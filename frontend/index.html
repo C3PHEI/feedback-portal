@@ -4,17 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Feedback — Inbox</title>
-  <meta name="description" content="Anonymes internes Feedback-Formular">
-
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
+  <title>Feedback Hub — Inbox</title>
+  <meta name="description" content="Internes Feedback">
 
   <link rel="icon" href="/feedback.svg" type="image/svg+xml">
-
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#151515">
 
@@ -47,6 +40,7 @@
 
 <div class="max-w-2xl mx-auto">
 
+  <!-- ═══ Header ═══ -->
   <div class="fade-up mb-8">
     <div class="accent-bar w-16 mb-6"></div>
     <div class="flex items-end justify-between">
@@ -58,8 +52,60 @@
     <p class="text-sm mt-2" style="color:#666;">Feedback das du erhalten hast</p>
   </div>
 
-  <div class="fade-up delay-1 flex flex-col gap-3 mb-24">
+  <!-- ═══ Feature 3: Averages / Manager-Warnung ═══ -->
+  <div class="fade-up delay-1 mb-6" style="background:#1e1e1e; border:1px solid #888888; border-radius:14px; padding:20px;">
+    <div class="flex items-center justify-between mb-3">
+      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase">Durchschnittliche Bewertungen</p>
+      <span class="text-xs" style="color:#888;">5 Reviews <span class="anon-icon-small" title="davon 1 anonym">🕶️ 1</span></span>
+    </div>
 
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <div class="avg-card">
+        <span class="avg-label">Impact / Results</span>
+        <div class="avg-stars">
+          <span class="star-display">★★★★<span class="empty">★</span></span>
+          <span class="avg-num">4.2</span>
+        </div>
+      </div>
+      <div class="avg-card">
+        <span class="avg-label">Ownership / Reliability</span>
+        <div class="avg-stars">
+          <span class="star-display">★★★★<span class="empty">★</span></span>
+          <span class="avg-num">3.8</span>
+        </div>
+      </div>
+      <div class="avg-card">
+        <span class="avg-label">Collaboration / Social</span>
+        <div class="avg-stars">
+          <span class="star-display">★★★★★</span>
+          <span class="avg-num">4.6</span>
+        </div>
+      </div>
+      <div class="avg-card">
+        <span class="avg-label">Growth / Learning</span>
+        <div class="avg-stars">
+          <span class="star-display">★★★★<span class="empty">★</span></span>
+          <span class="avg-num">4.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 3: Red warning text -->
+    <p class="averages-warning">
+      ⚠ Durchschnittswerte sind ein Richtwert und kein abschliessendes Urteil.
+    </p>
+    <!-- Feature 3: Low review count warning (example shown when <= 2) -->
+    <!--
+    <p class="averages-warning-low">
+      ⚠ Durchschnittsbewertungen basierend auf 2 Reviewer(s). Sie spiegeln möglicherweise nicht das vollständige Feedback wider.
+    </p>
+    -->
+  </div>
+
+  <!-- ═══ Feedback Cards ═══ -->
+  <div class="fade-up delay-2 flex flex-col gap-3 mb-24">
+
+    <!-- Unread 1 (named) -->
     <a href="feedbackResponce.html">
       <div class="inbox-card unread">
         <div class="flex items-start gap-3">
@@ -73,15 +119,16 @@
               </div>
             </div>
             <div class="star-display mb-2">★★★★★</div>
-            <p class="text-sm leading-relaxed" style="color:#888;">Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar.</p>
+            <p class="text-sm leading-relaxed" style="color:#888;">Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Weiter so.</p>
           </div>
         </div>
       </div>
     </a>
 
+    <!-- Unread 2 (named) -->
     <div class="inbox-card unread">
       <div class="flex items-start gap-3">
-        <div class="avatar">MK</div>
+        <div class="avatar">MH</div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-2 mb-1">
             <span class="text-white text-sm font-medium">Markus Huber</span>
@@ -96,12 +143,13 @@
       </div>
     </div>
 
+    <!-- Unread 3 — ANONYMOUS (Feature 3) -->
     <div class="inbox-card unread">
       <div class="flex items-start gap-3">
-        <div class="avatar">TR</div>
+        <div class="avatar anon-avatar">🕶️</div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-2 mb-1">
-            <span class="text-white text-sm font-medium">Thomas Rüfli</span>
+            <span class="text-white text-sm font-medium" style="color:#888;">Anonymes Feedback</span>
             <div class="flex items-center gap-2 flex-shrink-0">
               <div class="unread-dot"></div>
               <span class="text-xs" style="color:#555;">Mo, 17.03.</span>
@@ -115,6 +163,7 @@
 
     <hr class="divider my-2"/>
 
+    <!-- Read (named) -->
     <div class="inbox-card">
       <div class="flex items-start gap-3">
         <div class="avatar" style="background:rgba(255,255,255,0.04); color:#555;">JS</div>
@@ -129,6 +178,7 @@
       </div>
     </div>
 
+    <!-- Read (named) -->
     <div class="inbox-card">
       <div class="flex items-start gap-3">
         <div class="avatar" style="background:rgba(255,255,255,0.04); color:#555;">PW</div>
@@ -151,5 +201,4 @@
 
 <script src="js/app.js"></script>
 </body>
-
 </html>

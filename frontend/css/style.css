@@ -25,6 +25,7 @@ body {
   cursor: pointer;
   transition: color 0.15s, transform 0.15s;
   line-height: 1;
+  position: relative;
 }
 .stars label:hover,
 .stars label:hover ~ label,
@@ -33,6 +34,34 @@ body {
 }
 .stars label:hover {
   transform: scale(1.15);
+}
+.stars-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ─── Feature 7: Star Hover Tooltips ─── */
+.stars label[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: #1e1e1e;
+  border: 1px solid #FF6B00;
+  color: #f0f0f0;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+  animation: tooltipFade 0.15s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+@keyframes tooltipFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Inputs ────────────────────────────────────────────── */
@@ -79,6 +108,44 @@ select.fancy-input option {
   border-color: #FF6B00;
   box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.15), 0 4px 24px rgba(255, 107, 0, 0.07);
 }
+.cat-card.na-card {
+  border-color: #3e3e3e;
+  opacity: 0.6;
+}
+
+/* ─── N/A Button ────────────────────────────────────────── */
+.na-btn {
+  background: transparent;
+  border: 1px solid #2e2e2e;
+  color: #555;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.05em;
+}
+.na-btn:hover {
+  border-color: #555;
+  color: #888;
+}
+.na-btn.na-active {
+  background: rgba(229, 38, 32, 0.15);
+  border-color: #E52620;
+  color: #E52620;
+}
+.na-display {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #555;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border: 1px solid #3e3e3e;
+  border-radius: 6px;
+}
 
 /* ─── Submit Button ─────────────────────────────────────── */
 .btn-submit {
@@ -94,12 +161,17 @@ select.fancy-input option {
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s;
 }
-.btn-submit:hover {
+.btn-submit:hover:not(:disabled) {
   opacity: 0.92;
   transform: translateY(-1px);
 }
-.btn-submit:active {
+.btn-submit:active:not(:disabled) {
   transform: scale(0.98);
+}
+.btn-submit:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* ─── Animations ────────────────────────────────────────── */
@@ -226,6 +298,10 @@ select.fancy-input option {
   justify-content: center;
   flex-shrink: 0;
 }
+.anon-avatar {
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 18px;
+}
 
 /* ─── Star Display ──────────────────────────────────────── */
 .star-display {
@@ -299,4 +375,249 @@ select.fancy-input option {
 .btn-fab-home:active,
 .btn-fab-feedback:active {
   transform: scale(0.96);
+}
+
+/* ═══════════════════════════════════════════════════════
+   NEW FEATURE STYLES
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Feature 2: Visibility Cards ───────────────────────── */
+.visibility-option input {
+  display: none;
+}
+.visibility-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 16px;
+  border: 1px solid #2e2e2e;
+  border-radius: 12px;
+  background: #242424;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.visibility-card:hover {
+  border-color: #3e3e3e;
+  background: #2a2a2a;
+}
+.visibility-option input:checked + .visibility-card {
+  border-color: #FF6B00;
+  background: rgba(255, 107, 0, 0.06);
+  box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.2);
+}
+.visibility-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+.visibility-title {
+  color: #f0f0f0;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+.visibility-desc {
+  color: #666;
+  font-size: 12px;
+}
+
+/* ─── Feature 2: Anonymous Warning ──────────────────────── */
+.anon-warning {
+  background: rgba(255, 107, 0, 0.06);
+  border: 1px solid rgba(255, 107, 0, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+.anon-warning-icon {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.anon-warning-text {
+  color: #ccc;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ─── Anonymous Checkbox ────────────────────────────────── */
+.anon-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #aaa;
+  user-select: none;
+}
+.anon-checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #FF6B00;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ─── Feature 9: Rate Limit Notice ──────────────────────── */
+.rate-limit-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 107, 0, 0.06);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #888;
+}
+
+/* ─── Feature 2: Greyed-out Feedback Section ────────────── */
+.feedback-section-locked {
+  opacity: 0.3;
+  pointer-events: none;
+  filter: grayscale(0.5);
+  transition: opacity 0.3s, filter 0.3s;
+}
+
+/* ─── Feature 8: Character Counter ──────────────────────── */
+.char-counter {
+  text-align: right;
+  font-size: 12px;
+  color: #555;
+  margin-top: 6px;
+  transition: color 0.2s;
+}
+.char-counter.char-ok {
+  color: #22c55e;
+}
+.char-counter.char-warn {
+  color: #E52620;
+}
+
+/* ─── Validation Messages ───────────────────────────────── */
+.validation-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: rgba(229, 38, 32, 0.08);
+  border: 1px solid rgba(229, 38, 32, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  color: #E52620;
+}
+
+/* ─── Feature 10: Code of Conduct List ──────────────────── */
+.coc-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+.coc-list li {
+  padding: 6px 0 6px 20px;
+  position: relative;
+  color: #888;
+  line-height: 1.5;
+}
+.coc-list li::before {
+  content: '•';
+  position: absolute;
+  left: 6px;
+  color: #FF6B00;
+}
+
+/* ─── Feature 3: Averages Section ───────────────────────── */
+.avg-card {
+  background: #242424;
+  border: 1px solid #2e2e2e;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.avg-label {
+  display: block;
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 6px;
+  font-family: 'DM Sans', sans-serif;
+}
+.avg-stars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.avg-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #FF6B00;
+}
+.anon-icon-small {
+  font-size: 12px;
+  cursor: help;
+}
+.averages-warning {
+  color: #E52620;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+.averages-warning-low {
+  color: #FF6B00;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ─── Feature 4: Edit Button & Countdown ────────────────── */
+.edit-btn {
+  background: transparent;
+  border: 1px solid #FF6B00;
+  color: #FF6B00;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.edit-btn:hover {
+  background: rgba(255, 107, 0, 0.1);
+}
+.lock-icon {
+  font-size: 16px;
+}
+.edit-countdown {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.countdown-bar {
+  flex: 1;
+  height: 4px;
+  background: #2e2e2e;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.countdown-fill {
+  height: 100%;
+  width: 100%;
+  background: #FF6B00;
+  border-radius: 99px;
+  transition: width 1s linear;
+}
+
+/* ─── Read-only Text Block ──────────────────────────────── */
+.readonly-text {
+  background: #242424;
+  border: 1px solid #2e2e2e;
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.7;
 }

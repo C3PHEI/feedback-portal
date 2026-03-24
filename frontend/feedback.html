@@ -4,25 +4,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Internes Feedback</title>
+  <title>Feedback Hub — Feedback geben</title>
   <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="Anonymes internes Feedback-Formular">
-
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
+  <meta name="description" content="Internes Feedback-Formular">
 
   <link rel="icon" href="/feedback.svg" type="image/svg+xml">
-
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#151515">
 
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    let tailwind;
     tailwind.config = {
       theme: {
         extend: {
@@ -48,117 +40,261 @@
 
 <div class="max-w-2xl mx-auto">
 
+  <!-- ═══ Header ═══ -->
   <div class="fade-up mb-10">
     <div class="accent-bar w-16 mb-6"></div>
     <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
       Feedback
     </h1>
-    <p class="text-sm" style="color:#666;">Feedbacks einreichen von einer Person zu einer anderen Person</p>
+    <p class="text-sm" style="color:#666;">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
   </div>
 
-  <form onsubmit="handleSubmit(event)">
+  <form id="feedbackForm" onsubmit="handleSubmit(event)" novalidate>
 
+    <!-- ═══ 1 — Empfänger (AD-Liste) ═══ -->
     <div class="fade-up delay-1 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
       <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Empfänger</p>
-
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs mb-2" style="color:#666;">Mitarbeiter</label>
-          <select class="fancy-input">
-            <option value="">Auswählen…</option>
-            <option>Maximilian Läpple</option>
-            <option>Max Mustermann</option>
-          </select>
-        </div>
+      <div>
+        <label class="block text-xs mb-2" style="color:#666;">Mitarbeiter aus dem Active Directory</label>
+        <select id="recipientSelect" class="fancy-input" required>
+          <option value="">Person auswählen…</option>
+          <option value="maximilian.laepple">Maximilian Läpple</option>
+          <option value="max.mustermann">Max Mustermann</option>
+          <option value="anna.keller">Anna Keller</option>
+          <option value="markus.huber">Markus Huber</option>
+          <option value="thomas.ruefli">Thomas Rüfli</option>
+          <option value="jana.steiner">Jana Steiner</option>
+          <option value="patrick.weber">Patrick Weber</option>
+        </select>
       </div>
     </div>
 
-    <div class="fade-up delay-2 mb-6">
-      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Bewertung</p>
-      <div class="flex flex-col gap-3">
+    <!-- ═══ 2 — Sichtbarkeit (Public / Private) ═══ -->
+    <div class="fade-up delay-2 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
+      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Sichtbarkeit</p>
+      <p class="text-xs mb-4" style="color:#555;">Wähle ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
-        <div class="cat-card">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="num-badge">01</div>
-              <span class="text-white text-sm font-medium">Kommunikation</span>
-            </div>
-            <div class="stars">
-              <input type="radio" name="kommunikation" id="k5" value="5"/><label for="k5">★</label>
-              <input type="radio" name="kommunikation" id="k4" value="4"/><label for="k4">★</label>
-              <input type="radio" name="kommunikation" id="k3" value="3"/><label for="k3">★</label>
-              <input type="radio" name="kommunikation" id="k2" value="2"/><label for="k2">★</label>
-              <input type="radio" name="kommunikation" id="k1" value="1"/><label for="k1">★</label>
-            </div>
+      <div class="flex gap-4 mb-4">
+        <label class="visibility-option flex-1" id="vis-public-label">
+          <input type="radio" name="visibility" id="vis-public" value="public" onchange="onVisibilityChange()">
+          <div class="visibility-card">
+            <span class="visibility-icon">👤</span>
+            <span class="visibility-title">Namentlich</span>
+            <span class="visibility-desc">Dein Name ist sichtbar</span>
           </div>
-        </div>
+        </label>
 
-        <div class="cat-card">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="num-badge">03</div>
-              <span class="text-white text-sm font-medium">Hilfsbereitschaft</span>
-            </div>
-            <div class="stars">
-              <input type="radio" name="hilfsbereitschaft" id="h5" value="5"/><label for="h5">★</label>
-              <input type="radio" name="hilfsbereitschaft" id="h4" value="4"/><label for="h4">★</label>
-              <input type="radio" name="hilfsbereitschaft" id="h3" value="3"/><label for="h3">★</label>
-              <input type="radio" name="hilfsbereitschaft" id="h2" value="2"/><label for="h2">★</label>
-              <input type="radio" name="hilfsbereitschaft" id="h1" value="1"/><label for="h1">★</label>
-            </div>
+        <label class="visibility-option flex-1" id="vis-private-label">
+          <input type="radio" name="visibility" id="vis-private" value="private" onchange="onVisibilityChange()">
+          <div class="visibility-card">
+            <span class="visibility-icon">🕶️</span>
+            <span class="visibility-title">Anonym</span>
+            <span class="visibility-desc">Identität wird geschützt</span>
           </div>
-        </div>
-
-        <div class="cat-card">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="num-badge">05</div>
-              <span class="text-white text-sm font-medium">Respektvoller Umgang</span>
-            </div>
-            <div class="stars">
-              <input type="radio" name="respekt" id="r5" value="5"/><label for="r5">★</label>
-              <input type="radio" name="respekt" id="r4" value="4"/><label for="r4">★</label>
-              <input type="radio" name="respekt" id="r3" value="3"/><label for="r3">★</label>
-              <input type="radio" name="respekt" id="r2" value="2"/><label for="r2">★</label>
-              <input type="radio" name="respekt" id="r1" value="1"/><label for="r1">★</label>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="fade-up delay-3 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-5">Freitext</p>
-
-      <div class="mb-4">
-        <div class="flex items-center gap-2 mb-2">
-          <span style="width:8px;height:8px;border-radius:50%;background:#FF6B00;display:inline-block;"></span>
-          <label class="text-white text-sm font-medium">Anmerkung</label>
-          <span class="text-xs ml-auto" style="color:#555;">optional</span>
-        </div>
-        <label>
-          <textarea class="fancy-input" rows="5" placeholder="Beschreibe konkrete Stärken oder positives Verhalten…"></textarea>
         </label>
       </div>
 
-    <div class="fade-up delay-4 flex flex-col items-center gap-4 pt-2 pb-8">
-      <button type="submit" class="btn-submit w-full">
-        Feedback absenden →
-      </button>
-      <p class="text-xs text-center" style="color:#444;">
-        test
-      </p>
+      <!-- Anonymitäts-Warnung (Feature 2) -->
+      <div id="anonWarning" class="anon-warning" style="display:none;">
+        <div class="anon-warning-icon">⚠️</div>
+        <p class="anon-warning-text">
+          Du hast ausgewählt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
+        </p>
+        <label class="anon-checkbox-label mt-3">
+          <input type="checkbox" id="anonUnderstood" onchange="onAnonCheckboxChange()">
+          <span>Ich habe gelesen und verstanden</span>
+        </label>
+      </div>
+
+      <!-- Rate Limit Hinweis (Feature 9) -->
+      <div id="anonRateLimit" class="rate-limit-notice" style="display:none;">
+        <span style="color:#FF6B00;">ℹ</span>
+        <span>Anonymes Feedback ist auf 1× pro Person pro Jahr begrenzt.</span>
+      </div>
     </div>
-    </div>
+
+    <!-- ═══ Feedback-Sektion (greyed out bis Sichtbarkeit gewählt) ═══ -->
+    <div id="feedbackSection" class="feedback-section-locked">
+
+      <!-- ═══ 6 — Drivers & Stars ═══ -->
+      <div class="fade-up delay-3 mb-6">
+        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-2">Bewertung</p>
+        <p class="text-xs mb-4" style="color:#555;">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
+
+        <div class="flex flex-col gap-3">
+
+          <!-- Driver 1: Impact/Results -->
+          <div class="cat-card" id="driver-impact">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-3">
+                <div class="num-badge">01</div>
+                <span class="text-white text-sm font-medium">Impact / Results</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" class="na-btn" onclick="toggleNA('impact')" id="na-impact" title="N/A — Nicht beurteilbar">N/A</button>
+                <div class="stars" id="stars-impact">
+                  <input type="radio" name="impact" id="imp5" value="5"/><label for="imp5" data-tooltip="Herausragend — Ergebnisse übertreffen die Erwartungen bei Weitem">★</label>
+                  <input type="radio" name="impact" id="imp4" value="4"/><label for="imp4" data-tooltip="Stark — Liefert konstant überdurchschnittliche Ergebnisse">★</label>
+                  <input type="radio" name="impact" id="imp3" value="3"/><label for="imp3" data-tooltip="Solide — Erfüllt die Erwartungen zuverlässig">★</label>
+                  <input type="radio" name="impact" id="imp2" value="2"/><label for="imp2" data-tooltip="Ausbaufähig — Ergebnisse bleiben hinter den Erwartungen zurück">★</label>
+                  <input type="radio" name="impact" id="imp1" value="1"/><label for="imp1" data-tooltip="Unzureichend — Resultate fehlen oder sind mangelhaft">★</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Driver 2: Ownership/Reliability -->
+          <div class="cat-card" id="driver-ownership">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-3">
+                <div class="num-badge">02</div>
+                <span class="text-white text-sm font-medium">Ownership / Reliability</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" class="na-btn" onclick="toggleNA('ownership')" id="na-ownership" title="N/A — Nicht beurteilbar">N/A</button>
+                <div class="stars" id="stars-ownership">
+                  <input type="radio" name="ownership" id="own5" value="5"/><label for="own5" data-tooltip="Herausragend — Übernimmt volle Verantwortung und ist absolut verlässlich">★</label>
+                  <input type="radio" name="ownership" id="own4" value="4"/><label for="own4" data-tooltip="Stark — Proaktiv und zuverlässig in der Aufgabenübernahme">★</label>
+                  <input type="radio" name="ownership" id="own3" value="3"/><label for="own3" data-tooltip="Solide — Zuverlässig bei zugeteilten Aufgaben">★</label>
+                  <input type="radio" name="ownership" id="own2" value="2"/><label for="own2" data-tooltip="Ausbaufähig — Gelegentlich unzuverlässig oder reaktiv">★</label>
+                  <input type="radio" name="ownership" id="own1" value="1"/><label for="own1" data-tooltip="Unzureichend — Übernimmt selten Verantwortung">★</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Driver 3: Collaboration/Social -->
+          <div class="cat-card" id="driver-collaboration">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-3">
+                <div class="num-badge">03</div>
+                <span class="text-white text-sm font-medium">Collaboration / Social</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" class="na-btn" onclick="toggleNA('collaboration')" id="na-collaboration" title="N/A — Nicht beurteilbar">N/A</button>
+                <div class="stars" id="stars-collaboration">
+                  <input type="radio" name="collaboration" id="col5" value="5"/><label for="col5" data-tooltip="Herausragend — Fördert aktiv Teamwork und inspiriert andere">★</label>
+                  <input type="radio" name="collaboration" id="col4" value="4"/><label for="col4" data-tooltip="Stark — Arbeitet hervorragend im Team und kommuniziert offen">★</label>
+                  <input type="radio" name="collaboration" id="col3" value="3"/><label for="col3" data-tooltip="Solide — Guter Teamplayer mit angemessener Kommunikation">★</label>
+                  <input type="radio" name="collaboration" id="col2" value="2"/><label for="col2" data-tooltip="Ausbaufähig — Zusammenarbeit und Kommunikation könnten besser sein">★</label>
+                  <input type="radio" name="collaboration" id="col1" value="1"/><label for="col1" data-tooltip="Unzureichend — Arbeitet isoliert und kommuniziert kaum">★</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Driver 4: Growth/Learning -->
+          <div class="cat-card" id="driver-growth">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-3">
+                <div class="num-badge">04</div>
+                <span class="text-white text-sm font-medium">Growth / Learning</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" class="na-btn" onclick="toggleNA('growth')" id="na-growth" title="N/A — Nicht beurteilbar">N/A</button>
+                <div class="stars" id="stars-growth">
+                  <input type="radio" name="growth" id="gro5" value="5"/><label for="gro5" data-tooltip="Herausragend — Lernt kontinuierlich und teilt Wissen proaktiv">★</label>
+                  <input type="radio" name="growth" id="gro4" value="4"/><label for="gro4" data-tooltip="Stark — Zeigt starkes Interesse an Weiterentwicklung">★</label>
+                  <input type="radio" name="growth" id="gro3" value="3"/><label for="gro3" data-tooltip="Solide — Offen für Feedback und neue Methoden">★</label>
+                  <input type="radio" name="growth" id="gro2" value="2"/><label for="gro2" data-tooltip="Ausbaufähig — Wenig Initiative zur eigenen Weiterentwicklung">★</label>
+                  <input type="radio" name="growth" id="gro1" value="1"/><label for="gro1" data-tooltip="Unzureichend — Kein erkennbares Interesse an Lernfortschritt">★</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Validierungshinweis Drivers -->
+        <div id="driverValidation" class="validation-msg" style="display:none;">
+          <span>⚠ Mindestens 2 Drivers müssen bewertet werden.</span>
+        </div>
+      </div>
+
+      <!-- ═══ 8 — Actionable Feedback (Strengths + Areas to improve) ═══ -->
+      <div class="fade-up delay-4 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
+        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-5">Actionable Feedback</p>
+        <p class="text-xs mb-4" style="color:#555;">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
+
+        <div class="mb-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+            <label class="text-white text-sm font-medium" for="strengths">Strengths</label>
+          </div>
+          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten…" oninput="updateCharCount('strengths')"></textarea>
+          <div class="char-counter" id="strengths-counter">
+            <span id="strengths-count">0</span> / 200 Zeichen min.
+          </div>
+        </div>
+
+        <hr class="divider my-4"/>
+
+        <div class="mb-2">
+          <div class="flex items-center gap-2 mb-2">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FF6B00;display:inline-block;"></span>
+            <label class="text-white text-sm font-medium" for="improvements">Areas to improve</label>
+          </div>
+          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen…" oninput="updateCharCount('improvements')"></textarea>
+          <div class="char-counter" id="improvements-counter">
+            <span id="improvements-count">0</span> / 200 Zeichen min.
+          </div>
+        </div>
+
+        <!-- Validierungshinweis Textboxen -->
+        <div id="textValidation" class="validation-msg" style="display:none;">
+          <span>⚠ Mindestens ein Feld muss mit 200+ Zeichen ausgefüllt werden.</span>
+        </div>
+      </div>
+
+      <!-- ═══ 10 — Code of Conduct ═══ -->
+      <div class="fade-up delay-5 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
+        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Code of Conduct</p>
+
+        <div class="text-xs leading-relaxed mb-4" style="color:#666;">
+          <p class="mb-2">Mit dem Absenden dieses Feedbacks bestätigst du:</p>
+          <ul class="coc-list">
+            <li>Respektvolle Sprache — professionell, konstruktiv, frei von diskriminierender Sprache</li>
+            <li>Keine Vergeltung — Feedback darf nicht zum Bestrafen oder Blossstellen genutzt werden</li>
+            <li>Fokus auf Verhalten & Impact — keine persönlichen Eigenschaften oder Annahmen</li>
+            <li>Ehrlichkeit & Genauigkeit — basierend auf eigenen Beobachtungen</li>
+            <li>Vertraulichkeit — Feedback nur für Empfänger und Manager bestimmt</li>
+            <li>Konstruktive Kritik — kritisches Feedback mit konkreten Vorschlägen ergänzen</li>
+          </ul>
+        </div>
+
+        <label class="anon-checkbox-label">
+          <input type="checkbox" id="cocAccepted" required>
+          <span>Ich akzeptiere den <a href="#" style="color:#FF6B00; text-decoration:underline;">Code of Conduct</a></span>
+        </label>
+
+        <div class="mt-3">
+          <a href="#" class="text-xs" style="color:#E52620; text-decoration:underline;">Verstoss melden → Whistleblowing-Plattform</a>
+        </div>
+      </div>
+
+      <!-- ═══ Submit ═══ -->
+      <div class="fade-up delay-6 flex flex-col items-center gap-4 pt-2 pb-8">
+        <button type="submit" class="btn-submit w-full" id="submitBtn" disabled>
+          Feedback absenden →
+        </button>
+        <p class="text-xs text-center" style="color:#444;">
+          Einmal abgesendet, ist das Feedback endgültig. Du hast 5 Minuten um Tippfehler zu korrigieren.
+        </p>
+      </div>
+
+    </div><!-- /feedbackSection -->
+
   </form>
 </div>
 
+<!-- Toast -->
+<div id="toast">✓ Feedback erfolgreich eingereicht</div>
+
 <a href="index.html" class="btn-fab-home">
-  <img src="home.svg" alt="Icon" width="24" height="24">
+  <img src="home.svg" alt="Home" width="24" height="24">
 </a>
 
 <script src="js/app.js"></script>
-</body>
 
+</body>
 </html>
