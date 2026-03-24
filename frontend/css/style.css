@@ -118,7 +118,7 @@ select.fancy-input option {
   background: transparent;
   border: 1px solid #2e2e2e;
   color: #555;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
   font-size: 11px;
   padding: 4px 10px;
@@ -137,7 +137,7 @@ select.fancy-input option {
   color: #E52620;
 }
 .na-display {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
   font-size: 12px;
   color: #555;
@@ -151,7 +151,7 @@ select.fancy-input option {
 .btn-submit {
   background: linear-gradient(135deg, #E52620, #FF6B00);
   color: #fff;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
   font-size: 17px;
   letter-spacing: 0.04em;
@@ -227,7 +227,7 @@ select.fancy-input option {
   border-radius: 6px;
   background: rgba(229, 38, 32, 0.15);
   color: #E52620;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
   font-size: 14px;
   display: flex;
@@ -247,7 +247,7 @@ select.fancy-input option {
   border-radius: 12px;
   padding: 14px 28px;
   color: #fff;
-  font-family: 'Syne', sans-serif;
+  font-family: '', sans-serif;
   font-weight: 600;
   font-size: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
@@ -290,7 +290,7 @@ select.fancy-input option {
   border-radius: 10px;
   background: rgba(229, 38, 32, 0.15);
   color: #E52620;
-  font-family: 'Syne', sans-serif;
+  font-family: '', sans-serif;
   font-weight: 700;
   font-size: 13px;
   display: flex;
@@ -317,7 +317,7 @@ select.fancy-input option {
 .badge-count {
   background: rgba(229, 38, 32, 0.15);
   color: #E52620;
-  font-family: 'Syne', sans-serif;
+  font-family: '', sans-serif;
   font-weight: 700;
   font-size: 13px;
   padding: 2px 8px;
@@ -413,7 +413,7 @@ select.fancy-input option {
 }
 .visibility-title {
   color: #f0f0f0;
-  font-family: 'Syne', sans-serif;
+  font-family: '', sans-serif;
   font-weight: 700;
   font-size: 14px;
 }
@@ -547,7 +547,7 @@ select.fancy-input option {
   gap: 8px;
 }
 .avg-num {
-  font-family: 'Syne', sans-serif;
+  font-family: '', sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: #FF6B00;
@@ -576,7 +576,7 @@ select.fancy-input option {
   background: transparent;
   border: 1px solid #FF6B00;
   color: #FF6B00;
-  font-family: 'Syne', sans-serif;
+  font-family: '', sans-serif;
   font-weight: 600;
   font-size: 12px;
   padding: 6px 16px;
