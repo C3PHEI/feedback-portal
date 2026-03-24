@@ -49,7 +49,7 @@
     <p class="text-sm" style="color:#666;">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
   </div>
 
-  <form id="feedbackForm" onsubmit="handleSubmit(event)" novalidate>
+  <form id="feedbackForm" novalidate>
 
     <!-- ═══ 1 — Empfänger (AD-Liste) ═══ -->
     <div class="fade-up delay-1 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
@@ -76,7 +76,7 @@
 
       <div class="flex gap-4 mb-4">
         <label class="visibility-option flex-1" id="vis-public-label">
-          <input type="radio" name="visibility" id="vis-public" value="public" onchange="onVisibilityChange()">
+          <input type="radio" name="visibility" id="vis-public" value="public">
           <div class="visibility-card">
             <span class="visibility-icon">👤</span>
             <span class="visibility-title">Namentlich</span>
@@ -85,7 +85,7 @@
         </label>
 
         <label class="visibility-option flex-1" id="vis-private-label">
-          <input type="radio" name="visibility" id="vis-private" value="private" onchange="onVisibilityChange()">
+          <input type="radio" name="visibility" id="vis-private" value="private">
           <div class="visibility-card">
             <span class="visibility-icon">🕶️</span>
             <span class="visibility-title">Anonym</span>
@@ -98,10 +98,14 @@
       <div id="anonWarning" class="anon-warning" style="display:none;">
         <div class="anon-warning-icon">⚠️</div>
         <p class="anon-warning-text">
-          Du hast ausgewählt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
+          Du hast ausgewählt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen
+          Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten.
+          Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere
+          dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte
+          zu verweisen.
         </p>
         <label class="anon-checkbox-label mt-3">
-          <input type="checkbox" id="anonUnderstood" onchange="onAnonCheckboxChange()">
+          <input type="checkbox" id="anonUnderstood">
           <span>Ich habe gelesen und verstanden</span>
         </label>
       </div>
@@ -131,7 +135,7 @@
                 <span class="text-white text-sm font-medium">Impact / Results</span>
               </div>
               <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" onclick="toggleNA('impact')" id="na-impact" title="N/A — Nicht beurteilbar">N/A</button>
+                <button type="button" class="na-btn" id="na-impact" title="N/A — Nicht beurteilbar">N/A</button>
                 <div class="stars" id="stars-impact">
                   <input type="radio" name="impact" id="imp5" value="5"/><label for="imp5" data-tooltip="Herausragend — Ergebnisse übertreffen die Erwartungen bei Weitem">★</label>
                   <input type="radio" name="impact" id="imp4" value="4"/><label for="imp4" data-tooltip="Stark — Liefert konstant überdurchschnittliche Ergebnisse">★</label>
@@ -151,7 +155,7 @@
                 <span class="text-white text-sm font-medium">Ownership / Reliability</span>
               </div>
               <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" onclick="toggleNA('ownership')" id="na-ownership" title="N/A — Nicht beurteilbar">N/A</button>
+                <button type="button" class="na-btn" id="na-ownership" title="N/A — Nicht beurteilbar">N/A</button>
                 <div class="stars" id="stars-ownership">
                   <input type="radio" name="ownership" id="own5" value="5"/><label for="own5" data-tooltip="Herausragend — Übernimmt volle Verantwortung und ist absolut verlässlich">★</label>
                   <input type="radio" name="ownership" id="own4" value="4"/><label for="own4" data-tooltip="Stark — Proaktiv und zuverlässig in der Aufgabenübernahme">★</label>
@@ -171,7 +175,7 @@
                 <span class="text-white text-sm font-medium">Collaboration / Social</span>
               </div>
               <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" onclick="toggleNA('collaboration')" id="na-collaboration" title="N/A — Nicht beurteilbar">N/A</button>
+                <button type="button" class="na-btn" id="na-collaboration" title="N/A — Nicht beurteilbar">N/A</button>
                 <div class="stars" id="stars-collaboration">
                   <input type="radio" name="collaboration" id="col5" value="5"/><label for="col5" data-tooltip="Herausragend — Fördert aktiv Teamwork und inspiriert andere">★</label>
                   <input type="radio" name="collaboration" id="col4" value="4"/><label for="col4" data-tooltip="Stark — Arbeitet hervorragend im Team und kommuniziert offen">★</label>
@@ -191,7 +195,7 @@
                 <span class="text-white text-sm font-medium">Growth / Learning</span>
               </div>
               <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" onclick="toggleNA('growth')" id="na-growth" title="N/A — Nicht beurteilbar">N/A</button>
+                <button type="button" class="na-btn" id="na-growth" title="N/A — Nicht beurteilbar">N/A</button>
                 <div class="stars" id="stars-growth">
                   <input type="radio" name="growth" id="gro5" value="5"/><label for="gro5" data-tooltip="Herausragend — Lernt kontinuierlich und teilt Wissen proaktiv">★</label>
                   <input type="radio" name="growth" id="gro4" value="4"/><label for="gro4" data-tooltip="Stark — Zeigt starkes Interesse an Weiterentwicklung">★</label>
@@ -221,7 +225,7 @@
             <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="strengths">Strengths</label>
           </div>
-          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten…" oninput="updateCharCount('strengths')"></textarea>
+          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten…"></textarea>
           <div class="char-counter" id="strengths-counter">
             <span id="strengths-count">0</span> / 200 Zeichen min.
           </div>
@@ -234,7 +238,7 @@
             <span style="width:8px;height:8px;border-radius:50%;background:#FF6B00;display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="improvements">Areas to improve</label>
           </div>
-          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen…" oninput="updateCharCount('improvements')"></textarea>
+          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen…"></textarea>
           <div class="char-counter" id="improvements-counter">
             <span id="improvements-count">0</span> / 200 Zeichen min.
           </div>

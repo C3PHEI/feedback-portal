@@ -1,26 +1,25 @@
 /**
  * app.js
  * Feedback Hub — All frontend logic
+ * No inline handlers — everything is bound via addEventListener
  */
 
 /* ═══════════════════════════════════════════════════════
    Shared: Toast / Submit
    ═══════════════════════════════════════════════════════ */
 
-function handleSubmit(e) {
-  e.preventDefault();
-
-  const toast = document.getElementById('toast');
+function showToast() {
+  var toast = document.getElementById('toast');
   if (!toast) return;
 
   toast.style.display = 'block';
   toast.style.opacity = '1';
   toast.style.transition = 'none';
 
-  setTimeout(() => {
+  setTimeout(function () {
     toast.style.transition = 'opacity 0.5s';
     toast.style.opacity = '0';
-    setTimeout(() => {
+    setTimeout(function () {
       toast.style.display = 'none';
       toast.style.opacity = '1';
     }, 500);
@@ -32,15 +31,15 @@ function handleSubmit(e) {
    feedback.html — Feedback Form Logic
    ═══════════════════════════════════════════════════════ */
 
-const drivers = ['impact', 'ownership', 'collaboration', 'growth'];
-const naState = { impact: false, ownership: false, collaboration: false, growth: false };
+var drivers = ['impact', 'ownership', 'collaboration', 'growth'];
+var naState = { impact: false, ownership: false, collaboration: false, growth: false };
 
 /* ─── Feature 2: Visibility ─── */
 function onVisibilityChange() {
-  const vis = document.querySelector('input[name="visibility"]:checked');
-  const section = document.getElementById('feedbackSection');
-  const anonWarning = document.getElementById('anonWarning');
-  const anonRateLimit = document.getElementById('anonRateLimit');
+  var vis = document.querySelector('input[name="visibility"]:checked');
+  var section = document.getElementById('feedbackSection');
+  var anonWarning = document.getElementById('anonWarning');
+  var anonRateLimit = document.getElementById('anonRateLimit');
 
   if (!vis || !section) return;
 
@@ -59,9 +58,9 @@ function onVisibilityChange() {
 }
 
 function onAnonCheckboxChange() {
-  const vis = document.querySelector('input[name="visibility"]:checked');
-  const section = document.getElementById('feedbackSection');
-  const cb = document.getElementById('anonUnderstood');
+  var vis = document.querySelector('input[name="visibility"]:checked');
+  var section = document.getElementById('feedbackSection');
+  var cb = document.getElementById('anonUnderstood');
 
   if (!vis || !section || !cb) return;
 
@@ -78,17 +77,17 @@ function onAnonCheckboxChange() {
 /* ─── Feature 6: N/A Toggle ─── */
 function toggleNA(driver) {
   naState[driver] = !naState[driver];
-  const btn = document.getElementById('na-' + driver);
-  const starsEl = document.getElementById('stars-' + driver);
-  const card = document.getElementById('driver-' + driver);
+  var btn = document.getElementById('na-' + driver);
+  var starsEl = document.getElementById('stars-' + driver);
+  var card = document.getElementById('driver-' + driver);
 
   if (!btn || !starsEl || !card) return;
 
   if (naState[driver]) {
     btn.classList.add('na-active');
     starsEl.classList.add('stars-disabled');
-    const radios = starsEl.querySelectorAll('input[type="radio"]');
-    radios.forEach(r => r.checked = false);
+    var radios = starsEl.querySelectorAll('input[type="radio"]');
+    radios.forEach(function (r) { r.checked = false; });
     card.classList.add('na-card');
   } else {
     btn.classList.remove('na-active');
@@ -100,13 +99,13 @@ function toggleNA(driver) {
 
 /* ─── Feature 8: Character counter ─── */
 function updateCharCount(field) {
-  const el = document.getElementById(field);
-  const counter = document.getElementById(field + '-count');
-  const counterWrap = document.getElementById(field + '-counter');
+  var el = document.getElementById(field);
+  var counter = document.getElementById(field + '-count');
+  var counterWrap = document.getElementById(field + '-counter');
 
   if (!el || !counter || !counterWrap) return;
 
-  const len = el.value.length;
+  var len = el.value.length;
   counter.textContent = len;
 
   if (len >= 200) {
@@ -123,45 +122,45 @@ function updateCharCount(field) {
 
 /* ─── Form Validation ─── */
 function validateForm() {
-  const recipientEl = document.getElementById('recipientSelect');
-  const cocEl = document.getElementById('cocAccepted');
-  const btn = document.getElementById('submitBtn');
-  const strengthsEl = document.getElementById('strengths');
-  const improvementsEl = document.getElementById('improvements');
-  const driverValidationEl = document.getElementById('driverValidation');
-  const textValidationEl = document.getElementById('textValidation');
+  var recipientEl = document.getElementById('recipientSelect');
+  var cocEl = document.getElementById('cocAccepted');
+  var btn = document.getElementById('submitBtn');
+  var strengthsEl = document.getElementById('strengths');
+  var improvementsEl = document.getElementById('improvements');
+  var driverValidationEl = document.getElementById('driverValidation');
+  var textValidationEl = document.getElementById('textValidation');
 
   // Only run on feedback.html
   if (!btn || !recipientEl) return;
 
-  const vis = document.querySelector('input[name="visibility"]:checked');
-  const recipient = recipientEl.value;
-  const coc = cocEl ? cocEl.checked : false;
+  var vis = document.querySelector('input[name="visibility"]:checked');
+  var recipient = recipientEl.value;
+  var coc = cocEl ? cocEl.checked : false;
 
   // Visibility check
-  let visOk = !!vis;
+  var visOk = !!vis;
   if (vis && vis.value === 'private') {
-    const anonCb = document.getElementById('anonUnderstood');
+    var anonCb = document.getElementById('anonUnderstood');
     visOk = anonCb ? anonCb.checked : false;
   }
 
   // Drivers: count rated (star selected) and N/A
-  let ratedCount = 0;
-  let naCount = 0;
-  drivers.forEach(d => {
+  var ratedCount = 0;
+  var naCount = 0;
+  drivers.forEach(function (d) {
     if (naState[d]) {
       naCount++;
     } else {
-      const selected = document.querySelector('input[name="' + d + '"]:checked');
+      var selected = document.querySelector('input[name="' + d + '"]:checked');
       if (selected) ratedCount++;
     }
   });
-  const driversOk = ratedCount >= 2 && naCount <= 2;
+  var driversOk = ratedCount >= 2 && naCount <= 2;
 
   // Text validation
-  const sLen = strengthsEl ? strengthsEl.value.length : 0;
-  const iLen = improvementsEl ? improvementsEl.value.length : 0;
-  const textOk = (sLen >= 200) || (iLen >= 200);
+  var sLen = strengthsEl ? strengthsEl.value.length : 0;
+  var iLen = improvementsEl ? improvementsEl.value.length : 0;
+  var textOk = (sLen >= 200) || (iLen >= 200);
 
   // Show/hide validation messages
   if (driverValidationEl) {
@@ -171,7 +170,7 @@ function validateForm() {
     textValidationEl.style.display = ((sLen > 0 || iLen > 0) && !textOk) ? 'flex' : 'none';
   }
 
-  const allOk = visOk && recipient && driversOk && textOk && coc;
+  var allOk = visOk && recipient && driversOk && textOk && coc;
   btn.disabled = !allOk;
 }
 
@@ -180,17 +179,17 @@ function validateForm() {
    feedbackResponce.html — Locked Entry / Edit Timer
    ═══════════════════════════════════════════════════════ */
 
-let countdownInterval = null;
+var countdownInterval = null;
 
 function initEditWindow() {
-  const editBtn = document.getElementById('editBtn');
-  const lockIcon = document.getElementById('lockIcon');
-  const lockStatus = document.getElementById('lockStatus');
+  var editBtn = document.getElementById('editBtn');
+  var lockIcon = document.getElementById('lockIcon');
+  var lockStatus = document.getElementById('lockStatus');
 
   if (!editBtn || !lockIcon || !lockStatus) return;
 
   // Simulate: set to true if within 5 minutes of submission
-  const isWithinEditWindow = false; // Change to true for demo
+  var isWithinEditWindow = false; // Change to true for demo
 
   if (isWithinEditWindow) {
     editBtn.style.display = 'inline-block';
@@ -200,23 +199,23 @@ function initEditWindow() {
 }
 
 function startEditMode() {
-  const editBtn = document.getElementById('editBtn');
-  const countdown = document.getElementById('editCountdown');
-  const countdownText = document.getElementById('countdownText');
-  const countdownFill = document.getElementById('countdownFill');
+  var editBtn = document.getElementById('editBtn');
+  var countdown = document.getElementById('editCountdown');
+  var countdownText = document.getElementById('countdownText');
+  var countdownFill = document.getElementById('countdownFill');
 
   if (!editBtn || !countdown) return;
 
   editBtn.style.display = 'none';
   countdown.style.display = 'flex';
 
-  let remaining = 300; // 5 minutes in seconds
-  const total = 300;
+  var remaining = 300; // 5 minutes in seconds
+  var total = 300;
 
-  countdownInterval = setInterval(() => {
+  countdownInterval = setInterval(function () {
     remaining--;
-    const min = Math.floor(remaining / 60);
-    const sec = remaining % 60;
+    var min = Math.floor(remaining / 60);
+    var sec = remaining % 60;
     countdownText.textContent = min + ':' + String(sec).padStart(2, '0') + ' verbleibend';
     countdownFill.style.width = ((remaining / total) * 100) + '%';
 
@@ -236,27 +235,80 @@ function startEditMode() {
 
 
 /* ═══════════════════════════════════════════════════════
-   DOMContentLoaded — Init all pages
+   DOMContentLoaded — Bind ALL event listeners
    ═══════════════════════════════════════════════════════ */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
 
-  // feedback.html — event listeners for validation
-  const recipientEl = document.getElementById('recipientSelect');
-  const cocEl = document.getElementById('cocAccepted');
+  /* ─── feedback.html listeners ─── */
 
-  if (recipientEl) {
-    recipientEl.addEventListener('change', validateForm);
+  // Form submit
+  var feedbackForm = document.getElementById('feedbackForm');
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      showToast();
+    });
   }
-  if (cocEl) {
-    cocEl.addEventListener('change', validateForm);
-  }
 
-  drivers.forEach(d => {
-    const radios = document.querySelectorAll('input[name="' + d + '"]');
-    radios.forEach(r => r.addEventListener('change', validateForm));
+  // Visibility radio buttons
+  var visPublic = document.getElementById('vis-public');
+  var visPrivate = document.getElementById('vis-private');
+  if (visPublic) visPublic.addEventListener('change', onVisibilityChange);
+  if (visPrivate) visPrivate.addEventListener('change', onVisibilityChange);
+
+  // Anonymous understood checkbox
+  var anonUnderstood = document.getElementById('anonUnderstood');
+  if (anonUnderstood) anonUnderstood.addEventListener('change', onAnonCheckboxChange);
+
+  // Recipient select
+  var recipientEl = document.getElementById('recipientSelect');
+  if (recipientEl) recipientEl.addEventListener('change', validateForm);
+
+  // Code of Conduct checkbox
+  var cocEl = document.getElementById('cocAccepted');
+  if (cocEl) cocEl.addEventListener('change', validateForm);
+
+  // N/A buttons for each driver
+  drivers.forEach(function (d) {
+    var naBtn = document.getElementById('na-' + d);
+    if (naBtn) {
+      naBtn.addEventListener('click', function () {
+        toggleNA(d);
+      });
+    }
   });
 
-  // feedbackResponce.html — init edit window
+  // Star radio buttons for each driver
+  drivers.forEach(function (d) {
+    var radios = document.querySelectorAll('input[name="' + d + '"]');
+    radios.forEach(function (r) {
+      r.addEventListener('change', validateForm);
+    });
+  });
+
+  // Textareas char count
+  var strengthsEl = document.getElementById('strengths');
+  var improvementsEl = document.getElementById('improvements');
+  if (strengthsEl) {
+    strengthsEl.addEventListener('input', function () {
+      updateCharCount('strengths');
+    });
+  }
+  if (improvementsEl) {
+    improvementsEl.addEventListener('input', function () {
+      updateCharCount('improvements');
+    });
+  }
+
+  /* ─── feedbackResponce.html listeners ─── */
+
+  // Edit button
+  var editBtn = document.getElementById('editBtn');
+  if (editBtn) {
+    editBtn.addEventListener('click', startEditMode);
+  }
+
+  // Init edit window state
   initEditWindow();
 });
