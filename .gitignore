@@ -1,0 +1,73 @@
+# ===========================
+# NODE / FRONTEND
+# ===========================
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+.cache/
+.parcel-cache/
+.webpack/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ===========================
+# C# / .NET BACKEND
+# ===========================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Publish
+publish/
+**/Properties/launchSettings.json
+
+# Secrets & Configs
+appsettings.Development.json
+appsettings.Local.json
+appsettings.Secrets.json
+*.pfx
+*.key
+secrets.json
+
+# ===========================
+# IDE / EDITOREN
+# ===========================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+Thumbs.db
+.DS_Store
+
+# ===========================
+# SONSTIGES
+# ===========================
+*.tmp
+*.bak
+*.orig
