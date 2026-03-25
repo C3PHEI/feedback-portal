@@ -104,7 +104,7 @@ select.fancy-input option {
 .site-nav-inner {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* 🔥 zentriert den Content */
   align-items: center;
   padding: 14px 24px;
 }
@@ -116,32 +116,32 @@ select.fancy-input option {
   width: auto;
 }
 
-.nav-content-tabs {
+.nav-content {
   width: 100%;
   max-width: 48rem;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.nav-content-icon {
-  width: 100%;
-  max-width: 48rem;
-  display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
+  white-space: nowrap;
 }
 
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Links Styling */
 .nav-link {
   font-family: 'DM Sans', sans-serif;
   font-size: 16px;
-  color: #888; /* war #666 */
+  color: #888;
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 8px;
