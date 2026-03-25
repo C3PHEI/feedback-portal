@@ -7,7 +7,7 @@
 body {
   background: #151515;
   font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
+  font-size: 17px; /* war 16px */
 }
 
 /* ─── Stars (Form) ─────────────────────────────────────── */
@@ -21,7 +21,7 @@ body {
 }
 .stars label {
   font-size: 32px;
-  color: #2e2e2e;
+  color: #3e3e3e; /* war #2e2e2e */
   cursor: pointer;
   transition: color 0.15s, transform 0.15s;
   line-height: 1;
@@ -49,7 +49,7 @@ body {
   background: #1e1e1e;
   border: 1px solid #FF6B00;
   color: #f0f0f0;
-  font-size: 12px;
+  font-size: 13px; /* war 12px */
   font-family: 'DM Sans', sans-serif;
   padding: 8px 12px;
   border-radius: 8px;
@@ -67,7 +67,7 @@ body {
 /* ─── Inputs ────────────────────────────────────────────── */
 .fancy-input {
   background: #1e1e1e;
-  border: 1px solid #2e2e2e;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
   border-radius: 10px;
   color: #f0f0f0;
   font-family: 'DM Sans', sans-serif;
@@ -83,7 +83,7 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.12);
 }
 .fancy-input::placeholder {
-  color: #555;
+  color: #666; /* war #555 */
 }
 select.fancy-input option {
   background: #1e1e1e;
@@ -102,24 +102,34 @@ select.fancy-input option {
 }
 
 .site-nav-inner {
+  position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
   padding: 14px 24px;
 }
 
 .nav-logo {
+  position: absolute;
+  left: 24px;
   height: 45px;
   width: auto;
-  flex-shrink: 0;
 }
 
-.nav-content {
-  max-width: 42rem;
+.nav-content-tabs {
   width: 100%;
-  margin: 0 auto;
+  max-width: 48rem;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
+}
+
+.nav-content-icon {
+  width: 100%;
+  max-width: 48rem;
+  display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .nav-links {
@@ -131,7 +141,7 @@ select.fancy-input option {
 .nav-link {
   font-family: 'DM Sans', sans-serif;
   font-size: 16px;
-  color: #666;
+  color: #888; /* war #666 */
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 8px;
@@ -158,7 +168,7 @@ select.fancy-input option {
 /* ─── Category Card ─────────────────────────────────────── */
 .cat-card {
   background: #242424;
-  border: 1px solid #2e2e2e;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
   border-radius: 14px;
   padding: 20px 24px;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -175,11 +185,11 @@ select.fancy-input option {
 /* ─── N/A Button ────────────────────────────────────────── */
 .na-btn {
   background: transparent;
-  border: 1px solid #2e2e2e;
-  color: #555;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
+  color: #777; /* war #555 */
   font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 12px; /* war 11px */
   padding: 4px 10px;
   border-radius: 6px;
   cursor: pointer;
@@ -187,8 +197,8 @@ select.fancy-input option {
   letter-spacing: 0.05em;
 }
 .na-btn:hover {
-  border-color: #555;
-  color: #888;
+  border-color: #666; /* war #555 */
+  color: #999; /* war #888 */
 }
 .na-btn.na-active {
   background: rgba(229, 38, 32, 0.15);
@@ -198,8 +208,8 @@ select.fancy-input option {
 .na-display {
   font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
-  font-size: 12px;
-  color: #555;
+  font-size: 13px; /* war 12px */
+  color: #777; /* war #555 */
   letter-spacing: 0.05em;
   padding: 4px 10px;
   border: 1px solid #3e3e3e;
@@ -212,7 +222,7 @@ select.fancy-input option {
   color: #fff;
   font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
-  font-size: 17px;
+  font-size: 18px; /* war 17px */
   letter-spacing: 0.04em;
   border: none;
   border-radius: 12px;
@@ -254,8 +264,8 @@ select.fancy-input option {
   display: inline-block;
   padding: 6px 14px;
   border-radius: 99px;
-  border: 1px solid #2e2e2e;
-  color: #888;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
+  color: #999; /* war #888 */
   font-size: 15px;
   font-family: 'DM Sans', sans-serif;
   cursor: pointer;
@@ -268,7 +278,7 @@ select.fancy-input option {
   color: #ff6b6b;
 }
 .tag-pill label:hover {
-  border-color: #555;
+  border-color: #666; /* war #555 */
   color: #ccc;
 }
 
@@ -317,7 +327,7 @@ select.fancy-input option {
 /* ─── Inbox Card ────────────────────────────────────────── */
 .inbox-card {
   background: #1e1e1e;
-  border: 1px solid #2e2e2e;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
   border-radius: 14px;
   padding: 18px 20px;
   transition: border-color 0.2s, background 0.2s;
@@ -326,11 +336,11 @@ select.fancy-input option {
   display: block;
 }
 .inbox-card:hover {
-  border-color: #3e3e3e;
+  border-color: #4a4a4a; /* war #3e3e3e */
   background: #242424;
 }
 .inbox-card.unread {
-  border-color: #2e2e2e;
+  border-color: #3a3a3a; /* war #2e2e2e */
 }
 
 /* ─── Unread Dot ────────────────────────────────────────── */
@@ -370,11 +380,11 @@ select.fancy-input option {
 /* ─── Star Display ──────────────────────────────────────── */
 .star-display {
   color: #FF6B00;
-  font-size: 15px;
+  font-size: 16px; /* war 15px */
   letter-spacing: 1px;
 }
 .star-display .empty {
-  color: #2e2e2e;
+  color: #3e3e3e; /* war #2e2e2e */
 }
 
 /* ─── Badge Count ───────────────────────────────────────── */
@@ -383,7 +393,7 @@ select.fancy-input option {
   color: #E52620;
   font-family: '', sans-serif;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px; /* war 13px */
   padding: 2px 8px;
   border-radius: 99px;
 }
@@ -455,7 +465,7 @@ select.fancy-input option {
   align-items: center;
   gap: 6px;
   padding: 20px 16px;
-  border: 1px solid #2e2e2e;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
   border-radius: 12px;
   background: #242424;
   cursor: pointer;
@@ -463,7 +473,7 @@ select.fancy-input option {
   text-align: center;
 }
 .visibility-card:hover {
-  border-color: #3e3e3e;
+  border-color: #4a4a4a; /* war #3e3e3e */
   background: #2a2a2a;
 }
 .visibility-option input:checked + .visibility-card {
@@ -479,11 +489,11 @@ select.fancy-input option {
   color: #f0f0f0;
   font-family: '', sans-serif;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px; /* war 14px */
 }
 .visibility-desc {
-  color: #666;
-  font-size: 12px;
+  color: #888; /* war #666 */
+  font-size: 13px; /* war 12px */
 }
 
 /* ─── Feature 2: Anonymous Warning ──────────────────────── */
@@ -499,8 +509,8 @@ select.fancy-input option {
   margin-bottom: 8px;
 }
 .anon-warning-text {
-  color: #ccc;
-  font-size: 13px;
+  color: #d0d0d0; /* war #ccc */
+  font-size: 14px; /* war 13px */
   line-height: 1.6;
 }
 
@@ -510,8 +520,8 @@ select.fancy-input option {
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  font-size: 13px;
-  color: #aaa;
+  font-size: 14px; /* war 13px */
+  color: #bbb; /* war #aaa */
   user-select: none;
 }
 .anon-checkbox-label input[type="checkbox"] {
@@ -531,8 +541,8 @@ select.fancy-input option {
   padding: 10px 14px;
   background: rgba(255, 107, 0, 0.06);
   border-radius: 8px;
-  font-size: 12px;
-  color: #888;
+  font-size: 13px; /* war 12px */
+  color: #999; /* war #888 */
 }
 
 /* ─── Feature 2: Greyed-out Feedback Section ────────────── */
@@ -546,8 +556,8 @@ select.fancy-input option {
 /* ─── Feature 8: Character Counter ──────────────────────── */
 .char-counter {
   text-align: right;
-  font-size: 12px;
-  color: #555;
+  font-size: 13px; /* war 12px */
+  color: #777; /* war #555 */
   margin-top: 6px;
   transition: color 0.2s;
 }
@@ -568,7 +578,7 @@ select.fancy-input option {
   background: rgba(229, 38, 32, 0.08);
   border: 1px solid rgba(229, 38, 32, 0.2);
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 14px; /* war 13px */
   color: #E52620;
 }
 
@@ -581,8 +591,9 @@ select.fancy-input option {
 .coc-list li {
   padding: 6px 0 6px 20px;
   position: relative;
-  color: #888;
-  line-height: 1.5;
+  color: #999; /* war #888 */
+  font-size: 13px; /* war implizit klein */
+  line-height: 1.6; /* war 1.5 */
 }
 .coc-list li::before {
   content: '•';
@@ -594,14 +605,14 @@ select.fancy-input option {
 /* ─── Feature 3: Averages Section ───────────────────────── */
 .avg-card {
   background: #242424;
-  border: 1px solid #2e2e2e;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
   border-radius: 10px;
   padding: 12px 14px;
 }
 .avg-label {
   display: block;
-  font-size: 11px;
-  color: #666;
+  font-size: 12px; /* war 11px */
+  color: #888; /* war #666 */
   margin-bottom: 6px;
   font-family: 'DM Sans', sans-serif;
 }
@@ -613,23 +624,23 @@ select.fancy-input option {
 .avg-num {
   font-family: '', sans-serif;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px; /* war 14px */
   color: #FF6B00;
 }
 .anon-icon-small {
-  font-size: 12px;
+  font-size: 13px; /* war 12px */
   cursor: help;
 }
 .averages-warning {
   color: #E52620;
-  font-size: 12px;
+  font-size: 13px; /* war 12px */
   font-weight: 500;
   margin-top: 8px;
   line-height: 1.4;
 }
 .averages-warning-low {
   color: #FF6B00;
-  font-size: 12px;
+  font-size: 13px; /* war 12px */
   font-weight: 500;
   margin-top: 4px;
   line-height: 1.4;
@@ -642,7 +653,7 @@ select.fancy-input option {
   color: #FF6B00;
   font-family: '', sans-serif;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 13px; /* war 12px */
   padding: 6px 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -663,7 +674,7 @@ select.fancy-input option {
 .countdown-bar {
   flex: 1;
   height: 4px;
-  background: #2e2e2e;
+  background: #3a3a3a; /* war #2e2e2e */
   border-radius: 99px;
   overflow: hidden;
 }
@@ -678,10 +689,10 @@ select.fancy-input option {
 /* ─── Read-only Text Block ──────────────────────────────── */
 .readonly-text {
   background: #242424;
-  border: 1px solid #2e2e2e;
+  border: 1px solid #3a3a3a; /* war #2e2e2e */
   border-radius: 10px;
   padding: 14px 16px;
-  color: #ccc;
-  font-size: 14px;
+  color: #d0d0d0; /* war #ccc */
+  font-size: 15px; /* war 14px */
   line-height: 1.7;
 }
