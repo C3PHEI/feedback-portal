@@ -20,12 +20,12 @@
   --color-orange:           #FF6B00;   /* primary orange / accent  */
 
   /* ─── Text-Stufen ──────────────────────────────────── */
-  --color-text-primary:     #f0f0f0;   /* weisse Labels            */
-  --color-text-secondary:   #cccccc;   /* leicht gedimmt           */
-  --color-text-muted:       #888888;   /* section headers, na-btn  */
-  --color-text-dim:         #666666;   /* labels, subtitles        */
-  --color-text-faint:       #555555;   /* placeholders, read cards */
-  --color-text-ghost:       #444444;   /* älteste / dunkelste      */
+  --color-text-primary:     #f5f5f5;   /* weisse Labels            */
+  --color-text-secondary:   #d8d8d8;   /* leicht gedimmt           */
+  --color-text-muted:       #aaaaaa;   /* section headers, na-btn  */
+  --color-text-dim:         #909090;   /* labels, subtitles        */
+  --color-text-faint:       #787878;   /* placeholders, read cards */
+  --color-text-ghost:       #626262;   /* älteste / dunkelste      */
 
   /* ─── Stars ────────────────────────────────────────── */
   --color-star-active:      var(--color-orange);
