@@ -17,12 +17,12 @@
       theme: {
         extend: {
           colors: {
-            base:    '#151515',
-            surface: '#1e1e1e',
-            card:    '#242424',
-            border:  '#2e2e2e',
-            red:     '#E52620',
-            orange:  '#FF6B00',
+            base:    'var(--color-base)',
+            surface: 'var(--color-surface)',
+            card:    'var(--color-card)',
+            border:  'var(--color-border)',
+            red:     'var(--color-red)',
+            orange:  'var(--color-orange)',
           },
           fontFamily: {
             display: ['Bodoni MT', 'sans-serif'],
@@ -32,10 +32,12 @@
       }
     }
   </script>
+  <!-- Zentrale Farb-Konfiguration (immer zuerst laden) -->
+  <link rel="stylesheet" href="css/colors.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="min-h-screen pt-24 pb-12 px-4">
+<body class="min-h-screen pt-24 pb-12 px-4" style="background: var(--color-base);">
 
 <!-- Navbar -->
 <nav class="site-nav">
@@ -66,14 +68,14 @@
       </h1>
       <span class="badge-count mb-1">3 neu</span>
     </div>
-    <p class="text-sm mt-2" style="color:#666;">Feedback das du erhalten hast</p>
+    <p class="text-sm mt-2" style="color: var(--color-text-dim);">Feedback das du erhalten hast</p>
   </div>
 
-  <!-- Feature 3: Averages / Manager-Warnung -->
-  <div class="fade-up delay-1 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:20px;">
+  <!-- Averages / Manager-Warnung -->
+  <div class="fade-up delay-1 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 20px;">
     <div class="flex items-center justify-between mb-3">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-sm uppercase">Durchschnittliche Bewertungen</p>
-      <span class="text-xs" style="color:#888;">5 Reviews <span class="anon-icon-small" title="davon 1 anonym">🕶️ 1</span></span>
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase">Durchschnittliche Bewertungen</p>
+      <span class="text-xs" style="color: var(--color-text-muted);">5 Reviews <span class="anon-icon-small" title="davon 1 anonym">🕶️ 1</span></span>
     </div>
 
     <div class="grid grid-cols-2 gap-3 mb-3">
@@ -107,16 +109,9 @@
       </div>
     </div>
 
-    <!-- Red warning text -->
     <p class="averages-warning">
       ⚠ Durchschnittswerte sind ein Richtwert und kein abschliessendes Urteil.
     </p>
-    <!-- Feature 3: Low review count warning (example shown when <= 2) -->
-    <!--
-    <p class="averages-warning-low">
-      ⚠ Durchschnittsbewertungen basierend auf 2 Reviewer(s). Sie spiegeln möglicherweise nicht das vollständige Feedback wider.
-    </p>
-    -->
   </div>
 
   <!-- Feedback Cards -->
@@ -132,11 +127,11 @@
               <span class="text-white text-sm font-medium">Anna Keller</span>
               <div class="flex items-center gap-2 flex-shrink-0">
                 <div class="unread-dot"></div>
-                <span class="text-xs" style="color:#555;">heute</span>
+                <span class="text-xs" style="color: var(--color-border-stronger);">heute</span>
               </div>
             </div>
             <div class="star-display mb-2">★★★★★</div>
-            <p class="text-sm leading-relaxed" style="color:#888;">Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Weiter so.</p>
+            <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Weiter so.</p>
           </div>
         </div>
       </div>
@@ -151,16 +146,16 @@
             <span class="text-white text-sm font-medium">Markus Huber</span>
             <div class="flex items-center gap-2 flex-shrink-0">
               <div class="unread-dot"></div>
-              <span class="text-xs" style="color:#555;">gestern</span>
+              <span class="text-xs" style="color: var(--color-border-stronger);">gestern</span>
             </div>
           </div>
           <div class="star-display mb-2">★★★★<span class="empty">★</span></div>
-          <p class="text-sm leading-relaxed" style="color:#888;">Selbständiges Arbeiten hat sich stark verbessert. Könnte noch etwas mehr auf andere zugehen bei Fragen.</p>
+          <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">Selbständiges Arbeiten hat sich stark verbessert. Könnte noch etwas mehr auf andere zugehen bei Fragen.</p>
         </div>
       </div>
     </div>
 
-    <!-- Unread 3 — ANONYMOUS (Feature 3) -->
+    <!-- Unread 3 — ANONYMOUS -->
     <div class="inbox-card unread">
       <div class="flex items-start gap-3">
         <div class="avatar anon-avatar">
@@ -168,14 +163,14 @@
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-2 mb-1">
-            <span class="text-white text-sm font-medium" style="color:#888;">Anonymes Feedback</span>
+            <span class="text-sm font-medium" style="color: var(--color-text-muted);">Anonymes Feedback</span>
             <div class="flex items-center gap-2 flex-shrink-0">
               <div class="unread-dot"></div>
-              <span class="text-xs" style="color:#555;">Mo, 17.03.</span>
+              <span class="text-xs" style="color: var(--color-border-stronger);">Mo, 17.03.</span>
             </div>
           </div>
           <div class="star-display mb-2">★★★★★</div>
-          <p class="text-sm leading-relaxed" style="color:#888;">Immer hilfsbereit und offen für neue Ansätze. Macht die Zusammenarbeit wirklich angenehm.</p>
+          <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">Immer hilfsbereit und offen für neue Ansätze. Macht die Zusammenarbeit wirklich angenehm.</p>
         </div>
       </div>
     </div>
@@ -185,14 +180,14 @@
     <!-- Read (named) -->
     <div class="inbox-card">
       <div class="flex items-start gap-3">
-        <div class="avatar" style="background:rgba(255,255,255,0.04); color:#555;">JS</div>
+        <div class="avatar" style="background: rgba(255,255,255,0.04); color: var(--color-border-stronger);">JS</div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-2 mb-1">
-            <span class="text-sm font-medium" style="color:#666;">Jana Steiner</span>
-            <span class="text-xs" style="color:#444;">Di, 11.03.</span>
+            <span class="text-sm font-medium" style="color: var(--color-text-dim);">Jana Steiner</span>
+            <span class="text-xs" style="color: var(--color-text-ghost);">Di, 11.03.</span>
           </div>
-          <div class="mb-2" style="color:#444; font-size:13px; letter-spacing:1px;">★★★★<span style="color:#2e2e2e;">★</span></div>
-          <p class="text-sm leading-relaxed" style="color:#555;">Teamarbeit und Respekt sind vorbildlich. Weiter so.</p>
+          <div class="mb-2" style="color: var(--color-text-ghost); font-size:13px; letter-spacing:1px;">★★★★<span style="color: var(--color-border);">★</span></div>
+          <p class="text-sm leading-relaxed" style="color: var(--color-text-faint);">Teamarbeit und Respekt sind vorbildlich. Weiter so.</p>
         </div>
       </div>
     </div>
@@ -200,14 +195,14 @@
     <!-- Read (named) -->
     <div class="inbox-card">
       <div class="flex items-start gap-3">
-        <div class="avatar" style="background:rgba(255,255,255,0.04); color:#555;">PW</div>
+        <div class="avatar" style="background: rgba(255,255,255,0.04); color: var(--color-border-stronger);">PW</div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-2 mb-1">
-            <span class="text-sm font-medium" style="color:#666;">Patrick Weber</span>
-            <span class="text-xs" style="color:#444;">Samstag, 07.03.</span>
+            <span class="text-sm font-medium" style="color: var(--color-text-dim);">Patrick Weber</span>
+            <span class="text-xs" style="color: var(--color-text-ghost);">Samstag, 07.03.</span>
           </div>
-          <div class="mb-2" style="color:#444; font-size:13px; letter-spacing:1px;">★★★<span style="color:#2e2e2e;">★★</span></div>
-          <p class="text-sm leading-relaxed" style="color:#555;">Offenheit für Veränderungen könnte noch etwas ausgebaut werden, aber insgesamt sehr solide.</p>
+          <div class="mb-2" style="color: var(--color-text-ghost); font-size:13px; letter-spacing:1px;">★★★<span style="color: var(--color-border);">★★</span></div>
+          <p class="text-sm leading-relaxed" style="color: var(--color-text-faint);">Offenheit für Veränderungen könnte noch etwas ausgebaut werden, aber insgesamt sehr solide.</p>
         </div>
       </div>
     </div>
@@ -215,8 +210,6 @@
   </div>
 
 </div>
-
-<!-- <a href="feedback.html" class="btn-fab-feedback">+</a> -->
 
 <script src="js/app.js"></script>
 </body>

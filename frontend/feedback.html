@@ -5,25 +5,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Feedback Hub — Feedback geben</title>
-  <link rel="stylesheet" href="css/style.css">
   <meta name="description" content="Internes Feedback-Formular">
 
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#151515">
 
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni MT:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            base:    '#151515',
-            surface: '#1e1e1e',
-            card:    '#242424',
-            border:  '#2e2e2e',
-            red:     '#E52620',
-            orange:  '#FF6B00',
+            base:    'var(--color-base)',
+            surface: 'var(--color-surface)',
+            card:    'var(--color-card)',
+            border:  'var(--color-border)',
+            red:     'var(--color-red)',
+            orange:  'var(--color-orange)',
           },
           fontFamily: {
             display: ['Bodoni MT', 'sans-serif'],
@@ -33,9 +32,12 @@
       }
     }
   </script>
+  <!-- Zentrale Farb-Konfiguration (immer zuerst laden) -->
+  <link rel="stylesheet" href="css/colors.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="min-h-screen pt-24 pb-12 px-4">
+<body class="min-h-screen pt-24 pb-12 px-4" style="background: var(--color-base);">
 
 <!-- Navbar -->
 <nav class="site-nav">
@@ -60,20 +62,19 @@
 
   <!-- Header -->
   <div class="fade-up mb-10">
-    <!-- <div class="accent-bar w-16 mb-6"> -->
     <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
       Feedback
     </h1>
-    <p class="text-sm" style="color:#666;">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
+    <p class="text-sm" style="color: var(--color-text-dim);">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
   </div>
 
   <form id="feedbackForm" novalidate>
 
     <!-- Empfänger (AD-Liste) -->
-    <div class="fade-up delay-1 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-sm uppercase mb-4">Empfänger</p>
+    <div class="fade-up delay-1 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Empfänger</p>
       <div>
-        <label class="block font-normal text-sm mb-2" style="color:#666;">Mitarbeiter aus dem Active Directory</label>
+        <label class="block font-normal text-sm mb-2" style="color: var(--color-text-dim);">Mitarbeiter aus dem Active Directory</label>
         <select id="recipientSelect" class="fancy-input" required>
           <option value="">Person auswählen…</option>
           <option value="maximilian.laepple">Maximilian Läpple</option>
@@ -87,10 +88,10 @@
       </div>
     </div>
 
-    <!-- Sichtbarkeit (Public / Private) -->
-    <div class="fade-up delay-2 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-sm uppercase mb-4">Sichtbarkeit</p>
-      <p class="text-sm mb-4" style="color:#555;">Wähle ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
+    <!-- Sichtbarkeit -->
+    <div class="fade-up delay-2 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Sichtbarkeit</p>
+      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Wähle ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
       <div class="flex gap-4 mb-4">
         <label class="visibility-option flex-1" id="vis-public-label">
@@ -126,7 +127,7 @@
 
       <!-- Rate Limit Hinweis -->
       <div id="anonRateLimit" class="rate-limit-notice" style="display:none;">
-        <span style="color:#FF6B00;">ℹ</span>
+        <span style="color: var(--color-orange);">ℹ</span>
         <span>Anonymes Feedback kann von einer Person pro Jahr genau 1× an dieselbe person gesendet werden.</span>
       </div>
     </div>
@@ -136,8 +137,8 @@
 
       <!-- Drivers & Stars -->
       <div class="fade-up delay-3 mb-6">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-2">Bewertung</p>
-        <p class="text-sm mb-4" style="color:#555;">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-2">Bewertung</p>
+        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
 
         <div class="flex flex-col gap-3">
 
@@ -229,14 +230,14 @@
         </div>
       </div>
 
-      <!-- Actionable Feedback (Strengths + Areas to improve) -->
-      <div class="fade-up delay-4 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-5">Actionable Feedback</p>
-        <p class="text-sm mb-4" style="color:#555;">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
+      <!-- Actionable Feedback -->
+      <div class="fade-up delay-4 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-5">Actionable Feedback</p>
+        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
 
         <div class="mb-5">
           <div class="flex items-center gap-2 mb-2">
-            <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+            <span style="width:8px; height:8px; border-radius:50%; background: var(--color-success); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="strengths">Strengths</label>
           </div>
           <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten…"></textarea>
@@ -249,7 +250,7 @@
 
         <div class="mb-2">
           <div class="flex items-center gap-2 mb-2">
-            <span style="width:8px;height:8px;border-radius:50%;background:#FF6B00;display:inline-block;"></span>
+            <span style="width:8px; height:8px; border-radius:50%; background: var(--color-orange); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="improvements">Areas to improve</label>
           </div>
           <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen…"></textarea>
@@ -258,17 +259,16 @@
           </div>
         </div>
 
-        <!-- Validierungshinweis Textboxen -->
         <div id="textValidation" class="validation-msg" style="display:none;">
           <span>⚠ Mindestens ein Feld muss mit 200+ Zeichen ausgefüllt werden.</span>
         </div>
       </div>
 
       <!-- Code of Conduct -->
-      <div class="fade-up delay-5 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-sm uppercase mb-4">Code of Conduct</p>
+      <div class="fade-up delay-5 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Code of Conduct</p>
 
-        <div class="text-sm leading-relaxed mb-4" style="color:#666;">
+        <div class="text-sm leading-relaxed mb-4" style="color: var(--color-text-dim);">
           <p class="mb-2">By submitting this feedback you confirm adherence to the following:</p>
           <ul class="coc-list">
             <li>Respectful Language Only — All feedback must be professional, courteous, and respectful. Avoid offensive, discriminatory, or inflammatory language. Focus on observations and behaviors, not insults or personal attacks.</li>
@@ -285,11 +285,11 @@
 
         <label class="anon-checkbox-label">
           <input type="checkbox" id="cocAccepted" required>
-          <span>Ich akzeptiere den <a href="#" style="color:#FF6B00; text-decoration:underline;">Code of Conduct</a></span>
+          <span>Ich akzeptiere den <a href="#" style="color: var(--color-orange); text-decoration:underline;">Code of Conduct</a></span>
         </label>
 
         <div class="mt-3">
-          <a href="#" class="text-xs" style="color:#E52620; text-decoration:underline;">Report a concern → Whistleblowing Platform</a>
+          <a href="#" class="text-xs" style="color: var(--color-red); text-decoration:underline;">Report a concern → Whistleblowing Platform</a>
         </div>
       </div>
 
@@ -298,7 +298,7 @@
         <button type="submit" class="btn-submit w-full" id="submitBtn" disabled>
           Feedback absenden →
         </button>
-        <p class="text-xs text-center" style="color:#444;">
+        <p class="text-xs text-center" style="color: var(--color-text-ghost);">
           Einmal abgesendet, ist das Feedback endgültig. Du hast 5 Minuten um Tippfehler zu korrigieren.
         </p>
       </div>
@@ -310,11 +310,6 @@
 
 <div id="toast">✓ Feedback erfolgreich eingereicht</div>
 
-<!-- <a href="index.html" class="btn-fab-home">
-  <img src="home.svg" alt="Home" width="24" height="24">
-</a> -->
-
 <script src="js/app.js"></script>
-
 </body>
 </html>

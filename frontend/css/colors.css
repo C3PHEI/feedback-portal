@@ -1,0 +1,52 @@
+/* ══════════════════════════════════════════════════════
+   FEEDBACK HUB — ZENTRALE FARB-KONFIGURATION
+   Hier alle Farben einmalig ändern — wirkt überall.
+   ══════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ─── Hintergründe ─────────────────────────────────── */
+  --color-base:             #151515;   /* body background          */
+  --color-surface:          #1e1e1e;   /* cards, sections          */
+  --color-card:             #242424;   /* nested cards, cat-card   */
+
+  /* ─── Borders ──────────────────────────────────────── */
+  --color-border:           #2e2e2e;   /* default dividers         */
+  --color-border-strong:    #3a3a3a;   /* inputs, cat-card         */
+  --color-border-stronger:  #3e3e3e;   /* stars empty, na-display  */
+
+  /* ─── Brand-Farben ─────────────────────────────────── */
+  --color-red:              #E52620;   /* primary red              */
+  --color-orange:           #FF6B00;   /* primary orange / accent  */
+
+  /* ─── Text-Stufen ──────────────────────────────────── */
+  --color-text-primary:     #f0f0f0;   /* weisse Labels            */
+  --color-text-secondary:   #cccccc;   /* leicht gedimmt           */
+  --color-text-muted:       #888888;   /* section headers, na-btn  */
+  --color-text-dim:         #666666;   /* labels, subtitles        */
+  --color-text-faint:       #555555;   /* placeholders, read cards */
+  --color-text-ghost:       #444444;   /* älteste / dunkelste      */
+
+  /* ─── Stars ────────────────────────────────────────── */
+  --color-star-active:      var(--color-orange);
+  --color-star-empty:       #3e3e3e;
+
+  /* ─── Semantisch ───────────────────────────────────── */
+  --color-success:          #22c55e;   /* strengths dot            */
+  --color-danger:           var(--color-red);
+  --color-warning:          var(--color-orange);
+
+  /* ─── Gradient ─────────────────────────────────────── */
+  --gradient-brand:         linear-gradient(135deg, var(--color-red), var(--color-orange));
+
+  /* ─── Border-Radius ────────────────────────────────── */
+  --radius-sm:              6px;
+  --radius-md:              10px;
+  --radius-lg:              14px;
+  --radius-xl:              20px;
+
+  /* ─── Navbar ───────────────────────────────────────── */
+  --nav-bg:                 rgba(21, 21, 21, 0.85);
+  --nav-border:             var(--color-border);
+
+}
