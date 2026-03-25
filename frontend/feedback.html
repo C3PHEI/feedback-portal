@@ -11,7 +11,7 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#151515">
 
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni MT:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -26,7 +26,7 @@
             orange:  '#FF6B00',
           },
           fontFamily: {
-            display: ['Syne', 'sans-serif'],
+            display: ['Bodoni MT', 'sans-serif'],
             body:    ['DM Sans', 'sans-serif'],
           }
         }
@@ -71,9 +71,9 @@
 
     <!-- Empfänger (AD-Liste) -->
     <div class="fade-up delay-1 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Empfänger</p>
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-sm uppercase mb-4">Empfänger</p>
       <div>
-        <label class="block text-xs mb-2" style="color:#666;">Mitarbeiter aus dem Active Directory</label>
+        <label class="block font-normal text-sm mb-2" style="color:#666;">Mitarbeiter aus dem Active Directory</label>
         <select id="recipientSelect" class="fancy-input" required>
           <option value="">Person auswählen…</option>
           <option value="maximilian.laepple">Maximilian Läpple</option>
@@ -89,8 +89,8 @@
 
     <!-- Sichtbarkeit (Public / Private) -->
     <div class="fade-up delay-2 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Sichtbarkeit</p>
-      <p class="text-xs mb-4" style="color:#555;">Wähle ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-sm uppercase mb-4">Sichtbarkeit</p>
+      <p class="text-sm mb-4" style="color:#555;">Wähle ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
       <div class="flex gap-4 mb-4">
         <label class="visibility-option flex-1" id="vis-public-label">
@@ -136,8 +136,8 @@
 
       <!-- Drivers & Stars -->
       <div class="fade-up delay-3 mb-6">
-        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-2">Bewertung</p>
-        <p class="text-xs mb-4" style="color:#555;">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-2">Bewertung</p>
+        <p class="text-sm mb-4" style="color:#555;">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
 
         <div class="flex flex-col gap-3">
 
@@ -231,8 +231,8 @@
 
       <!-- Actionable Feedback (Strengths + Areas to improve) -->
       <div class="fade-up delay-4 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-5">Actionable Feedback</p>
-        <p class="text-xs mb-4" style="color:#555;">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-5">Actionable Feedback</p>
+        <p class="text-sm mb-4" style="color:#555;">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
 
         <div class="mb-5">
           <div class="flex items-center gap-2 mb-2">
@@ -266,9 +266,9 @@
 
       <!-- Code of Conduct -->
       <div class="fade-up delay-5 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
-        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Code of Conduct</p>
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-sm uppercase mb-4">Code of Conduct</p>
 
-        <div class="text-xs leading-relaxed mb-4" style="color:#666;">
+        <div class="text-sm leading-relaxed mb-4" style="color:#666;">
           <p class="mb-2">By submitting this feedback you confirm adherence to the following:</p>
           <ul class="coc-list">
             <li>Respectful Language Only — All feedback must be professional, courteous, and respectful. Avoid offensive, discriminatory, or inflammatory language. Focus on observations and behaviors, not insults or personal attacks.</li>
