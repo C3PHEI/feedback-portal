@@ -40,7 +40,7 @@
 
 <div class="max-w-2xl mx-auto">
 
-  <!-- ═══ Header ═══ -->
+  <!-- Header -->
   <div class="fade-up mb-10">
     <div class="accent-bar w-16 mb-6"></div>
     <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
@@ -51,7 +51,7 @@
 
   <form id="feedbackForm" novalidate>
 
-    <!-- ═══ 1 — Empfänger (AD-Liste) ═══ -->
+    <!-- Empfänger (AD-Liste) -->
     <div class="fade-up delay-1 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
       <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Empfänger</p>
       <div>
@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    <!-- ═══ 2 — Sichtbarkeit (Public / Private) ═══ -->
+    <!-- Sichtbarkeit (Public / Private) -->
     <div class="fade-up delay-2 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
       <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Sichtbarkeit</p>
       <p class="text-xs mb-4" style="color:#555;">Wähle ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
@@ -106,17 +106,17 @@
         </label>
       </div>
 
-      <!-- Rate Limit Hinweis (Feature 9) -->
+      <!-- Rate Limit Hinweis -->
       <div id="anonRateLimit" class="rate-limit-notice" style="display:none;">
         <span style="color:#FF6B00;">ℹ</span>
-        <span>Anonymes Feedback ist auf 1× pro Person pro Jahr begrenzt.</span>
+        <span>Anonymes Feedback kann von einer Person pro Jahr genau 1× an dieselbe person gesendet werden.</span>
       </div>
     </div>
 
-    <!-- ═══ Feedback-Sektion (greyed out bis Sichtbarkeit gewählt) ═══ -->
+    <!-- Feedback-Sektion -->
     <div id="feedbackSection" class="feedback-section-locked">
 
-      <!-- ═══ 6 — Drivers & Stars ═══ -->
+      <!-- Drivers & Stars -->
       <div class="fade-up delay-3 mb-6">
         <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-2">Bewertung</p>
         <p class="text-xs mb-4" style="color:#555;">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
@@ -211,7 +211,7 @@
         </div>
       </div>
 
-      <!-- ═══ 8 — Actionable Feedback (Strengths + Areas to improve) ═══ -->
+      <!-- Actionable Feedback (Strengths + Areas to improve) -->
       <div class="fade-up delay-4 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
         <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-5">Actionable Feedback</p>
         <p class="text-xs mb-4" style="color:#555;">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
@@ -246,7 +246,7 @@
         </div>
       </div>
 
-      <!-- ═══ 10 — Code of Conduct ═══ -->
+      <!-- Code of Conduct -->
       <div class="fade-up delay-5 mb-6" style="background:#1e1e1e; border:1px solid #2e2e2e; border-radius:14px; padding:24px;">
         <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color:#888;" class="text-xs uppercase mb-4">Code of Conduct</p>
 
@@ -275,7 +275,7 @@
         </div>
       </div>
 
-      <!-- ═══ Submit ═══ -->
+      <!-- Submit -->
       <div class="fade-up delay-6 flex flex-col items-center gap-4 pt-2 pb-8">
         <button type="submit" class="btn-submit w-full" id="submitBtn" disabled>
           Feedback absenden →
@@ -290,7 +290,6 @@
   </form>
 </div>
 
-<!-- Toast -->
 <div id="toast">✓ Feedback erfolgreich eingereicht</div>
 
 <a href="index.html" class="btn-fab-home">
