@@ -89,6 +89,65 @@ select.fancy-input option {
   background: #1e1e1e;
 }
 
+/* ─── Navbar ────────────────────────────────────────────── */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(21, 21, 21, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.site-nav-inner {
+  display: flex;
+  align-items: center;
+  padding: 14px 24px;
+}
+
+.nav-logo {
+  height: 45px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.nav-content {
+  max-width: 42rem;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: #666;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-link:hover {
+  color: #ccc;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+  color: #FF6B00;
+  background: rgba(255, 107, 0, 0.08);
+}
+
 /* ─── Accent Bar ────────────────────────────────────────── */
 .accent-bar {
   background: linear-gradient(90deg, #E52620, #FF6B00);
@@ -301,6 +360,11 @@ select.fancy-input option {
 .anon-avatar {
   background: rgba(255, 255, 255, 0.06);
   font-size: 18px;
+}
+
+.anon-avatar-icon {
+  height: 28px;
+  width: 28px;
 }
 
 /* ─── Star Display ──────────────────────────────────────── */

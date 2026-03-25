@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="css/style.css">
   <meta name="description" content="Internes Feedback-Formular">
 
-  <link rel="icon" href="/feedback.svg" type="image/svg+xml">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#151515">
 
@@ -36,13 +35,26 @@
   </script>
 </head>
 
-<body class="min-h-screen py-12 px-4">
+<body class="min-h-screen pt-24 pb-12 px-4">
 
-<div class="max-w-2xl mx-auto">
+<!-- Navbar -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <img src="img/777ch_Logo.svg" alt="Logo" class="nav-logo">
+    <div class="nav-content">
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Inbox</a>
+        <a href="feedback.html" class="nav-link active">Feedback geben</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-3xl mx-auto">
 
   <!-- Header -->
   <div class="fade-up mb-10">
-    <div class="accent-bar w-16 mb-6"></div>
+    <!-- <div class="accent-bar w-16 mb-6"> -->
     <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
       Feedback
     </h1>
@@ -94,7 +106,7 @@
         </label>
       </div>
 
-      <!-- Anonymitäts-Warnung (Feature 2) -->
+      <!-- Anonymitäts-Warnung -->
       <div id="anonWarning" class="anon-warning" style="display:none;">
         <div class="anon-warning-icon">⚠️</div>
         <p class="anon-warning-text">
@@ -292,9 +304,9 @@
 
 <div id="toast">✓ Feedback erfolgreich eingereicht</div>
 
-<a href="index.html" class="btn-fab-home">
+<!-- <a href="index.html" class="btn-fab-home">
   <img src="home.svg" alt="Home" width="24" height="24">
-</a>
+</a> -->
 
 <script src="js/app.js"></script>
 
