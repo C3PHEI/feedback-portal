@@ -1,0 +1,643 @@
+<!doctype html>
+<html class="no-js" lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback Hub — Admin</title>
+  <meta name="description" content="Admin-Bereich des Feedback Hub">
+
+  <link rel="icon" href="/feedback.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#151515">
+
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            base:    '#151515',
+            surface: '#1e1e1e',
+            card:    '#242424',
+            border:  '#2e2e2e',
+            red:     '#E52620',
+            orange:  '#FF6B00',
+          },
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body:    ['DM Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body class="min-h-screen py-12 px-4">
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <img src="img/777ch_Logo.svg" alt="Logo" class="nav-logo">
+    <div class="nav-content">
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Inbox</a>
+        <a href="feedback.html" class="nav-link">Feedback geben</a>
+        <a href="feedback.html" class="nav-link">Verlauf</a>
+        <a href="admin.html" class="nav-link active">Admin</a>
+      </div>
+      <div class="nav-icons">
+        <div class="avatar anon-avatar">
+          <img class="anon-avatar-icon" alt="Icon" src="img/person.svg"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-3xl mx-auto">
+
+  <!-- ═══ Header ═══ -->
+  <div class="fade-up mb-8">
+    <div class="accent-bar w-16 mb-6"></div>
+    <div class="flex items-end justify-between">
+      <div>
+        <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight">
+          Admin
+        </h1>
+        <p class="text-sm mt-2" style="color:#777;">Verwaltung, Moderation und Benachrichtigungen</p>
+      </div>
+      <span class="role-badge admin mb-1">Administrator</span>
+    </div>
+  </div>
+
+  <!-- ═══ Stats Overview ═══ -->
+  <div class="fade-up delay-1 grid grid-cols-4 gap-3 mb-8">
+    <div class="stat-card">
+      <div class="stat-number highlight">35</div>
+      <div class="stat-label">Benutzer</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">86</div>
+      <div class="stat-label">Feedbacks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#FF6B00;">3</div>
+      <div class="stat-label">Gemeldet</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#22c55e;">98%</div>
+      <div class="stat-label">Zustellung</div>
+    </div>
+  </div>
+
+  <!-- ═══ Sub-Tab Navigation ═══ -->
+  <div class="fade-up delay-2 mb-8">
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="tabBtn-users" type="button">
+        <span class="tab-icon">👥</span>
+        Benutzerverwaltung
+      </button>
+      <button class="admin-tab" id="tabBtn-moderation" type="button">
+        <span class="tab-icon">🛡️</span>
+        Feedbackmoderation
+      </button>
+      <button class="admin-tab" id="tabBtn-notifications" type="button">
+        <span class="tab-icon">🔔</span>
+        Benachrichtigungen
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       TAB 1: BENUTZERVERWALTUNG
+       ═══════════════════════════════════════════════════════ -->
+  <div class="tab-content active" id="tab-users">
+
+    <!-- Search + Add User -->
+    <div class="admin-card">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="search-wrapper flex-1">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="admin-search" id="userSearch" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)…">
+        </div>
+        <button class="btn-admin primary" id="addUserBtn" type="button">+ Benutzer</button>
+      </div>
+
+      <!-- Filter Pills -->
+      <div class="flex gap-2 flex-wrap">
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterAll" value="all" checked>
+          <label for="filterAll">Alle</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterAdmin" value="admin">
+          <label for="filterAdmin">Admins</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterManager" value="manager">
+          <label for="filterManager">Manager</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterUser" value="user">
+          <label for="filterUser">Benutzer</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterInactive" value="inactive">
+          <label for="filterInactive">Inaktiv</label>
+        </span>
+      </div>
+    </div>
+
+    <!-- User Table -->
+    <div class="admin-card" style="padding: 0; overflow-x: auto;">
+      <table class="admin-table">
+        <thead>
+        <tr>
+          <th>Benutzer</th>
+          <th>Abteilung</th>
+          <th>Rolle</th>
+          <th>Status</th>
+          <th class="hide-mobile">Feedbacks</th>
+          <th style="text-align:right;">Aktionen</th>
+        </tr>
+        </thead>
+        <tbody id="userTableBody">
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">ML</div>
+              <div>
+                <div class="text-white text-sm font-medium">Maximilian Läpple</div>
+                <div class="text-xs" style="color:#666;">m.laepple@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">IT</span></td>
+          <td><span class="role-badge admin">Admin</span></td>
+          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">12 / 8</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">AK</div>
+              <div>
+                <div class="text-white text-sm font-medium">Anna Keller</div>
+                <div class="text-xs" style="color:#666;">a.keller@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">Marketing</span></td>
+          <td><span class="role-badge manager">Manager</span></td>
+          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">24 / 15</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">MH</div>
+              <div>
+                <div class="text-white text-sm font-medium">Markus Huber</div>
+                <div class="text-xs" style="color:#666;">m.huber@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">Finance</span></td>
+          <td><span class="role-badge user">Benutzer</span></td>
+          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">6 / 3</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">TR</div>
+              <div>
+                <div class="text-white text-sm font-medium">Thomas Rüfli</div>
+                <div class="text-xs" style="color:#666;">t.ruefli@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">Sales</span></td>
+          <td><span class="role-badge manager">Manager</span></td>
+          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">18 / 11</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">PW</div>
+              <div>
+                <div class="text-white text-sm font-medium">Patrick Weber</div>
+                <div class="text-xs" style="color:#666;">p.weber@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">HR</span></td>
+          <td><span class="role-badge user">Benutzer</span></td>
+          <td><span class="status-dot inactive"></span><span style="color:#999;font-size:13px;">Inaktiv</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">2 / 0</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
+              <button class="btn-admin" type="button" title="Aktivieren" style="color:#22c55e;border-color:#22c55e33;">✅</button>
+            </div>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       TAB 2: FEEDBACKMODERATION
+       ═══════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-moderation">
+
+    <!-- Moderation Stats -->
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="stat-card">
+        <div class="stat-number" style="color:#E52620;">3</div>
+        <div class="stat-label">Offene Meldungen</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" style="color:#FF6B00;">7</div>
+        <div class="stat-label">In Prüfung</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" style="color:#22c55e;">42</div>
+        <div class="stat-label">Erledigt</div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="admin-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="search-wrapper flex-1">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="admin-search" id="moderationSearch" placeholder="Feedback-ID, Benutzer oder Schlagwort suchen…">
+        </div>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <span class="tag-pill">
+          <input type="radio" name="modFilter" id="modAll" value="all" checked>
+          <label for="modAll">Alle</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="modFilter" id="modOpen" value="open">
+          <label for="modOpen">Offen</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="modFilter" id="modReview" value="review">
+          <label for="modReview">In Prüfung</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="modFilter" id="modResolved" value="resolved">
+          <label for="modResolved">Erledigt</label>
+        </span>
+      </div>
+    </div>
+
+    <!-- Flagged Feedback 1 -->
+    <div class="feedback-preview" id="flag-1">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <span class="status-dot flagged"></span>
+          <div>
+            <span class="text-white text-sm font-medium">Code of Conduct Verstoss</span>
+            <span class="text-xs block" style="color:#666;">Gemeldet am 24.03.2026 · Feedback #FB-0472</span>
+          </div>
+        </div>
+        <span class="severity-pill high">Hoch</span>
+      </div>
+      <div class="mb-3" style="padding-left:20px;">
+        <p style="color:#999;font-size:12px;margin-bottom:6px;">
+          <span style="color:#777;">Verstoss gegen:</span> Respectful Language Only, No Retaliation
+        </p>
+        <p style="color:#999;font-size:12px;">
+          <span style="color:#777;">Gemeldet von:</span> <span style="color:#ccc;">Anna Keller</span> · <span style="color:#777;">Betrifft Feedback von:</span> <span style="color:#ccc;">Anonymous</span> → <span style="color:#ccc;">Markus Huber</span>
+        </p>
+      </div>
+      <div class="feedback-preview-text" style="padding-left:20px;">
+        „Das Feedback enthält beleidigende Sprache und persönliche Angriffe, die gegen den Code of Conduct verstossen. Der Absender nutzt die Anonymität, um den Empfänger gezielt herabzusetzen…"
+      </div>
+      <div style="padding-left:20px;">
+        <button class="expand-btn" type="button">Mehr anzeigen ↓</button>
+      </div>
+      <div class="flex gap-2 mt-4" style="padding-left:20px;">
+        <button class="btn-admin primary" type="button">📋 Überprüfen</button>
+        <button class="btn-admin" type="button">⚠️ Verwarnung senden</button>
+        <button class="btn-admin danger" type="button">🗑️ Feedback entfernen</button>
+      </div>
+    </div>
+
+    <!-- Flagged Feedback 2 -->
+    <div class="feedback-preview" id="flag-2">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <span class="status-dot pending"></span>
+          <div>
+            <span class="text-white text-sm font-medium">Rating Abuse Verdacht</span>
+            <span class="text-xs block" style="color:#666;">Gemeldet am 22.03.2026 · Feedback #FB-0465</span>
+          </div>
+        </div>
+        <span class="severity-pill medium">Mittel</span>
+      </div>
+      <div class="mb-3" style="padding-left:20px;">
+        <p style="color:#999;font-size:12px;margin-bottom:6px;">
+          <span style="color:#777;">Verstoss gegen:</span> Platform Etiquette / Avoid Rating Abuse
+        </p>
+        <p style="color:#999;font-size:12px;">
+          <span style="color:#777;">Automatisch erkannt:</span> Alle 4 Drivers mit 1 Stern bewertet, Textfelder enthalten minimalen Inhalt.
+        </p>
+      </div>
+      <div class="flex gap-2 mt-4" style="padding-left:20px;">
+        <button class="btn-admin primary" type="button">📋 Überprüfen</button>
+        <button class="btn-admin" type="button">✅ Freigeben</button>
+        <button class="btn-admin danger" type="button">🗑️ Feedback entfernen</button>
+      </div>
+    </div>
+
+    <!-- Flagged Feedback 3 -->
+    <div class="feedback-preview" id="flag-3">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <span class="status-dot resolved"></span>
+          <div>
+            <span class="text-white text-sm font-medium">Anonymitäts-Bedenken</span>
+            <span class="text-xs block" style="color:#666;">Gemeldet am 18.03.2026 · Feedback #FB-0451 · <span style="color:#22c55e;">Erledigt</span></span>
+          </div>
+        </div>
+        <span class="severity-pill low">Niedrig</span>
+      </div>
+      <div class="mb-3" style="padding-left:20px;">
+        <p style="color:#999;font-size:12px;margin-bottom:6px;">
+          <span style="color:#777;">Verstoss gegen:</span> Anonymity Awareness
+        </p>
+        <p style="color:#999;font-size:12px;">
+          <span style="color:#777;">Massnahme:</span> Feedback anonym neu zugeordnet · Absender informiert.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       TAB 3: BENACHRICHTIGUNGEN
+       ═══════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-notifications">
+
+    <!-- Email Notification Settings -->
+    <div class="admin-card">
+      <p class="admin-card-title">E-Mail Benachrichtigungen</p>
+      <p style="color:#777;font-size:13px;margin-bottom:20px;">Konfiguriere welche Benachrichtigungen automatisch per E-Mail versendet werden.</p>
+
+      <!-- Notification Toggle: Neues Feedback -->
+      <div class="notif-card">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span style="font-size:20px;">📩</span>
+            <div>
+              <p class="text-white text-sm font-medium">Neues Feedback erhalten</p>
+              <p style="color:#777;font-size:12px;">Benutzer werden benachrichtigt, wenn sie ein neues Feedback erhalten</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="notifNewFeedback">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Notification Toggle: Feedback bearbeitet -->
+      <div class="notif-card">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span style="font-size:20px;">✏️</span>
+            <div>
+              <p class="text-white text-sm font-medium">Feedback bearbeitet</p>
+              <p style="color:#777;font-size:12px;">Empfänger wird informiert, wenn ein Feedback innerhalb der 5-Minuten-Frist bearbeitet wurde</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="notifEditFeedback">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Notification Toggle: CoC Verstoss -->
+      <div class="notif-card">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span style="font-size:20px;">🛡️</span>
+            <div>
+              <p class="text-white text-sm font-medium">Code of Conduct Verstoss gemeldet</p>
+              <p style="color:#777;font-size:12px;">Admin erhält sofort eine E-Mail wenn ein Feedback gemeldet wird</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="notifCocViolation">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Notification Toggle: Wöchentlicher Bericht -->
+      <div class="notif-card">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span style="font-size:20px;">📊</span>
+            <div>
+              <p class="text-white text-sm font-medium">Wöchentlicher Admin-Bericht</p>
+              <p style="color:#777;font-size:12px;">Zusammenfassung der Plattformaktivität jeden Montag um 08:00 Uhr</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="notifWeeklyReport">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Notification Toggle: Rate Limit -->
+      <div class="notif-card">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span style="font-size:20px;">⏱️</span>
+            <div>
+              <p class="text-white text-sm font-medium">Anonymes Rate-Limit erreicht</p>
+              <p style="color:#777;font-size:12px;">Admin wird informiert wenn ein Benutzer das jährliche anonyme Feedback-Limit erreicht</p>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="notifRateLimit">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Job Status -->
+    <div class="admin-card">
+      <p class="admin-card-title">Notification Jobs</p>
+      <p style="color:#777;font-size:13px;margin-bottom:16px;">Status der automatischen E-Mail-Jobs.</p>
+
+      <table class="admin-table">
+        <thead>
+        <tr>
+          <th>Job</th>
+          <th>Status</th>
+          <th>Letzte Ausführung</th>
+          <th style="text-align:right;">Aktion</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <span class="text-white text-sm">Feedback-Benachrichtigung</span>
+            <span class="text-xs block" style="color:#666;">Echtzeit-Trigger</span>
+          </td>
+          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Läuft</span></td>
+          <td><span style="color:#999;font-size:13px;">Vor 2 Minuten</span></td>
+          <td style="text-align:right;">
+            <button class="btn-admin" type="button">⏸️ Pause</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="text-white text-sm">Wöchentlicher Bericht</span>
+            <span class="text-xs block" style="color:#666;">Cron: Montag 08:00</span>
+          </td>
+          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Geplant</span></td>
+          <td><span style="color:#999;font-size:13px;">24.03.2026, 08:00</span></td>
+          <td style="text-align:right;">
+            <button class="btn-admin" type="button">▶️ Jetzt senden</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="text-white text-sm">CoC-Alarmierung</span>
+            <span class="text-xs block" style="color:#666;">Echtzeit-Trigger</span>
+          </td>
+          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Läuft</span></td>
+          <td><span style="color:#999;font-size:13px;">Vor 1 Stunde</span></td>
+          <td style="text-align:right;">
+            <button class="btn-admin" type="button">⏸️ Pause</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="text-white text-sm">AD-Sync Benachrichtigung</span>
+            <span class="text-xs block" style="color:#666;">Cron: Täglich 02:00</span>
+          </td>
+          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Geplant</span></td>
+          <td><span style="color:#999;font-size:13px;">25.03.2026, 02:00</span></td>
+          <td style="text-align:right;">
+            <button class="btn-admin" type="button">▶️ Jetzt senden</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /max-w-3xl -->
+
+
+<!-- ═══ Add User Modal ═══ -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="modal-title" style="margin-bottom:0;">Benutzer hinzufügen</h2>
+      <button type="button" style="background:none;border:none;color:#666;font-size:24px;cursor:pointer;" id="closeModalBtn">×</button>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-xs mb-2" style="color:#777;">Name</label>
+      <input type="text" class="admin-search" style="padding-left:16px;" placeholder="Vor- und Nachname">
+    </div>
+    <div class="mb-4">
+      <label class="block text-xs mb-2" style="color:#777;">E-Mail</label>
+      <input type="email" class="admin-search" style="padding-left:16px;" placeholder="name@company.ch">
+    </div>
+    <div class="mb-4">
+      <label class="block text-xs mb-2" style="color:#777;">Abteilung</label>
+      <select class="admin-search" style="padding-left:16px;appearance:auto;">
+        <option value="">Abteilung wählen…</option>
+        <option>IT</option>
+        <option>Marketing</option>
+        <option>Finance</option>
+        <option>Sales</option>
+        <option>HR</option>
+        <option>Operations</option>
+      </select>
+    </div>
+    <div class="mb-6">
+      <label class="block text-xs mb-2" style="color:#777;">Rolle</label>
+      <div class="flex gap-2">
+        <span class="tag-pill">
+          <input type="radio" name="newUserRole" id="roleUser" value="user" checked>
+          <label for="roleUser">Benutzer</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="newUserRole" id="roleManager" value="manager">
+          <label for="roleManager">Manager</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="newUserRole" id="roleAdminNew" value="admin">
+          <label for="roleAdminNew">Admin</label>
+        </span>
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <button class="btn-admin primary flex-1" type="button">Benutzer erstellen</button>
+      <button class="btn-admin flex-1" type="button" id="cancelModalBtn">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Toast ═══ -->
+<div id="toast">✓ Aktion erfolgreich</div>
+
+<script src="js/admin.js"></script>
+
+</body>
+</html>

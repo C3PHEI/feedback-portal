@@ -1,0 +1,406 @@
+/* ═══════════════════════════════════════════════════════
+   Admin Panel — Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Admin Sub-Tab Navigation ──────────────────────── */
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  background: #1a1a1a;
+  border: 1px solid #2e2e2e;
+  border-radius: 14px;
+  padding: 5px;
+}
+.admin-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #777;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+.admin-tab:hover {
+  color: #bbb;
+  background: rgba(255, 255, 255, 0.03);
+}
+.admin-tab.active {
+  background: linear-gradient(135deg, rgba(229, 38, 32, 0.15), rgba(255, 107, 0, 0.10));
+  color: #FF6B00;
+  box-shadow: 0 2px 12px rgba(229, 38, 32, 0.1);
+}
+.admin-tab .tab-icon {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+/* ─── Tab Content ──────────────────────────────────── */
+.tab-content {
+  display: none;
+  animation: fadeUp 0.35s ease both;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* ─── Admin Section Card ───────────────────────────── */
+.admin-card {
+  background: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.admin-card:hover {
+  border-color: #3a3a3a;
+}
+.admin-card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #999;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* ─── Admin Table ──────────────────────────────────── */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.admin-table thead th {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #666;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #2e2e2e;
+}
+.admin-table tbody tr {
+  transition: background 0.15s;
+}
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+.admin-table tbody td {
+  padding: 14px 12px;
+  font-size: 14px;
+  color: #ccc;
+  border-bottom: 1px solid #1a1a1a;
+  vertical-align: middle;
+}
+
+/* ─── Role Badge ───────────────────────────────────── */
+.role-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+.role-badge.admin {
+  background: rgba(229, 38, 32, 0.12);
+  color: #E52620;
+}
+.role-badge.manager {
+  background: rgba(255, 107, 0, 0.12);
+  color: #FF6B00;
+}
+.role-badge.user {
+  background: rgba(255, 255, 255, 0.06);
+  color: #888;
+}
+
+/* ─── Status Badge ─────────────────────────────────── */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.status-dot.active   { background: #22c55e; }
+.status-dot.inactive { background: #666; }
+.status-dot.flagged  { background: #E52620; }
+.status-dot.pending  { background: #FF6B00; }
+.status-dot.resolved { background: #22c55e; }
+
+/* ─── Flag Severity ────────────────────────────────── */
+.severity-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Syne', sans-serif;
+}
+.severity-pill.high {
+  background: rgba(229, 38, 32, 0.12);
+  color: #E52620;
+}
+.severity-pill.medium {
+  background: rgba(255, 107, 0, 0.12);
+  color: #FF6B00;
+}
+.severity-pill.low {
+  background: rgba(255, 255, 255, 0.06);
+  color: #888;
+}
+
+/* ─── Admin Buttons ────────────────────────────────── */
+.btn-admin {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid #3a3a3a;
+  background: transparent;
+  color: #bbb;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-admin:hover {
+  border-color: #FF6B00;
+  color: #FF6B00;
+  background: rgba(255, 107, 0, 0.06);
+}
+.btn-admin.danger:hover {
+  border-color: #E52620;
+  color: #E52620;
+  background: rgba(229, 38, 32, 0.06);
+}
+.btn-admin.primary {
+  background: linear-gradient(135deg, #E52620, #FF6B00);
+  border: none;
+  color: #fff;
+  font-weight: 500;
+}
+.btn-admin.primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ─── Search Input ─────────────────────────────────── */
+.admin-search {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  background: #242424;
+  border: 1px solid #2e2e2e;
+  border-radius: 10px;
+  color: #eee;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.admin-search::placeholder {
+  color: #555;
+}
+.admin-search:focus {
+  border-color: #FF6B00;
+}
+.search-wrapper {
+  position: relative;
+}
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* ─── Toggle Switch ────────────────────────────────── */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.toggle-switch input {
+  display: none;
+}
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #333;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #888;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.25s, background 0.25s;
+}
+.toggle-switch input:checked + .toggle-slider {
+  background: rgba(255, 107, 0, 0.3);
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+  background: #FF6B00;
+}
+
+/* ─── Stats Card ───────────────────────────────────── */
+.stat-card {
+  background: #242424;
+  border: 1px solid #2e2e2e;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.stat-card:hover {
+  border-color: #3a3a3a;
+}
+.stat-number {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  color: #fff;
+  line-height: 1;
+}
+.stat-number.highlight {
+  background: linear-gradient(135deg, #E52620, #FF6B00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #777;
+  margin-top: 6px;
+}
+
+/* ─── Expandable Feedback Preview ──────────────────── */
+.feedback-preview {
+  background: #242424;
+  border: 1px solid #2e2e2e;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.feedback-preview:hover {
+  border-color: #3a3a3a;
+}
+.feedback-preview-text {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.7;
+  max-height: 60px;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+.feedback-preview.expanded .feedback-preview-text {
+  max-height: 500px;
+}
+.expand-btn {
+  background: none;
+  border: none;
+  color: #FF6B00;
+  font-size: 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 0;
+}
+
+/* ─── Notification Template Card ───────────────────── */
+.notif-card {
+  background: #242424;
+  border: 1px solid #2e2e2e;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.notif-card:hover {
+  border-color: #3a3a3a;
+}
+
+/* ─── Empty State ──────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #555;
+}
+.empty-state-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+/* ─── Modal Overlay ────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show {
+  display: flex;
+}
+.modal-box {
+  background: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+.modal-title {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+/* ─── Responsive ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .admin-tabs {
+    flex-direction: column;
+  }
+  .admin-table {
+    font-size: 12px;
+  }
+  .admin-table thead th,
+  .admin-table tbody td {
+    padding: 10px 8px;
+  }
+  .hide-mobile {
+    display: none;
+  }
+}
