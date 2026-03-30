@@ -192,4 +192,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  /* ─── Feedback Detail Expand/Collapse ─── */
+  var fbToggleRows = document.querySelectorAll('.fb-row-toggle');
+  fbToggleRows.forEach(function (row) {
+    row.addEventListener('click', function () {
+      var targetId = row.dataset.target;
+      var detailRow = document.getElementById(targetId);
+      var chevron = row.querySelector('.fb-chevron');
+      if (!detailRow) return;
+
+      if (detailRow.style.display === 'none') {
+        detailRow.style.display = '';
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+        row.style.background = 'rgba(255,255,255,0.02)';
+      } else {
+        detailRow.style.display = 'none';
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+        row.style.background = '';
+      }
+    });
+  });
+
 });

@@ -108,6 +108,23 @@
   vertical-align: middle;
 }
 
+/* ─── Feedback Expand Row ──────────────────────────── */
+.fb-row-toggle:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+.fb-row-toggle:hover .fb-chevron {
+  color: #FF6B00 !important;
+}
+.fb-detail-row td {
+  padding: 0 !important;
+}
+
+/* ─── Feedback Status Cell ─────────────────────────── */
+.fb-status-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
 /* ─── Role Badge ───────────────────────────────────── */
 .role-badge {
   display: inline-block;
