@@ -146,16 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   /* ─── Add User Modal ─── */
-  var addUserBtn = document.getElementById('addUserBtn');
   var modal = document.getElementById('addUserModal');
   var closeModalBtn = document.getElementById('closeModalBtn');
   var cancelModalBtn = document.getElementById('cancelModalBtn');
 
-  if (addUserBtn) {
-    addUserBtn.addEventListener('click', function () {
-      modal.classList.add('show');
-    });
-  }
   if (closeModalBtn) {
     closeModalBtn.addEventListener('click', function () {
       modal.classList.remove('show');

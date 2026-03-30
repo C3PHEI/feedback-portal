@@ -76,22 +76,18 @@
   </div>
 
   <!-- ═══ Stats Overview ═══ -->
-  <div class="fade-up delay-1 grid grid-cols-4 gap-3 mb-8">
+  <div class="fade-up delay-1 grid grid-cols-3 gap-3 mb-8">
     <div class="stat-card">
       <div class="stat-number highlight">35</div>
       <div class="stat-label">Benutzer</div>
     </div>
     <div class="stat-card">
-      <div class="stat-number">86</div>
+      <div class="stat-number" style="color:#22c55e">86</div>
       <div class="stat-label">Feedbacks</div>
     </div>
     <div class="stat-card">
       <div class="stat-number" style="color:#FF6B00;">3</div>
       <div class="stat-label">Gemeldet</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" style="color:#22c55e;">98%</div>
-      <div class="stat-label">Zustellung</div>
     </div>
   </div>
 
@@ -99,16 +95,16 @@
   <div class="fade-up delay-2 mb-8">
     <div class="admin-tabs">
       <button class="admin-tab active" id="tabBtn-users" type="button">
-        <span class="tab-icon">👥</span>
+        <img src="img/user-management-icon.svg" class="tab-icon" alt="icon">
         Benutzerverwaltung
       </button>
       <button class="admin-tab" id="tabBtn-moderation" type="button">
-        <span class="tab-icon">🛡️</span>
+        <img src="img/moderation-icon.svg" class="tab-icon" alt="icon">
         Feedbackmoderation
       </button>
       <button class="admin-tab" id="tabBtn-notifications" type="button">
-        <span class="tab-icon">🔔</span>
-        Benachrichtigungen
+        <img src="img/mail-icon.svg" class="tab-icon" alt="icon">
+        Feedbacks
       </button>
     </div>
   </div>
@@ -126,7 +122,6 @@
           <span class="search-icon">🔍</span>
           <input type="text" class="admin-search" id="userSearch" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)…">
         </div>
-        <button class="btn-admin primary" id="addUserBtn" type="button">+ Benutzer</button>
       </div>
 
       <!-- Filter Pills -->
@@ -162,7 +157,6 @@
           <th>Benutzer</th>
           <th>Abteilung</th>
           <th>Rolle</th>
-          <th>Status</th>
           <th class="hide-mobile">Feedbacks</th>
           <th style="text-align:right;">Aktionen</th>
         </tr>
@@ -181,11 +175,9 @@
           </td>
           <td><span style="color:#999;font-size:13px;">IT</span></td>
           <td><span class="role-badge admin">Admin</span></td>
-          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
           <td class="hide-mobile"><span style="color:#999;font-size:13px;">12 / 8</span></td>
           <td style="text-align:right;">
             <div class="flex gap-2 justify-end">
-              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
               <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
             </div>
           </td>
@@ -203,11 +195,9 @@
           </td>
           <td><span style="color:#999;font-size:13px;">Marketing</span></td>
           <td><span class="role-badge manager">Manager</span></td>
-          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
           <td class="hide-mobile"><span style="color:#999;font-size:13px;">24 / 15</span></td>
           <td style="text-align:right;">
             <div class="flex gap-2 justify-end">
-              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
               <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
             </div>
           </td>
@@ -225,11 +215,9 @@
           </td>
           <td><span style="color:#999;font-size:13px;">Finance</span></td>
           <td><span class="role-badge user">Benutzer</span></td>
-          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
           <td class="hide-mobile"><span style="color:#999;font-size:13px;">6 / 3</span></td>
           <td style="text-align:right;">
             <div class="flex gap-2 justify-end">
-              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
               <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
             </div>
           </td>
@@ -247,11 +235,9 @@
           </td>
           <td><span style="color:#999;font-size:13px;">Sales</span></td>
           <td><span class="role-badge manager">Manager</span></td>
-          <td><span class="status-dot active"></span><span style="color:#999;font-size:13px;">Aktiv</span></td>
           <td class="hide-mobile"><span style="color:#999;font-size:13px;">18 / 11</span></td>
           <td style="text-align:right;">
             <div class="flex gap-2 justify-end">
-              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
               <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
             </div>
           </td>
@@ -269,11 +255,9 @@
           </td>
           <td><span style="color:#999;font-size:13px;">HR</span></td>
           <td><span class="role-badge user">Benutzer</span></td>
-          <td><span class="status-dot inactive"></span><span style="color:#999;font-size:13px;">Inaktiv</span></td>
           <td class="hide-mobile"><span style="color:#999;font-size:13px;">2 / 0</span></td>
           <td style="text-align:right;">
             <div class="flex gap-2 justify-end">
-              <button class="btn-admin" type="button" title="Bearbeiten">✏️</button>
               <button class="btn-admin" type="button" title="Aktivieren" style="color:#22c55e;border-color:#22c55e33;">✅</button>
             </div>
           </td>
@@ -419,221 +403,13 @@
 
 
   <!-- ═══════════════════════════════════════════════════════
-       TAB 3: BENACHRICHTIGUNGEN
+       TAB 3: Feedbacks
        ═══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="tab-notifications">
 
-    <!-- Email Notification Settings -->
-    <div class="admin-card">
-      <p class="admin-card-title">E-Mail Benachrichtigungen</p>
-      <p style="color:#777;font-size:13px;margin-bottom:20px;">Konfiguriere welche Benachrichtigungen automatisch per E-Mail versendet werden.</p>
-
-      <!-- Notification Toggle: Neues Feedback -->
-      <div class="notif-card">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span style="font-size:20px;">📩</span>
-            <div>
-              <p class="text-white text-sm font-medium">Neues Feedback erhalten</p>
-              <p style="color:#777;font-size:12px;">Benutzer werden benachrichtigt, wenn sie ein neues Feedback erhalten</p>
-            </div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" checked id="notifNewFeedback">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Notification Toggle: Feedback bearbeitet -->
-      <div class="notif-card">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span style="font-size:20px;">✏️</span>
-            <div>
-              <p class="text-white text-sm font-medium">Feedback bearbeitet</p>
-              <p style="color:#777;font-size:12px;">Empfänger wird informiert, wenn ein Feedback innerhalb der 5-Minuten-Frist bearbeitet wurde</p>
-            </div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" checked id="notifEditFeedback">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Notification Toggle: CoC Verstoss -->
-      <div class="notif-card">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span style="font-size:20px;">🛡️</span>
-            <div>
-              <p class="text-white text-sm font-medium">Code of Conduct Verstoss gemeldet</p>
-              <p style="color:#777;font-size:12px;">Admin erhält sofort eine E-Mail wenn ein Feedback gemeldet wird</p>
-            </div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" checked id="notifCocViolation">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Notification Toggle: Wöchentlicher Bericht -->
-      <div class="notif-card">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span style="font-size:20px;">📊</span>
-            <div>
-              <p class="text-white text-sm font-medium">Wöchentlicher Admin-Bericht</p>
-              <p style="color:#777;font-size:12px;">Zusammenfassung der Plattformaktivität jeden Montag um 08:00 Uhr</p>
-            </div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="notifWeeklyReport">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Notification Toggle: Rate Limit -->
-      <div class="notif-card">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span style="font-size:20px;">⏱️</span>
-            <div>
-              <p class="text-white text-sm font-medium">Anonymes Rate-Limit erreicht</p>
-              <p style="color:#777;font-size:12px;">Admin wird informiert wenn ein Benutzer das jährliche anonyme Feedback-Limit erreicht</p>
-            </div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" checked id="notifRateLimit">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Email Job Status -->
-    <div class="admin-card">
-      <p class="admin-card-title">Notification Jobs</p>
-      <p style="color:#777;font-size:13px;margin-bottom:16px;">Status der automatischen E-Mail-Jobs.</p>
-
-      <table class="admin-table">
-        <thead>
-        <tr>
-          <th>Job</th>
-          <th>Status</th>
-          <th>Letzte Ausführung</th>
-          <th style="text-align:right;">Aktion</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>
-            <span class="text-white text-sm">Feedback-Benachrichtigung</span>
-            <span class="text-xs block" style="color:#666;">Echtzeit-Trigger</span>
-          </td>
-          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Läuft</span></td>
-          <td><span style="color:#999;font-size:13px;">Vor 2 Minuten</span></td>
-          <td style="text-align:right;">
-            <button class="btn-admin" type="button">⏸️ Pause</button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white text-sm">Wöchentlicher Bericht</span>
-            <span class="text-xs block" style="color:#666;">Cron: Montag 08:00</span>
-          </td>
-          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Geplant</span></td>
-          <td><span style="color:#999;font-size:13px;">24.03.2026, 08:00</span></td>
-          <td style="text-align:right;">
-            <button class="btn-admin" type="button">▶️ Jetzt senden</button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white text-sm">CoC-Alarmierung</span>
-            <span class="text-xs block" style="color:#666;">Echtzeit-Trigger</span>
-          </td>
-          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Läuft</span></td>
-          <td><span style="color:#999;font-size:13px;">Vor 1 Stunde</span></td>
-          <td style="text-align:right;">
-            <button class="btn-admin" type="button">⏸️ Pause</button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white text-sm">AD-Sync Benachrichtigung</span>
-            <span class="text-xs block" style="color:#666;">Cron: Täglich 02:00</span>
-          </td>
-          <td><span class="status-dot active"></span><span style="color:#22c55e;font-size:13px;">Geplant</span></td>
-          <td><span style="color:#999;font-size:13px;">25.03.2026, 02:00</span></td>
-          <td style="text-align:right;">
-            <button class="btn-admin" type="button">▶️ Jetzt senden</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
-</div><!-- /max-w-3xl -->
-
-
-<!-- ═══ Add User Modal ═══ -->
-<div class="modal-overlay" id="addUserModal">
-  <div class="modal-box">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="modal-title" style="margin-bottom:0;">Benutzer hinzufügen</h2>
-      <button type="button" style="background:none;border:none;color:#666;font-size:24px;cursor:pointer;" id="closeModalBtn">×</button>
-    </div>
-
-    <div class="mb-4">
-      <label class="block text-xs mb-2" style="color:#777;">Name</label>
-      <input type="text" class="admin-search" style="padding-left:16px;" placeholder="Vor- und Nachname">
-    </div>
-    <div class="mb-4">
-      <label class="block text-xs mb-2" style="color:#777;">E-Mail</label>
-      <input type="email" class="admin-search" style="padding-left:16px;" placeholder="name@company.ch">
-    </div>
-    <div class="mb-4">
-      <label class="block text-xs mb-2" style="color:#777;">Abteilung</label>
-      <select class="admin-search" style="padding-left:16px;appearance:auto;">
-        <option value="">Abteilung wählen…</option>
-        <option>IT</option>
-        <option>Marketing</option>
-        <option>Finance</option>
-        <option>Sales</option>
-        <option>HR</option>
-        <option>Operations</option>
-      </select>
-    </div>
-    <div class="mb-6">
-      <label class="block text-xs mb-2" style="color:#777;">Rolle</label>
-      <div class="flex gap-2">
-        <span class="tag-pill">
-          <input type="radio" name="newUserRole" id="roleUser" value="user" checked>
-          <label for="roleUser">Benutzer</label>
-        </span>
-        <span class="tag-pill">
-          <input type="radio" name="newUserRole" id="roleManager" value="manager">
-          <label for="roleManager">Manager</label>
-        </span>
-        <span class="tag-pill">
-          <input type="radio" name="newUserRole" id="roleAdminNew" value="admin">
-          <label for="roleAdminNew">Admin</label>
-        </span>
-      </div>
-    </div>
-
-    <div class="flex gap-3">
-      <button class="btn-admin primary flex-1" type="button">Benutzer erstellen</button>
-      <button class="btn-admin flex-1" type="button" id="cancelModalBtn">Abbrechen</button>
-    </div>
-  </div>
 </div>
-
 <!-- ═══ Toast ═══ -->
 <div id="toast">✓ Aktion erfolgreich</div>
 
