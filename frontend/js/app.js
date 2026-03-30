@@ -157,17 +157,18 @@ function validateForm() {
   });
   var driversOk = ratedCount >= 2 && naCount <= 2;
 
+  if (driverValidationEl) {
+    driverValidationEl.style.display = driversOk ? 'none' : 'flex';
+  }
+
   // Text validation
   var sLen = strengthsEl ? strengthsEl.value.length : 0;
   var iLen = improvementsEl ? improvementsEl.value.length : 0;
   var textOk = (sLen >= 200) || (iLen >= 200);
 
   // Show/hide validation messages
-  if (driverValidationEl) {
-    driverValidationEl.style.display = (ratedCount < 2 && (ratedCount + naCount) > 0) ? 'flex' : 'none';
-  }
   if (textValidationEl) {
-    textValidationEl.style.display = ((sLen > 0 || iLen > 0) && !textOk) ? 'flex' : 'none';
+    textValidationEl.style.display = textOk ? 'none' : 'flex';
   }
 
   var allOk = visOk && recipient && driversOk && textOk && coc;

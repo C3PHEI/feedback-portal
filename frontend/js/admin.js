@@ -213,4 +213,65 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  /* ─── Deactivate User Modal ─── */
+  var deactivateModal = document.getElementById('deactivateModal');
+  var cancelDeactivateBtn = document.getElementById('cancelDeactivateBtn');
+  var confirmDeactivateBtn = document.getElementById('confirmDeactivateBtn');
+  var currentDeactivateRow = null;
+
+// Close handlers
+  if (cancelDeactivateBtn) {
+    cancelDeactivateBtn.addEventListener('click', function () {
+      deactivateModal.classList.remove('show');
+    });
+  }
+  if (deactivateModal) {
+    deactivateModal.addEventListener('click', function (e) {
+      if (e.target === deactivateModal) deactivateModal.classList.remove('show');
+    });
+  }
+
+// Open modal when clicking 🚫 button
+  var deactivateBtns = document.querySelectorAll('.btn-admin.danger[title="Deaktivieren"]');
+  deactivateBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var row = btn.closest('tr');
+      currentDeactivateRow = row;
+
+      // Extract user info from the row
+      var name = row.querySelector('.text-white.text-sm.font-medium').textContent;
+      var email = row.querySelector('.text-xs').textContent;
+      var dept = row.querySelector('td:nth-child(2) span').textContent;
+      var roleBadge = row.querySelector('.role-badge');
+      var role = roleBadge ? roleBadge.textContent.trim() : '';
+      var feedbacks = row.querySelector('.hide-mobile span')
+        ? row.querySelector('.hide-mobile span').textContent
+        : '—';
+      var initials = row.querySelector('.avatar').textContent.trim();
+
+      // Populate modal
+      document.getElementById('deactivateAvatar').textContent = initials;
+      document.getElementById('deactivateName').textContent = name;
+      document.getElementById('deactivateEmail').textContent = email;
+      document.getElementById('deactivateRole').textContent = role;
+      document.getElementById('deactivateDept').textContent = dept;
+      document.getElementById('deactivateFeedbacks').textContent = feedbacks;
+
+      deactivateModal.classList.add('show');
+    });
+  });
+
+// Confirm deactivation
+  if (confirmDeactivateBtn) {
+    confirmDeactivateBtn.addEventListener('click', function () {
+      if (currentDeactivateRow) {
+        var name = document.getElementById('deactivateName').textContent;
+        // TODO: API call to deactivate user
+        showAdminToast(name + ' wurde deaktiviert');
+      }
+      deactivateModal.classList.remove('show');
+      currentDeactivateRow = null;
+    });
+  }
+
 });

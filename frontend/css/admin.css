@@ -22,7 +22,7 @@
   border-radius: 10px;
   background: transparent;
   color: #777;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.02em;
@@ -68,11 +68,11 @@
   border-color: #3a3a3a;
 }
 .admin-card-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: #999;
-  font-size: 11px;
+  color: var(--color-text-primary);
+  font-size: 13px;
   text-transform: uppercase;
   margin-bottom: 16px;
 }
@@ -84,7 +84,7 @@
   border-spacing: 0;
 }
 .admin-table thead th {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -125,12 +125,113 @@
   white-space: nowrap;
 }
 
+/* ─── Deactivate Modal ─────────────────────────────── */
+.deactivate-avatar {
+  width: 42px;
+  height: 42px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.deactivate-info-box {
+  background: #242424;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.deactivate-info-box .admin-card-title {
+  margin-bottom: 12px;
+}
+
+.deactivate-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #777;
+  padding: 6px 0;
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.deactivate-info-row:last-child {
+  border-bottom: none;
+}
+
+.deactivate-detail-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.deactivate-detail-item:last-child {
+  border-bottom: none;
+}
+
+.deactivate-detail-label {
+  display: block;
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.deactivate-detail-value {
+  font-size: 13px;
+  color: #999;
+  line-height: 1.6;
+}
+
+/* ─── Highlight Utilities ──────────────────────────── */
+.hl-orange {
+  color: #FF6B00;
+  font-weight: 600;
+}
+
+.hl-danger {
+  color: #E52620;
+  font-weight: 600;
+}
+
+.hl-green {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.hl-badge {
+  display: inline-block;
+  background: rgba(255, 107, 0, 0.12);
+  color: #FF6B00;
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+.deactivate-warning {
+  background: rgba(229, 38, 32, 0.08);
+  border: 1px solid rgba(229, 38, 32, 0.2);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.deactivate-warning p {
+  color: #ff6b6b;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.text-muted {
+  color: #666;
+}
+
 /* ─── Role Badge ───────────────────────────────────── */
 .role-badge {
   display: inline-block;
   padding: 3px 10px;
   border-radius: 99px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.03em;
@@ -169,7 +270,7 @@
   border-radius: 99px;
   font-size: 11px;
   font-weight: 600;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
 }
 .severity-pill.high {
   background: rgba(229, 38, 32, 0.12);
@@ -346,7 +447,7 @@
   border: none;
   color: #FF6B00;
   font-size: 12px;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Bodoni MT', sans-serif;
   font-weight: 600;
   cursor: pointer;
   margin-top: 8px;
