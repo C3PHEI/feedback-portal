@@ -219,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var confirmDeactivateBtn = document.getElementById('confirmDeactivateBtn');
   var currentDeactivateRow = null;
 
-// Close handlers
   if (cancelDeactivateBtn) {
     cancelDeactivateBtn.addEventListener('click', function () {
       deactivateModal.classList.remove('show');
@@ -231,14 +230,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-// Open modal when clicking 🚫 button
   var deactivateBtns = document.querySelectorAll('.btn-admin.danger[title="Deaktivieren"]');
   deactivateBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var row = btn.closest('tr');
       currentDeactivateRow = row;
 
-      // Extract user info from the row
       var name = row.querySelector('.text-white.text-sm.font-medium').textContent;
       var email = row.querySelector('.text-xs').textContent;
       var dept = row.querySelector('td:nth-child(2) span').textContent;
@@ -249,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function () {
         : '—';
       var initials = row.querySelector('.avatar').textContent.trim();
 
-      // Populate modal
       document.getElementById('deactivateAvatar').textContent = initials;
       document.getElementById('deactivateName').textContent = name;
       document.getElementById('deactivateEmail').textContent = email;
@@ -261,12 +257,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-// Confirm deactivation
   if (confirmDeactivateBtn) {
     confirmDeactivateBtn.addEventListener('click', function () {
       if (currentDeactivateRow) {
         var name = document.getElementById('deactivateName').textContent;
-        // TODO: API call to deactivate user
         showAdminToast(name + ' wurde deaktiviert');
       }
       deactivateModal.classList.remove('show');
@@ -274,4 +268,151 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-});
+
+  /* ═══════════════════════════════════════════════════════
+     Dashboard Charts — Chart.js Initialization
+     ═══════════════════════════════════════════════════════ */
+
+  function initDashboardCharts() {
+    if (typeof Chart === 'undefined') return;
+
+    Chart.defaults.color = '#777';
+    Chart.defaults.borderColor = '#2e2e2e';
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+    Chart.defaults.font.size = 12;
+
+    /* ── Feedback-Aktivität — Bar Chart (6 Monate) ── */
+    var activityCanvas = document.getElementById('activityChart');
+    if (activityCanvas) {
+      new Chart(activityCanvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Okt', 'Nov', 'Dez', 'Jan', 'Feb', 'Mär'],
+          datasets: [
+            {
+              label: 'Öffentlich',
+              data: [8, 11, 7, 10, 9, 10],
+              backgroundColor: '#FF6B00',
+              borderRadius: 6,
+              borderSkipped: false,
+              barPercentage: 0.7,
+              categoryPercentage: 0.6
+            },
+            {
+              label: 'Anonym',
+              data: [3, 5, 4, 6, 5, 8],
+              backgroundColor: '#E52620',
+              borderRadius: 6,
+              borderSkipped: false,
+              barPercentage: 0.7,
+              categoryPercentage: 0.6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              align: 'end',
+              labels: {
+                boxWidth: 10,
+                boxHeight: 10,
+                borderRadius: 3,
+                useBorderRadius: true,
+                padding: 16,
+                font: { size: 11, family: "'DM Sans', sans-serif" },
+                color: '#999'
+              }
+            },
+            tooltip: {
+              backgroundColor: '#1e1e1e',
+              titleColor: '#fff',
+              bodyColor: '#aaa',
+              borderColor: '#2e2e2e',
+              borderWidth: 1,
+              cornerRadius: 8,
+              padding: 12,
+              titleFont: { family: "'Syne', sans-serif", weight: '600' }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#666', font: { size: 11 } }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+              ticks: { color: '#555', font: { size: 11 }, stepSize: 5 }
+            }
+          }
+        }
+      });
+    }
+
+    /* ── Sichtbarkeit — Donut Chart ── */
+    var visibilityCanvas = document.getElementById('visibilityChart');
+    if (visibilityCanvas) {
+      new Chart(visibilityCanvas, {
+        type: 'doughnut',
+        data: {
+          labels: ['Öffentlich', 'Anonym'],
+          datasets: [{
+            data: [55, 31],
+            backgroundColor: ['#FF6B00', '#E52620'],
+            borderColor: '#1e1e1e',
+            borderWidth: 3,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          cutout: '65%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1e1e1e',
+              titleColor: '#fff',
+              bodyColor: '#aaa',
+              borderColor: '#2e2e2e',
+              borderWidth: 1,
+              cornerRadius: 8,
+              padding: 12,
+              callbacks: {
+                label: function (context) {
+                  var total = context.dataset.data.reduce(function (a, b) { return a + b; }, 0);
+                  var pct = Math.round((context.raw / total) * 100);
+                  return context.label + ': ' + context.raw + ' (' + pct + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  /* Init charts (Chart.js might load async) */
+  initDashboardCharts();
+
+  /* ── Animate Driver/Dept Bars on Dashboard Tab Switch ── */
+  var dashTab = document.getElementById('tabBtn-notifications');
+  if (dashTab) {
+    dashTab.addEventListener('click', function () {
+      var fills = document.querySelectorAll('.dash-driver-bar-fill, .dash-dept-bar-fill');
+      fills.forEach(function (fill) {
+        var w = fill.style.width;
+        fill.style.width = '0%';
+        fill.offsetHeight;
+        fill.style.width = w;
+      });
+      /* Re-init charts if they weren't ready on first load */
+      initDashboardCharts();
+    });
+  }
+
+}); /* END DOMContentLoaded */

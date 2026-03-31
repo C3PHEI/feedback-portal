@@ -125,107 +125,6 @@
   white-space: nowrap;
 }
 
-/* ─── Deactivate Modal ─────────────────────────────── */
-.deactivate-avatar {
-  width: 42px;
-  height: 42px;
-  font-size: 13px;
-  border-radius: 10px;
-}
-
-.deactivate-info-box {
-  background: #242424;
-  border-radius: 10px;
-  padding: 16px;
-}
-
-.deactivate-info-box .admin-card-title {
-  margin-bottom: 12px;
-}
-
-.deactivate-info-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #777;
-  padding: 6px 0;
-  border-bottom: 1px solid #2e2e2e;
-}
-
-.deactivate-info-row:last-child {
-  border-bottom: none;
-}
-
-.deactivate-detail-item {
-  padding: 10px 0;
-  border-bottom: 1px solid #2e2e2e;
-}
-
-.deactivate-detail-item:last-child {
-  border-bottom: none;
-}
-
-.deactivate-detail-label {
-  display: block;
-  font-family: 'Bodoni MT', sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 4px;
-}
-
-.deactivate-detail-value {
-  font-size: 13px;
-  color: #999;
-  line-height: 1.6;
-}
-
-/* ─── Highlight Utilities ──────────────────────────── */
-.hl-orange {
-  color: #FF6B00;
-  font-weight: 600;
-}
-
-.hl-danger {
-  color: #E52620;
-  font-weight: 600;
-}
-
-.hl-green {
-  color: #22c55e;
-  font-weight: 600;
-}
-
-.hl-badge {
-  display: inline-block;
-  background: rgba(255, 107, 0, 0.12);
-  color: #FF6B00;
-  font-family: 'Bodoni MT', sans-serif;
-  font-weight: 600;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.02em;
-}
-
-.deactivate-warning {
-  background: rgba(229, 38, 32, 0.08);
-  border: 1px solid rgba(229, 38, 32, 0.2);
-  border-radius: 10px;
-  padding: 14px;
-}
-
-.deactivate-warning p {
-  color: #ff6b6b;
-  font-size: 13px;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.text-muted {
-  color: #666;
-}
-
 /* ─── Role Badge ───────────────────────────────────── */
 .role-badge {
   display: inline-block;
@@ -510,7 +409,357 @@
   margin-bottom: 16px;
 }
 
-/* ─── Responsive ───────────────────────────────────── */
+/* ─── Deactivate Modal ─────────────────────────────── */
+.deactivate-avatar {
+  width: 42px;
+  height: 42px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.deactivate-info-box {
+  background: #242424;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.deactivate-info-box .admin-card-title {
+  margin-bottom: 12px;
+}
+
+.deactivate-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #777;
+  padding: 6px 0;
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.deactivate-info-row:last-child {
+  border-bottom: none;
+}
+
+.deactivate-detail-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.deactivate-detail-item:last-child {
+  border-bottom: none;
+}
+
+.deactivate-detail-label {
+  display: block;
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.deactivate-detail-value {
+  font-size: 13px;
+  color: #999;
+  line-height: 1.6;
+}
+
+/* ─── Highlight Utilities ──────────────────────────── */
+.hl-orange {
+  color: #FF6B00;
+  font-weight: 600;
+}
+
+.hl-danger {
+  color: #E52620;
+  font-weight: 600;
+}
+
+.hl-green {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.hl-badge {
+  display: inline-block;
+  background: rgba(255, 107, 0, 0.12);
+  color: #FF6B00;
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+.deactivate-warning {
+  background: rgba(229, 38, 32, 0.08);
+  border: 1px solid rgba(229, 38, 32, 0.2);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.deactivate-warning p {
+  color: #ff6b6b;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.text-muted {
+  color: #666;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   Dashboard — Feedback Tab Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── KPI Cards ────────────────────────────────────── */
+.dash-kpi-card {
+  background: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.dash-kpi-card:hover {
+  border-color: #3a3a3a;
+  transform: translateY(-2px);
+}
+.dash-kpi-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+.dash-kpi-number {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: #fff;
+  line-height: 1.1;
+}
+.dash-kpi-unit {
+  font-size: 18px;
+  font-weight: 600;
+  color: #999;
+}
+.dash-kpi-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #777;
+  letter-spacing: 0.02em;
+}
+.dash-kpi-trend {
+  font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.dash-kpi-trend.up {
+  color: #22c55e;
+}
+.dash-kpi-trend.down {
+  color: #E52620;
+}
+.dash-kpi-trend.neutral {
+  color: #666;
+}
+
+/* ─── Chart Wrapper ────────────────────────────────── */
+.dash-chart-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+}
+
+/* ─── Donut Legend ──────────────────────────────────── */
+.dash-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+.dash-donut-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #aaa;
+  font-family: 'DM Sans', sans-serif;
+}
+.dash-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── Driver Bars ──────────────────────────────────── */
+.dash-driver-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dash-driver-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 36px;
+  align-items: center;
+  gap: 12px;
+}
+.dash-driver-name {
+  font-size: 12px;
+  color: #aaa;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-driver-bar-track {
+  height: 8px;
+  background: #2a2a2a;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.dash-driver-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #E52620, #FF6B00);
+  transition: width 0.8s ease;
+}
+.dash-driver-val {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #FF6B00;
+  text-align: right;
+}
+.dash-driver-note {
+  font-size: 11px;
+  color: #666;
+  margin-top: 16px;
+  line-height: 1.5;
+}
+
+/* ─── Department Bars ──────────────────────────────── */
+.dash-dept-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dash-dept-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 36px;
+  align-items: center;
+  gap: 12px;
+}
+.dash-dept-name {
+  font-size: 12px;
+  color: #aaa;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-dept-bar-track {
+  height: 8px;
+  background: #2a2a2a;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.dash-dept-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #FF6B00, #ffaa44);
+  transition: width 0.8s ease;
+}
+.dash-dept-count {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #ccc;
+  text-align: right;
+}
+
+/* ─── System Status ────────────────────────────────── */
+.dash-status-item {
+  background: #242424;
+  border: 1px solid #2e2e2e;
+  border-radius: 10px;
+  padding: 16px;
+}
+.dash-status-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.dash-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dash-status-dot.active {
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+.dash-status-dot.warning {
+  background: #FF6B00;
+  box-shadow: 0 0 8px rgba(255, 107, 0, 0.4);
+}
+.dash-status-dot.error {
+  background: #E52620;
+  box-shadow: 0 0 8px rgba(229, 38, 32, 0.4);
+}
+.dash-status-title {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #ddd;
+}
+.dash-status-detail {
+  font-size: 12px;
+  color: #777;
+  line-height: 1.8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ─── Privacy Notice ───────────────────────────────── */
+.dash-privacy-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: rgba(255, 107, 0, 0.05);
+  border: 1px solid rgba(255, 107, 0, 0.15);
+  border-radius: 10px;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.6;
+  font-family: 'DM Sans', sans-serif;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .dash-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .dash-driver-row {
+    grid-template-columns: 110px 1fr 32px;
+  }
+  .dash-dept-row {
+    grid-template-columns: 80px 1fr 32px;
+  }
+}
+
 @media (max-width: 640px) {
   .admin-tabs {
     flex-direction: column;
