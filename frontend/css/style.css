@@ -696,3 +696,109 @@ select.fancy-input option {
   font-size: 15px; /* war 14px */
   line-height: 1.7;
 }
+
+/* ─── Profile Dropdown ──────────────────────────────────── */
+.nav-profile-wrapper {
+  position: relative;
+}
+
+.nav-profile-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,107,0,0.15);
+  color: #FF6B00;
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  transition: background 0.15s;
+}
+
+.nav-profile-btn:hover .nav-avatar {
+  background: rgba(255,107,0,0.25);
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 220px;
+  background: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.profile-dropdown.is-open {
+  display: block;
+  animation: dropdownFade 0.15s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.profile-dropdown-header {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-dropdown-name {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+.profile-dropdown-email {
+  font-size: 12px;
+  color: #666;
+}
+
+.profile-dropdown-divider {
+  height: 1px;
+  background: #2e2e2e;
+  margin: 0;
+}
+
+.profile-dropdown-logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: #E52620;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.profile-dropdown-logout:hover {
+  background: rgba(229, 38, 32, 0.08);
+}

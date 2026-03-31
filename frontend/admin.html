@@ -54,7 +54,29 @@
       </div>
       <div class="nav-icons">
         <div class="avatar anon-avatar">
-          <img class="anon-avatar-icon" alt="Icon" src="img/person.svg"/>
+          <!-- Profil-Dropdown-Wrapper -->
+          <div class="nav-profile-wrapper" id="profileWrapper">
+            <button class="nav-profile-btn" id="profileBtn" aria-expanded="false">
+              <span class="nav-avatar">MM</span>
+            </button>
+
+            <!-- Dropdown -->
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="profile-dropdown-header">
+                <span class="profile-dropdown-name">Max Muster</span>
+                <span class="profile-dropdown-email">m.muster@firma.ch</span>
+              </div>
+              <div class="profile-dropdown-divider"></div>
+              <button class="profile-dropdown-logout" id="logoutBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                  <polyline points="16 17 21 12 16 7"/>
+                  <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Abmelden
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -399,138 +421,6 @@
         </span>
       </div>
     </div>
-
-    <!-- Flagged Feedback 1 -->
-    <div class="feedback-preview" id="flag-1">
-      <div class="flex items-start justify-between mb-3">
-        <div class="flex items-center gap-3">
-          <span class="status-dot flagged"></span>
-          <div>
-            <span class="text-white text-sm font-medium">Code of Conduct Verstoss</span>
-            <span class="text-xs block" style="color:#666;">Gemeldet am 24.03.2026 · Feedback #FB-0472</span>
-          </div>
-        </div>
-      </div>
-      <div class="mb-3" style="padding-left:20px;">
-        <p style="color:#999;font-size:12px;margin-bottom:6px;">
-          <span style="color:#777;">Verstoss gegen:</span> Respectful Language Only, No Retaliation
-        </p>
-        <p style="color:#999;font-size:12px;">
-          <span style="color:#777;">Gemeldet von:</span> <span style="color:#ccc;">Anna Keller</span> · <span style="color:#777;">Betrifft Feedback von:</span> <span style="color:#ccc;">Anonymous</span> → <span style="color:#ccc;">Markus Huber</span>
-        </p>
-      </div>
-      <div class="feedback-preview-text" style="padding-left:20px;">
-        „Das Feedback enthält beleidigende Sprache und persönliche Angriffe, die gegen den Code of Conduct verstossen. Der Absender nutzt die Anonymität, um den Empfänger gezielt herabzusetzen…"
-      </div>
-      <div style="padding-left:20px;">
-        <button class="expand-btn" type="button">Mehr anzeigen ↓</button>
-      </div>
-      <div class="flex gap-2 mt-4" style="padding-left:20px;">
-        <button class="btn-admin primary" type="button">📋 Überprüfen</button>
-        <button class="btn-admin" type="button">⚠️ Verwarnung senden</button>
-        <button class="btn-admin danger" type="button">🗑️ Feedback entfernen</button>
-      </div>
-    </div>
-
-    <!-- Flagged Feedback 2 -->
-    <div class="feedback-preview" id="flag-2">
-      <div class="flex items-start justify-between mb-3">
-        <div class="flex items-center gap-3">
-          <span class="status-dot pending"></span>
-          <div>
-            <span class="text-white text-sm font-medium">Rating Abuse Verdacht</span>
-            <span class="text-xs block" style="color:#666;">Gemeldet am 22.03.2026 · Feedback #FB-0465</span>
-          </div>
-        </div>
-      </div>
-      <div class="mb-3" style="padding-left:20px;">
-        <p style="color:#999;font-size:12px;margin-bottom:6px;">
-          <span style="color:#777;">Verstoss gegen:</span> Platform Etiquette / Avoid Rating Abuse
-        </p>
-        <p style="color:#999;font-size:12px;">
-          <span style="color:#777;">Automatisch erkannt:</span> Alle 4 Drivers mit 1 Stern bewertet, Textfelder enthalten minimalen Inhalt.
-        </p>
-      </div>
-      <div class="flex gap-2 mt-4" style="padding-left:20px;">
-        <button class="btn-admin primary" type="button">📋 Überprüfen</button>
-        <button class="btn-admin" type="button">✅ Freigeben</button>
-        <button class="btn-admin danger" type="button">🗑️ Feedback entfernen</button>
-      </div>
-    </div>
-
-    <!-- Flagged Feedback 3 -->
-    <div class="feedback-preview" id="flag-3">
-      <div class="flex items-start justify-between mb-3">
-        <div class="flex items-center gap-3">
-          <span class="status-dot resolved"></span>
-          <div>
-            <span class="text-white text-sm font-medium">Anonymitäts-Bedenken</span>
-            <span class="text-xs block" style="color:#666;">Gemeldet am 18.03.2026 · Feedback #FB-0451 · <span style="color:#22c55e;">Erledigt</span></span>
-          </div>
-        </div>
-      </div>
-      <div class="mb-3" style="padding-left:20px;">
-        <p style="color:#999;font-size:12px;margin-bottom:6px;">
-          <span style="color:#777;">Verstoss gegen:</span> Anonymity Awareness
-        </p>
-        <p style="color:#999;font-size:12px;">
-          <span style="color:#777;">Massnahme:</span> Feedback anonym neu zugeordnet · Absender informiert.
-        </p>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ═══════════════════════════════════════════════════════
-     TAB 3: ALLE FEEDBACKS
-     ═══════════════════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-notifications">
-
-    <!-- Stats -->
-    <div class="grid grid-cols-3 gap-3 mb-6">
-      <div class="stat-card">
-        <div class="stat-number">86</div>
-        <div class="stat-label">Gesamt</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">31</div>
-        <div class="stat-label">Anonym</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">55</div>
-        <div class="stat-label">Öffentlich</div>
-      </div>
-    </div>
-
-    <!-- Search + Filter -->
-    <div class="admin-card">
-      <div class="flex items-center gap-3 mb-4">
-        <div class="search-wrapper flex-1">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="admin-search" id="feedbackSearch" placeholder="Feedback-ID, Absender, Empfänger oder Schlagwort…">
-        </div>
-      </div>
-      <div class="flex gap-2 flex-wrap">
-      <span class="tag-pill">
-        <input type="radio" name="fbFilter" id="fbAll" value="all" checked>
-        <label for="fbAll">Alle</label>
-      </span>
-        <span class="tag-pill">
-        <input type="radio" name="fbFilter" id="fbPublic" value="public">
-        <label for="fbPublic">Öffentlich</label>
-      </span>
-        <span class="tag-pill">
-        <input type="radio" name="fbFilter" id="fbAnon" value="anonymous">
-        <label for="fbAnon">Anonym</label>
-      </span>
-        <span class="tag-pill">
-        <input type="radio" name="fbFilter" id="fbEdited" value="edited">
-        <label for="fbEdited">Bearbeitet</label>
-      </span>
-      </div>
-    </div>
-
-    <!-- Feedback Table -->
     <div class="admin-card" style="padding: 0; overflow-x: auto;">
       <table class="admin-table">
         <thead>
@@ -544,7 +434,7 @@
           <th style="text-align:right;">Status</th>
         </tr>
         </thead>
-        <tbody id="feedbackTableBody">
+        <tbody id="feedbackTableBody1">
 
         <!-- Row 1 — Expandable -->
         <tr class="fb-row-toggle" data-type="public" data-target="fb-detail-0486" style="cursor:pointer;">
@@ -571,7 +461,7 @@
         </tr>
 
         <!-- Detail Row -->
-        <tr class="fb-detail-row" id="fb-detail-0486" style="display:none;">
+        <tr class="fb-detail-row" id="fb-detail-0490" style="display:none;">
           <td colspan="7" style="padding:0;border-bottom:1px solid #2e2e2e;">
             <div style="background:#1a1a1a;padding:20px 24px;border-top:1px solid #2e2e2e;">
 
@@ -776,6 +666,32 @@
         </tbody>
       </table>
     </div>
+
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+     TAB 3: ALLE FEEDBACKS
+     ═══════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-notifications">
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="stat-card">
+        <div class="stat-number">86</div>
+        <div class="stat-label">Gesamt</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">31</div>
+        <div class="stat-label">Anonym</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">55</div>
+        <div class="stat-label">Öffentlich</div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD erstellen -->
   </div>
 
 </div>
@@ -783,6 +699,7 @@
 <div id="toast">✓ Aktion erfolgreich</div>
 
 <script src="js/admin.js"></script>
+<script src="js/app.js"></script>
 
 </body>
 </html>

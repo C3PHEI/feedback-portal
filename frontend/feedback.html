@@ -52,7 +52,29 @@
       </div>
       <div class="nav-icons">
         <div class="avatar anon-avatar">
-          <img class="anon-avatar-icon" alt="Icon" src="img/person.svg"/>
+          <!-- Profil-Dropdown-Wrapper -->
+          <div class="nav-profile-wrapper" id="profileWrapper">
+            <button class="nav-profile-btn" id="profileBtn" aria-expanded="false">
+              <span class="nav-avatar">MM</span>
+            </button>
+
+            <!-- Dropdown -->
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="profile-dropdown-header">
+                <span class="profile-dropdown-name">Max Muster</span>
+                <span class="profile-dropdown-email">m.muster@firma.ch</span>
+              </div>
+              <div class="profile-dropdown-divider"></div>
+              <button class="profile-dropdown-logout" id="logoutBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                  <polyline points="16 17 21 12 16 7"/>
+                  <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Abmelden
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -82,7 +104,7 @@
           <option value="max.mustermann">Max Mustermann</option>
           <option value="anna.keller">Anna Keller</option>
           <option value="markus.huber">Markus Huber</option>
-          <option value="thomas.ruefli">Thomas Rüfli</option>
+          <option value="thomas.ruefli">Thomas Müller</option>
           <option value="jana.steiner">Jana Steiner</option>
           <option value="patrick.weber">Patrick Weber</option>
         </select>
@@ -92,7 +114,7 @@
     <!-- Sichtbarkeit -->
     <div class="fade-up delay-2 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
       <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Sichtbarkeit</p>
-      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Wähle ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
+      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Wähle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
       <div class="flex gap-4 mb-4">
         <label class="visibility-option flex-1" id="vis-public-label">

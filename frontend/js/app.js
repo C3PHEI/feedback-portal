@@ -313,3 +313,30 @@ document.addEventListener('DOMContentLoaded', function () {
   // Init edit window state
   initEditWindow();
 });
+
+// ─── Profile Dropdown ────────────────────────────────────
+const profileBtn     = document.getElementById('profileBtn');
+const profileDropdown = document.getElementById('profileDropdown');
+const logoutBtn      = document.getElementById('logoutBtn');
+
+if (profileBtn && profileDropdown) {
+  profileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = profileDropdown.classList.toggle('is-open');
+    profileBtn.setAttribute('aria-expanded', isOpen);
+  });
+
+  document.addEventListener('click', () => {
+    profileDropdown.classList.remove('is-open');
+    profileBtn.setAttribute('aria-expanded', 'false');
+  });
+
+  profileDropdown.addEventListener('click', (e) => e.stopPropagation());
+}
+
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    // MSAL Logout — später mit echtem msalInstance.logoutRedirect() ersetzen
+    window.location.href = 'index.html';
+  });
+}
