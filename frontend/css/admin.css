@@ -517,7 +517,7 @@
 
 /* ─── KPI Cards ────────────────────────────────────── */
 .dash-kpi-card {
-  background: #1e1e1e;
+  background: var(--color-surface);
   border: 1px solid #2e2e2e;
   border-radius: 14px;
   padding: 20px;

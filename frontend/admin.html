@@ -120,258 +120,210 @@
   <!-- ═══ Sub-Tab Navigation ═══ -->
   <div class="fade-up delay-2 mb-8">
     <div class="admin-tabs">
-      <button class="admin-tab active" id="tabBtn-users" type="button">
-        <img src="img/user-management-icon.svg" class="tab-icon" alt="icon">
-        Benutzerverwaltung
+      <button class="admin-tab active" id="tabBtn-dash" type="button">
+        <img src="img/mail-icon.svg" class="tab-icon" alt="icon">
+        Dashboard
       </button>
       <button class="admin-tab" id="tabBtn-moderation" type="button">
         <img src="img/moderation-icon.svg" class="tab-icon" alt="icon">
         Feedbackmoderation
       </button>
-      <button class="admin-tab" id="tabBtn-notifications" type="button">
-        <img src="img/mail-icon.svg" class="tab-icon" alt="icon">
-        Feedbacks
+      <button class="admin-tab" id="tabBtn-users" type="button">
+        <img src="img/user-management-icon.svg" class="tab-icon" alt="icon">
+        Benutzerverwaltung
       </button>
     </div>
   </div>
 
 
   <!-- ═══════════════════════════════════════════════════════
-       TAB 1: BENUTZERVERWALTUNG
+       TAB 1: DASHBOARD
        ═══════════════════════════════════════════════════════ -->
-  <div class="tab-content active" id="tab-users">
+  <div class="tab-content" id="tab-dash">
 
-    <!-- Search + Add User -->
-    <div class="admin-card">
-      <div class="flex items-center gap-3 mb-5">
-        <div class="search-wrapper flex-1">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="admin-search" id="userSearch" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)…">
-        </div>
+    <!-- ─── KPI Stat Cards ─── -->
+    <div class="grid grid-cols-2 gap-3 mb-6" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="dash-kpi-card">
+        <!--        <div class="dash-kpi-icon">📊</div>-->
+        <div class="dash-kpi-number">86</div>
+        <div class="dash-kpi-label">Feedbacks gesamt</div>
+        <div class="dash-kpi-trend up">+12 diesen Monat</div>
       </div>
-
-      <!-- Filter Pills -->
-      <div class="flex gap-2 flex-wrap">
-        <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterAll" value="all" checked>
-          <label for="filterAll">Alle</label>
-        </span>
-        <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterAdmin" value="admin">
-          <label for="filterAdmin">Admins</label>
-        </span>
-        <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterManager" value="manager">
-          <label for="filterManager">Manager</label>
-        </span>
-        <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterUser" value="user">
-          <label for="filterUser">Benutzer</label>
-        </span>
-        <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterInactive" value="inactive">
-          <label for="filterInactive">Inaktiv</label>
-        </span>
+      <div class="dash-kpi-card">
+        <!--        <div class="dash-kpi-icon">🔒</div>-->
+        <div class="dash-kpi-number">36<span class="dash-kpi-unit">%</span></div>
+        <div class="dash-kpi-label">Anonyme Quote</div>
+        <div class="dash-kpi-trend neutral">31 von 86</div>
+      </div>
+      <div class="dash-kpi-card">
+        <!--        <div class="dash-kpi-icon">⭐</div>-->
+        <div class="dash-kpi-number">3.7</div>
+        <div class="dash-kpi-label">Ø Bewertung</div>
+        <div class="dash-kpi-trend up">+0.2 vs. Vormonat</div>
+      </div>
+      <div class="dash-kpi-card">
+        <!--        <div class="dash-kpi-icon">✏️</div>-->
+        <div class="dash-kpi-number">14</div>
+        <div class="dash-kpi-label">Bearbeitet</div>
+        <div class="dash-kpi-trend neutral">16% aller Feedbacks</div>
       </div>
     </div>
 
-    <!-- User Table -->
-    <div class="admin-card" style="padding: 0; overflow-x: auto;">
-      <table class="admin-table">
-        <thead>
-        <tr>
-          <th>Benutzer</th>
-          <th>Abteilung</th>
-          <th>Rolle</th>
-          <th class="hide-mobile">Feedback (Erhalten/Bekommen)</th>
-          <th style="text-align:right;">Aktionen</th>
-        </tr>
-        </thead>
-        <tbody id="userTableBody">
+    <!-- ─── Row: Activity Chart + Donut ─── -->
+    <div class="grid gap-4 mb-4" style="grid-template-columns: 2fr 1fr;">
 
+      <!-- Feedback-Aktivität (Bar Chart) -->
+      <div class="admin-card">
+        <div class="admin-card-title">Feedback-Aktivität</div>
+        <div class="dash-chart-wrapper">
+          <canvas id="activityChart"></canvas>
+        </div>
+      </div>
 
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">ML</div>
-              <div>
-                <div class="text-white text-sm font-medium">Maximilian Läpple</div>
-                <div class="text-xs" style="color:#666;">m.laepple@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">IT</span></td>
-          <td><span class="role-badge admin">Admin</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">12 / 8</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">AK</div>
-              <div>
-                <div class="text-white text-sm font-medium">Anna Keller</div>
-                <div class="text-xs" style="color:#666;">a.keller@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">Marketing</span></td>
-          <td><span class="role-badge manager">Manager</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">24 / 15</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">MH</div>
-              <div>
-                <div class="text-white text-sm font-medium">Markus Huber</div>
-                <div class="text-xs" style="color:#666;">m.huber@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">Finance</span></td>
-          <td><span class="role-badge user">Benutzer</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">6 / 3</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">TR</div>
-              <div>
-                <div class="text-white text-sm font-medium">Thomas Rüfli</div>
-                <div class="text-xs" style="color:#666;">t.ruefli@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">Sales</span></td>
-          <td><span class="role-badge manager">Manager</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">18 / 11</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">PW</div>
-              <div>
-                <div class="text-white text-sm font-medium">Patrick Weber</div>
-                <div class="text-xs" style="color:#666;">p.weber@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">HR</span></td>
-          <td><span class="role-badge user">Benutzer</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">2 / 0</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin" type="button" title="Aktivieren" style="color:#22c55e;border-color:#22c55e33;">✅</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <!-- Deactivate User Confirmation Modal -->
-        <div class="modal-overlay" id="deactivateModal">
-          <div class="modal-box">
-            <h2 class="modal-title">Benutzer deaktivieren</h2>
-
-            <!-- User Info -->
-            <div class="flex items-center gap-3 mb-5">
-              <div class="avatar deactivate-avatar" id="deactivateAvatar"></div>
-              <div>
-                <div class="text-white font-medium" id="deactivateName"></div>
-                <div class="text-xs text-muted" id="deactivateEmail"></div>
-              </div>
-            </div>
-
-            <!-- Overview -->
-            <div class="deactivate-info-box mb-4">
-              <div class="admin-card-title">Übersicht</div>
-              <div class="deactivate-info-row">
-                <span>Rolle</span>
-                <span class="text-white" id="deactivateRole"></span>
-              </div>
-              <div class="deactivate-info-row">
-                <span>Abteilung</span>
-                <span class="text-white" id="deactivateDept"></span>
-              </div>
-              <div class="deactivate-info-row">
-                <span>Feedbacks gesendet / erhalten</span>
-                <span class="text-white" id="deactivateFeedbacks"></span>
-              </div>
-            </div>
-
-            <!-- Consequences -->
-            <div class="deactivate-info-box mb-4">
-              <div class="admin-card-title">Was passiert bei der Deaktivierung?</div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">1. Zugriff</span>
-                <span class="deactivate-detail-value">Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen möglich.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">2. Datenaufbewahrung</span>
-                <span class="deactivate-detail-value">Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">gelöscht oder anonymisiert</span>.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">3. Legal Hold</span>
-                <span class="deactivate-detail-value">Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Löschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">4. Reaktivierung</span>
-                <span class="deactivate-detail-value"><span class="hl-green">Jederzeit möglich.</span> Der Retention-Countdown wird zurückgesetzt.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">5. AD-Sync</span>
-                <span class="deactivate-detail-value">Status wird beim nächsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.</span>
-              </div>
-            </div>
-
-            <!-- Warning -->
-            <div class="deactivate-warning mb-5">
-              <p>⚠️ Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zuerst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.</p>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex gap-3 justify-end">
-              <button class="btn-admin" type="button" id="cancelDeactivateBtn">Abbrechen</button>
-              <button class="btn-admin danger" type="button" id="confirmDeactivateBtn">🚫 Deaktivieren</button>
-            </div>
+      <!-- Anonym vs Öffentlich (Donut) -->
+      <div class="admin-card">
+        <div class="admin-card-title">Sichtbarkeit</div>
+        <div class="dash-chart-wrapper" style="display:flex;align-items:center;justify-content:center;">
+          <canvas id="visibilityChart" style="max-width:180px;max-height:180px;"></canvas>
+        </div>
+        <div class="dash-donut-legend">
+          <div class="dash-donut-legend-item">
+            <span class="dash-dot" style="background:#FF6B00;"></span>
+            <span>Öffentlich — 55</span>
+          </div>
+          <div class="dash-donut-legend-item">
+            <span class="dash-dot" style="background:#E52620;"></span>
+            <span>Anonym — 31</span>
           </div>
         </div>
-
-        </tbody>
-      </table>
+      </div>
     </div>
+
+    <!-- ─── Row: Driver Averages + Department Breakdown ─── -->
+    <div class="grid gap-4 mb-4" style="grid-template-columns: 1fr 1fr;">
+
+      <!-- Driver-Durchschnitte -->
+      <div class="admin-card">
+        <div class="admin-card-title">Ø Bewertung pro Driver</div>
+        <div class="dash-driver-list">
+          <div class="dash-driver-row">
+            <span class="dash-driver-name">Impact / Results</span>
+            <div class="dash-driver-bar-track">
+              <div class="dash-driver-bar-fill" style="width:76%;" data-val="3.8"></div>
+            </div>
+            <span class="dash-driver-val">3.8</span>
+          </div>
+          <div class="dash-driver-row">
+            <span class="dash-driver-name">Ownership / Reliability</span>
+            <div class="dash-driver-bar-track">
+              <div class="dash-driver-bar-fill" style="width:84%;" data-val="4.2"></div>
+            </div>
+            <span class="dash-driver-val">4.2</span>
+          </div>
+          <div class="dash-driver-row">
+            <span class="dash-driver-name">Collaboration / Social</span>
+            <div class="dash-driver-bar-track">
+              <div class="dash-driver-bar-fill" style="width:70%;" data-val="3.5"></div>
+            </div>
+            <span class="dash-driver-val">3.5</span>
+          </div>
+          <div class="dash-driver-row">
+            <span class="dash-driver-name">Growth / Learning</span>
+            <div class="dash-driver-bar-track">
+              <div class="dash-driver-bar-fill" style="width:64%;" data-val="3.2"></div>
+            </div>
+            <span class="dash-driver-val">3.2</span>
+          </div>
+        </div>
+        <p class="dash-driver-note">⚠ Durchschnitte sind Richtwerte — keine abschliessende Beurteilung.</p>
+      </div>
+
+      <!-- Feedbacks pro Abteilung -->
+      <div class="admin-card">
+        <div class="admin-card-title">Feedbacks pro Abteilung</div>
+        <div class="dash-dept-list">
+          <div class="dash-dept-row">
+            <span class="dash-dept-name">Engineering</span>
+            <div class="dash-dept-bar-track">
+              <div class="dash-dept-bar-fill" style="width:100%;"></div>
+            </div>
+            <span class="dash-dept-count">28</span>
+          </div>
+          <div class="dash-dept-row">
+            <span class="dash-dept-name">Marketing</span>
+            <div class="dash-dept-bar-track">
+              <div class="dash-dept-bar-fill" style="width:68%;"></div>
+            </div>
+            <span class="dash-dept-count">19</span>
+          </div>
+          <div class="dash-dept-row">
+            <span class="dash-dept-name">Sales</span>
+            <div class="dash-dept-bar-track">
+              <div class="dash-dept-bar-fill" style="width:54%;"></div>
+            </div>
+            <span class="dash-dept-count">15</span>
+          </div>
+          <div class="dash-dept-row">
+            <span class="dash-dept-name">Operations</span>
+            <div class="dash-dept-bar-track">
+              <div class="dash-dept-bar-fill" style="width:43%;"></div>
+            </div>
+            <span class="dash-dept-count">12</span>
+          </div>
+          <div class="dash-dept-row">
+            <span class="dash-dept-name">HR / Finance</span>
+            <div class="dash-dept-bar-track">
+              <div class="dash-dept-bar-fill" style="width:43%;"></div>
+            </div>
+            <span class="dash-dept-count">12</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── System Status Row ─── -->
+    <div class="admin-card">
+      <div class="admin-card-title">System Status</div>
+      <div class="grid gap-4" style="grid-template-columns: repeat(3, 1fr);">
+
+        <div class="dash-status-item">
+          <div class="dash-status-header">
+            <span class="dash-status-dot active"></span>
+            <span class="dash-status-title">AD Sync</span>
+          </div>
+          <div class="dash-status-detail">Letzter Sync: Heute, 02:00 UTC</div>
+          <div class="dash-status-detail">Nächster Sync: Morgen, 02:00 UTC</div>
+          <div class="dash-status-detail">35 User synchronisiert</div>
+        </div>
+
+        <div class="dash-status-item">
+          <div class="dash-status-header">
+            <span class="dash-status-dot active"></span>
+            <span class="dash-status-title">E-Mail Benachrichtigungen</span>
+          </div>
+          <div class="dash-status-detail">84 von 86 zugestellt</div>
+          <div class="dash-status-detail">2 ausstehend</div>
+          <div class="dash-status-detail">Letzte: vor 3 Stunden</div>
+        </div>
+
+        <div class="dash-status-item">
+          <div class="dash-status-header">
+            <span class="dash-status-dot warning"></span>
+            <span class="dash-status-title">Retention Policy</span>
+          </div>
+          <div class="dash-status-detail">Aufbewahrung: 3 Jahre (aktiv)</div>
+          <div class="dash-status-detail">2 User im 12-Mt. Countdown</div>
+          <div class="dash-status-detail">1 Feedback unter <span class="hl-badge">Legal Hold</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Privacy Hinweis ─── -->
+    <div class="dash-privacy-notice">
+      <span>🔒</span>
+      <span>Dieses Dashboard zeigt ausschliesslich aggregierte Daten. Individuelle Feedbacks werden aus Datenschutzgründen nicht angezeigt (DSG / DSGVO).</span>
+    </div>
+
   </div>
 
 
@@ -673,194 +625,241 @@
 
 
   <!-- ═══════════════════════════════════════════════════════
-     TAB 3: ALLE FEEDBACKS
+     TAB 3: BENUTZERVERWALTUNG
      ═══════════════════════════════════════════════════════ -->
+  <div class="tab-content active" id="tab-users">
 
-  <div class="tab-content" id="tab-notifications">
-
-    <!-- ─── KPI Stat Cards ─── -->
-    <div class="grid grid-cols-2 gap-3 mb-6" style="grid-template-columns: repeat(4, 1fr);">
-      <div class="dash-kpi-card">
-<!--        <div class="dash-kpi-icon">📊</div>-->
-        <div class="dash-kpi-number">86</div>
-        <div class="dash-kpi-label">Feedbacks gesamt</div>
-        <div class="dash-kpi-trend up">+12 diesen Monat</div>
-      </div>
-      <div class="dash-kpi-card">
-<!--        <div class="dash-kpi-icon">🔒</div>-->
-        <div class="dash-kpi-number">36<span class="dash-kpi-unit">%</span></div>
-        <div class="dash-kpi-label">Anonyme Quote</div>
-        <div class="dash-kpi-trend neutral">31 von 86</div>
-      </div>
-      <div class="dash-kpi-card">
-<!--        <div class="dash-kpi-icon">⭐</div>-->
-        <div class="dash-kpi-number">3.7</div>
-        <div class="dash-kpi-label">Ø Bewertung</div>
-        <div class="dash-kpi-trend up">+0.2 vs. Vormonat</div>
-      </div>
-      <div class="dash-kpi-card">
-<!--        <div class="dash-kpi-icon">✏️</div>-->
-        <div class="dash-kpi-number">14</div>
-        <div class="dash-kpi-label">Bearbeitet</div>
-        <div class="dash-kpi-trend neutral">16% aller Feedbacks</div>
-      </div>
-    </div>
-
-    <!-- ─── Row: Activity Chart + Donut ─── -->
-    <div class="grid gap-4 mb-4" style="grid-template-columns: 2fr 1fr;">
-
-      <!-- Feedback-Aktivität (Bar Chart) -->
-      <div class="admin-card">
-        <div class="admin-card-title">Feedback-Aktivität</div>
-        <div class="dash-chart-wrapper">
-          <canvas id="activityChart"></canvas>
-        </div>
-      </div>
-
-      <!-- Anonym vs Öffentlich (Donut) -->
-      <div class="admin-card">
-        <div class="admin-card-title">Sichtbarkeit</div>
-        <div class="dash-chart-wrapper" style="display:flex;align-items:center;justify-content:center;">
-          <canvas id="visibilityChart" style="max-width:180px;max-height:180px;"></canvas>
-        </div>
-        <div class="dash-donut-legend">
-          <div class="dash-donut-legend-item">
-            <span class="dash-dot" style="background:#FF6B00;"></span>
-            <span>Öffentlich — 55</span>
-          </div>
-          <div class="dash-donut-legend-item">
-            <span class="dash-dot" style="background:#E52620;"></span>
-            <span>Anonym — 31</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─── Row: Driver Averages + Department Breakdown ─── -->
-    <div class="grid gap-4 mb-4" style="grid-template-columns: 1fr 1fr;">
-
-      <!-- Driver-Durchschnitte -->
-      <div class="admin-card">
-        <div class="admin-card-title">Ø Bewertung pro Driver</div>
-        <div class="dash-driver-list">
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Impact / Results</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:76%;" data-val="3.8"></div>
-            </div>
-            <span class="dash-driver-val">3.8</span>
-          </div>
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Ownership / Reliability</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:84%;" data-val="4.2"></div>
-            </div>
-            <span class="dash-driver-val">4.2</span>
-          </div>
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Collaboration / Social</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:70%;" data-val="3.5"></div>
-            </div>
-            <span class="dash-driver-val">3.5</span>
-          </div>
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Growth / Learning</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:64%;" data-val="3.2"></div>
-            </div>
-            <span class="dash-driver-val">3.2</span>
-          </div>
-        </div>
-        <p class="dash-driver-note">⚠ Durchschnitte sind Richtwerte — keine abschliessende Beurteilung.</p>
-      </div>
-
-      <!-- Feedbacks pro Abteilung -->
-      <div class="admin-card">
-        <div class="admin-card-title">Feedbacks pro Abteilung</div>
-        <div class="dash-dept-list">
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Engineering</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:100%;"></div>
-            </div>
-            <span class="dash-dept-count">28</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Marketing</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:68%;"></div>
-            </div>
-            <span class="dash-dept-count">19</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Sales</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:54%;"></div>
-            </div>
-            <span class="dash-dept-count">15</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Operations</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:43%;"></div>
-            </div>
-            <span class="dash-dept-count">12</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">HR / Finance</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:43%;"></div>
-            </div>
-            <span class="dash-dept-count">12</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─── System Status Row ─── -->
+    <!-- Search + Add User -->
     <div class="admin-card">
-      <div class="admin-card-title">System Status</div>
-      <div class="grid gap-4" style="grid-template-columns: repeat(3, 1fr);">
-
-        <div class="dash-status-item">
-          <div class="dash-status-header">
-            <span class="dash-status-dot active"></span>
-            <span class="dash-status-title">AD Sync</span>
-          </div>
-          <div class="dash-status-detail">Letzter Sync: Heute, 02:00 UTC</div>
-          <div class="dash-status-detail">Nächster Sync: Morgen, 02:00 UTC</div>
-          <div class="dash-status-detail">35 User synchronisiert</div>
+      <div class="flex items-center gap-3 mb-5">
+        <div class="search-wrapper flex-1">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="admin-search" id="userSearch" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)…">
         </div>
+      </div>
 
-        <div class="dash-status-item">
-          <div class="dash-status-header">
-            <span class="dash-status-dot active"></span>
-            <span class="dash-status-title">E-Mail Benachrichtigungen</span>
-          </div>
-          <div class="dash-status-detail">84 von 86 zugestellt</div>
-          <div class="dash-status-detail">2 ausstehend</div>
-          <div class="dash-status-detail">Letzte: vor 3 Stunden</div>
-        </div>
-
-        <div class="dash-status-item">
-          <div class="dash-status-header">
-            <span class="dash-status-dot warning"></span>
-            <span class="dash-status-title">Retention Policy</span>
-          </div>
-          <div class="dash-status-detail">Aufbewahrung: 3 Jahre (aktiv)</div>
-          <div class="dash-status-detail">2 User im 12-Mt. Countdown</div>
-          <div class="dash-status-detail">1 Feedback unter <span class="hl-badge">Legal Hold</span></div>
-        </div>
+      <!-- Filter Pills -->
+      <div class="flex gap-2 flex-wrap">
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterAll" value="all" checked>
+          <label for="filterAll">Alle</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterAdmin" value="admin">
+          <label for="filterAdmin">Admins</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterManager" value="manager">
+          <label for="filterManager">Manager</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterUser" value="user">
+          <label for="filterUser">Benutzer</label>
+        </span>
+        <span class="tag-pill">
+          <input type="radio" name="userFilter" id="filterInactive" value="inactive">
+          <label for="filterInactive">Inaktiv</label>
+        </span>
       </div>
     </div>
 
-    <!-- ─── Privacy Hinweis ─── -->
-    <div class="dash-privacy-notice">
-      <span>🔒</span>
-      <span>Dieses Dashboard zeigt ausschliesslich aggregierte Daten. Individuelle Feedbacks werden aus Datenschutzgründen nicht angezeigt (DSG / DSGVO).</span>
-    </div>
+    <!-- User Table -->
+    <div class="admin-card" style="padding: 0; overflow-x: auto;">
+      <table class="admin-table">
+        <thead>
+        <tr>
+          <th>Benutzer</th>
+          <th>Abteilung</th>
+          <th>Rolle</th>
+          <th class="hide-mobile">Feedback (Erhalten/Bekommen)</th>
+          <th style="text-align:right;">Aktionen</th>
+        </tr>
+        </thead>
+        <tbody id="userTableBody">
 
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">ML</div>
+              <div>
+                <div class="text-white text-sm font-medium">Maximilian Läpple</div>
+                <div class="text-xs" style="color:#666;">m.laepple@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">IT</span></td>
+          <td><span class="role-badge admin">Admin</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">12 / 8</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">AK</div>
+              <div>
+                <div class="text-white text-sm font-medium">Anna Keller</div>
+                <div class="text-xs" style="color:#666;">a.keller@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">Marketing</span></td>
+          <td><span class="role-badge manager">Manager</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">24 / 15</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">MH</div>
+              <div>
+                <div class="text-white text-sm font-medium">Markus Huber</div>
+                <div class="text-xs" style="color:#666;">m.huber@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">Finance</span></td>
+          <td><span class="role-badge user">Benutzer</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">6 / 3</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">TR</div>
+              <div>
+                <div class="text-white text-sm font-medium">Thomas Rüfli</div>
+                <div class="text-xs" style="color:#666;">t.ruefli@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">Sales</span></td>
+          <td><span class="role-badge manager">Manager</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">18 / 11</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
+              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">PW</div>
+              <div>
+                <div class="text-white text-sm font-medium">Patrick Weber</div>
+                <div class="text-xs" style="color:#666;">p.weber@company.ch</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="color:#999;font-size:13px;">HR</span></td>
+          <td><span class="role-badge user">Benutzer</span></td>
+          <td class="hide-mobile"><span style="color:#999;font-size:13px;">2 / 0</span></td>
+          <td style="text-align:right;">
+            <div class="flex gap-2 justify-end">
+              <button class="btn-admin" type="button" title="Aktivieren" style="color:#22c55e;border-color:#22c55e33;">✅</button>
+              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Deactivate User Confirmation Modal -->
+        <div class="modal-overlay" id="deactivateModal">
+          <div class="modal-box">
+            <h2 class="modal-title">Benutzer deaktivieren</h2>
+
+            <!-- User Info -->
+            <div class="flex items-center gap-3 mb-5">
+              <div class="avatar deactivate-avatar" id="deactivateAvatar"></div>
+              <div>
+                <div class="text-white font-medium" id="deactivateName"></div>
+                <div class="text-xs text-muted" id="deactivateEmail"></div>
+              </div>
+            </div>
+
+            <!-- Overview -->
+            <div class="deactivate-info-box mb-4">
+              <div class="admin-card-title">Übersicht</div>
+              <div class="deactivate-info-row">
+                <span>Rolle</span>
+                <span class="text-white" id="deactivateRole"></span>
+              </div>
+              <div class="deactivate-info-row">
+                <span>Abteilung</span>
+                <span class="text-white" id="deactivateDept"></span>
+              </div>
+              <div class="deactivate-info-row">
+                <span>Feedbacks gesendet / erhalten</span>
+                <span class="text-white" id="deactivateFeedbacks"></span>
+              </div>
+            </div>
+
+            <!-- Consequences -->
+            <div class="deactivate-info-box mb-4">
+              <div class="admin-card-title">Was passiert bei der Deaktivierung?</div>
+
+              <div class="deactivate-detail-item">
+                <span class="deactivate-detail-label">1. Zugriff</span>
+                <span class="deactivate-detail-value">Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen möglich.</span>
+              </div>
+
+              <div class="deactivate-detail-item">
+                <span class="deactivate-detail-label">2. Datenaufbewahrung</span>
+                <span class="deactivate-detail-value">Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">gelöscht oder anonymisiert</span>.</span>
+              </div>
+
+              <div class="deactivate-detail-item">
+                <span class="deactivate-detail-label">3. Legal Hold</span>
+                <span class="deactivate-detail-value">Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Löschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.</span>
+              </div>
+
+              <div class="deactivate-detail-item">
+                <span class="deactivate-detail-label">4. Reaktivierung</span>
+                <span class="deactivate-detail-value"><span class="hl-green">Jederzeit möglich.</span> Der Retention-Countdown wird zurückgesetzt.</span>
+              </div>
+
+              <div class="deactivate-detail-item">
+                <span class="deactivate-detail-label">5. AD-Sync</span>
+                <span class="deactivate-detail-value">Status wird beim nächsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.</span>
+              </div>
+            </div>
+
+            <!-- Warning -->
+            <div class="deactivate-warning mb-5">
+              <p>⚠️ Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zuerst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.</p>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-3 justify-end">
+              <button class="btn-admin" type="button" id="cancelDeactivateBtn">Abbrechen</button>
+              <button class="btn-admin danger" type="button" id="confirmDeactivateBtn">🚫 Deaktivieren</button>
+            </div>
+          </div>
+        </div>
+
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>
