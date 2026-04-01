@@ -44,46 +44,8 @@
 
 <body class="min-h-screen py-12 px-4">
 
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <img src="img/777ch_Logo.svg" alt="Logo" class="nav-logo">
-    <div class="nav-content">
-      <div class="nav-links">
-        <a href="index.html" class="nav-link">Inbox</a>
-        <a href="feedback.html" class="nav-link">Feedback geben</a>
-        <a href="history.html" class="nav-link">Verlauf</a>
-        <a href="" class="nav-link active">Admin</a>
-      </div>
-      <div class="nav-icons">
-        <div class="avatar anon-avatar">
-          <!-- Profil-Dropdown-Wrapper -->
-          <div class="nav-profile-wrapper" id="profileWrapper">
-            <button class="nav-profile-btn" id="profileBtn" aria-expanded="false">
-              <span class="nav-avatar">MM</span>
-            </button>
-
-            <!-- Dropdown -->
-            <div class="profile-dropdown" id="profileDropdown">
-              <div class="profile-dropdown-header">
-                <span class="profile-dropdown-name">Max Muster</span>
-                <span class="profile-dropdown-email">m.muster@firma.ch</span>
-              </div>
-              <div class="profile-dropdown-divider"></div>
-              <button class="profile-dropdown-logout" id="logoutBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                  <polyline points="16 17 21 12 16 7"/>
-                  <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Abmelden
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+<!-- Navbar -->
+<div id="navbar-container"></div>
 
 <div class="max-w-3xl mx-auto">
 
@@ -101,23 +63,10 @@
     </div>
   </div>
 
-  <!-- ═══ Stats Overview ═══ -->
-  <div class="fade-up delay-1 grid grid-cols-2 gap-3 mb-8">
-    <div class="stat-card">
-      <div class="stat-number" style="color:#22c55e">86</div>
-      <div class="stat-label">Feedbacks</div>
-    </div>
-<!--    <div class="stat-card">-->
-<!--      <div class="stat-number highlight">3</div>-->
-<!--      <div class="stat-label">Gemeldet</div>-->
-<!--    </div>-->
-    <div class="stat-card">
-      <div class="stat-number highlight">35</div>
-      <div class="stat-label">Benutzer</div>
-    </div>
-  </div>
+  <!-- Stats Overview -->
+  <div class="fade-up delay-1 grid grid-cols-2 gap-3 mb-8" id="admin-stats-container"></div>
 
-  <!-- ═══ Sub-Tab Navigation ═══ -->
+  <!-- Sub-Tab Navigation -->
   <div class="fade-up delay-2 mb-8">
     <div class="admin-tabs">
       <button class="admin-tab active" id="tabBtn-dash" type="button">
@@ -141,187 +90,49 @@
        ═══════════════════════════════════════════════════════ -->
   <div class="tab-content active" id="tab-dash">
 
-    <!-- ─── KPI Stat Cards ─── -->
-    <div class="grid grid-cols-2 gap-3 mb-6" style="grid-template-columns: repeat(4, 1fr);">
-      <div class="dash-kpi-card">
-        <!--        <div class="dash-kpi-icon">📊</div>-->
-        <div class="dash-kpi-number">86</div>
-        <div class="dash-kpi-label">Feedbacks gesamt</div>
-        <div class="dash-kpi-trend up">+12 diesen Monat</div>
-      </div>
-      <div class="dash-kpi-card">
-        <!--        <div class="dash-kpi-icon">🔒</div>-->
-        <div class="dash-kpi-number">36<span class="dash-kpi-unit">%</span></div>
-        <div class="dash-kpi-label">Anonyme Quote</div>
-        <div class="dash-kpi-trend neutral">31 von 86</div>
-      </div>
-      <div class="dash-kpi-card">
-        <!--        <div class="dash-kpi-icon">⭐</div>-->
-        <div class="dash-kpi-number">3.7</div>
-        <div class="dash-kpi-label">Ø Bewertung</div>
-        <div class="dash-kpi-trend up">+0.2 vs. Vormonat</div>
-      </div>
-      <div class="dash-kpi-card">
-        <!--        <div class="dash-kpi-icon">✏️</div>-->
-        <div class="dash-kpi-number">14</div>
-        <div class="dash-kpi-label">Bearbeitet</div>
-        <div class="dash-kpi-trend neutral">16% aller Feedbacks</div>
-      </div>
-    </div>
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-2 gap-3 mb-6" style="grid-template-columns: repeat(4, 1fr);" id="admin-kpis-container"></div>
 
-    <!-- ─── Row: Activity Chart + Donut ─── -->
+    <!-- Charts Row -->
     <div class="grid gap-4 mb-4" style="grid-template-columns: 2fr 1fr;">
-
-      <!-- Feedback-Aktivität (Bar Chart) -->
       <div class="admin-card">
-        <div class="admin-card-title">Feedback-Aktivität</div>
+        <div class="admin-card-title">Feedback-Aktivitaet</div>
         <div class="dash-chart-wrapper">
           <canvas id="activityChart"></canvas>
         </div>
       </div>
-
-      <!-- Anonym vs Öffentlich (Donut) -->
       <div class="admin-card">
         <div class="admin-card-title">Sichtbarkeit</div>
         <div class="dash-chart-wrapper" style="display:flex;align-items:center;justify-content:center;">
           <canvas id="visibilityChart" style="max-width:180px;max-height:180px;"></canvas>
         </div>
-        <div class="dash-donut-legend">
-          <div class="dash-donut-legend-item">
-            <span class="dash-dot" style="background:#FF6B00;"></span>
-            <span>Öffentlich — 55</span>
-          </div>
-          <div class="dash-donut-legend-item">
-            <span class="dash-dot" style="background:#E52620;"></span>
-            <span>Anonym — 31</span>
-          </div>
-        </div>
+        <div class="dash-donut-legend" id="admin-donut-legend"></div>
       </div>
     </div>
 
-    <!-- ─── Row: Driver Averages + Department Breakdown ─── -->
+    <!-- Driver Averages + Departments -->
     <div class="grid gap-4 mb-4" style="grid-template-columns: 1fr 1fr;">
-
-      <!-- Driver-Durchschnitte -->
       <div class="admin-card">
-        <div class="admin-card-title">Ø Bewertung pro Driver</div>
-        <div class="dash-driver-list">
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Impact / Results</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:76%;" data-val="3.8"></div>
-            </div>
-            <span class="dash-driver-val">3.8</span>
-          </div>
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Ownership / Reliability</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:84%;" data-val="4.2"></div>
-            </div>
-            <span class="dash-driver-val">4.2</span>
-          </div>
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Collaboration / Social</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:70%;" data-val="3.5"></div>
-            </div>
-            <span class="dash-driver-val">3.5</span>
-          </div>
-          <div class="dash-driver-row">
-            <span class="dash-driver-name">Growth / Learning</span>
-            <div class="dash-driver-bar-track">
-              <div class="dash-driver-bar-fill" style="width:64%;" data-val="3.2"></div>
-            </div>
-            <span class="dash-driver-val">3.2</span>
-          </div>
-        </div>
-        <p class="dash-driver-note">⚠ Durchschnitte sind Richtwerte — keine abschliessende Beurteilung.</p>
+        <div class="admin-card-title">&Oslash; Bewertung pro Driver</div>
+        <div class="dash-driver-list" id="admin-driver-averages"></div>
+        <p class="dash-driver-note">&#9888; Durchschnitte sind Richtwerte — keine abschliessende Beurteilung.</p>
       </div>
-
-      <!-- Feedbacks pro Abteilung -->
       <div class="admin-card">
         <div class="admin-card-title">Feedbacks pro Abteilung</div>
-        <div class="dash-dept-list">
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Engineering</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:100%;"></div>
-            </div>
-            <span class="dash-dept-count">28</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Marketing</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:68%;"></div>
-            </div>
-            <span class="dash-dept-count">19</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Sales</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:54%;"></div>
-            </div>
-            <span class="dash-dept-count">15</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">Operations</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:43%;"></div>
-            </div>
-            <span class="dash-dept-count">12</span>
-          </div>
-          <div class="dash-dept-row">
-            <span class="dash-dept-name">HR / Finance</span>
-            <div class="dash-dept-bar-track">
-              <div class="dash-dept-bar-fill" style="width:43%;"></div>
-            </div>
-            <span class="dash-dept-count">12</span>
-          </div>
-        </div>
+        <div class="dash-dept-list" id="admin-departments"></div>
       </div>
     </div>
 
-    <!-- ─── System Status Row ─── -->
+    <!-- System Status -->
     <div class="admin-card">
       <div class="admin-card-title">System Status</div>
-      <div class="grid gap-4" style="grid-template-columns: repeat(3, 1fr);">
-
-        <div class="dash-status-item">
-          <div class="dash-status-header">
-            <span class="dash-status-dot active"></span>
-            <span class="dash-status-title">AD Sync</span>
-          </div>
-          <div class="dash-status-detail">Letzter Sync: Heute, 02:00 UTC</div>
-          <div class="dash-status-detail">Nächster Sync: Morgen, 02:00 UTC</div>
-          <div class="dash-status-detail">35 User synchronisiert</div>
-        </div>
-
-        <div class="dash-status-item">
-          <div class="dash-status-header">
-            <span class="dash-status-dot active"></span>
-            <span class="dash-status-title">E-Mail Benachrichtigungen</span>
-          </div>
-          <div class="dash-status-detail">84 von 86 zugestellt</div>
-          <div class="dash-status-detail">2 ausstehend</div>
-          <div class="dash-status-detail">Letzte: vor 3 Stunden</div>
-        </div>
-
-        <div class="dash-status-item">
-          <div class="dash-status-header">
-            <span class="dash-status-dot warning"></span>
-            <span class="dash-status-title">Retention Policy</span>
-          </div>
-          <div class="dash-status-detail">Aufbewahrung: 3 Jahre (aktiv)</div>
-          <div class="dash-status-detail">2 User im 12-Mt. Countdown</div>
-          <div class="dash-status-detail">1 Feedback unter <span class="hl-badge">Legal Hold</span></div>
-        </div>
-      </div>
+      <div class="grid gap-4" style="grid-template-columns: repeat(3, 1fr);" id="admin-system-status"></div>
     </div>
 
-    <!-- ─── Privacy Hinweis ─── -->
+    <!-- Privacy Notice -->
     <div class="dash-privacy-notice">
-      <span>🔒</span>
-      <span>Dieses Dashboard zeigt ausschliesslich aggregierte Daten. Individuelle Feedbacks werden aus Datenschutzgründen nicht angezeigt (DSG / DSGVO).</span>
+      <span>&#128274;</span>
+      <span>Dieses Dashboard zeigt ausschliesslich aggregierte Daten. Individuelle Feedbacks werden aus Datenschutzgruenden nicht angezeigt (DSG / DSGVO).</span>
     </div>
 
   </div>
@@ -333,27 +144,14 @@
   <div class="tab-content" id="tab-moderation">
 
     <!-- Moderation Stats -->
-    <div class="grid grid-cols-3 gap-3 mb-6">
-      <div class="stat-card">
-        <div class="stat-number" style="color:#E52620;">3</div>
-        <div class="stat-label">Offene Meldungen</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" style="color:#FF6B00;">7</div>
-        <div class="stat-label">In Prüfung</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" style="color:#22c55e;">42</div>
-        <div class="stat-label">Erledigt</div>
-      </div>
-    </div>
+    <div class="grid grid-cols-3 gap-3 mb-6" id="admin-mod-stats"></div>
 
     <!-- Filter Bar -->
     <div class="admin-card">
       <div class="flex items-center gap-3 mb-4">
         <div class="search-wrapper flex-1">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="admin-search" id="moderationSearch" placeholder="Feedback-ID, Benutzer oder Schlagwort suchen…">
+          <span class="search-icon">&#128269;</span>
+          <input type="text" class="admin-search" id="moderationSearch" placeholder="Feedback-ID, Benutzer oder Schlagwort suchen...">
         </div>
       </div>
       <div class="flex gap-2 flex-wrap">
@@ -367,7 +165,7 @@
         </span>
         <span class="tag-pill">
           <input type="radio" name="modFilter" id="modReview" value="review">
-          <label for="modReview">In Prüfung</label>
+          <label for="modReview">In Pruefung</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="modFilter" id="modResolved" value="resolved">
@@ -375,6 +173,8 @@
         </span>
       </div>
     </div>
+
+    <!-- Moderation Table -->
     <div class="admin-card" style="padding: 0; overflow-x: auto;">
       <table class="admin-table">
         <thead>
@@ -388,111 +188,7 @@
           <th style="text-align:right;">Status</th>
         </tr>
         </thead>
-        <tbody id="feedbackTableBody1">
-
-        <!-- Row 1 -->
-        <tr class="mod-report-row"
-            data-id="#FB-0486"
-            data-von="Anna Keller" data-von-initials="AK"
-            data-an="Markus Huber" data-an-initials="MH"
-            data-datum="28.03.2026" data-typ="Öffentlich" data-rating="3.8"
-            data-status-label="Gemeldet" data-status-class="flagged"
-            data-reason="Das Feedback enthält abwertende Formulierungen über meine persönliche Arbeitsweise, die ich als unangemessen und diskriminierend empfinde. Es überschreitet die Grenzen konstruktiver Kritik."
-            data-strengths="Anna bringt sehr viel Energie und Engagement in jedes Projekt. Sie kommuniziert proaktiv und sorgt dafür, dass alle Beteiligten gut informiert sind. Ihre Präsentationen sind klar strukturiert."
-            data-improvements="Manchmal werden Entscheidungen ohne ausreichende Rücksprache getroffen. Es wäre hilfreich, bei wichtigen Entscheidungen mehr Stimmen einzuholen und den Prozess transparenter zu gestalten."
-            data-drivers="Impact/Results: ★★★★☆ (3.8) | Ownership/Reliability: ★★★★☆ (4.0) | Collaboration/Social: ★★★☆☆ (3.2) | Growth/Learning: N/A"
-            style="cursor:pointer;">
-          <td><span style="color:#666;font-size:12px;font-family:'Bodoni MT',sans-serif;">#FB-0486</span></td>
-          <td>
-            <div class="flex items-center gap-2">
-              <div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">AK</div>
-              <span class="text-white text-sm">Anna Keller</span>
-            </div>
-          </td>
-          <td>
-            <div class="flex items-center gap-2">
-              <div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">MH</div>
-              <span class="text-white text-sm">Markus Huber</span>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">28.03.2026</span></td>
-          <td><span class="role-badge user">Öffentlich</span></td>
-          <td class="hide-mobile"><span style="color:#FF6B00;font-size:13px;">★ 3.8</span></td>
-          <td class="fb-status-cell">
-            <span class="status-dot flagged"></span>
-            <span style="color:#E52620;font-size:12px;">Gemeldet</span>
-          </td>
-        </tr>
-
-        <!-- Row 2 -->
-        <tr class="mod-report-row"
-            data-id="#FB-0451"
-            data-von="Thomas Bauer" data-von-initials="TB"
-            data-an="Sandra Meier" data-an-initials="SM"
-            data-datum="21.03.2026" data-typ="Öffentlich" data-rating="2.5"
-            data-status-label="In Prüfung" data-status-class="pending"
-            data-reason="Der Absender hat mehrfach ähnliche negative Bewertungen an mich gesendet. Ich vermute, dass dies gezielte Belästigung ist und nicht konstruktives Feedback."
-            data-strengths="Sandra zeigt Einsatz und ist immer pünktlich. Sie erledigt ihre Aufgaben zuverlässig."
-            data-improvements="Die Kommunikation mit Kollegen ist schwierig. Oft werden Meetings ohne Vorwarnung abgesagt und Deadlines nicht eingehalten. Es fehlt an Eigeninitiative."
-            data-drivers="Impact/Results: ★★☆☆☆ (2.0) | Ownership/Reliability: ★★★☆☆ (3.0) | Collaboration/Social: ★★☆☆☆ (2.5) | Growth/Learning: ★★★☆☆ (3.0)"
-            style="cursor:pointer;">
-          <td><span style="color:#666;font-size:12px;font-family:'Bodoni MT',sans-serif;">#FB-0451</span></td>
-          <td>
-            <div class="flex items-center gap-2">
-              <div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">TB</div>
-              <span class="text-white text-sm">Thomas Bauer</span>
-            </div>
-          </td>
-          <td>
-            <div class="flex items-center gap-2">
-              <div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">SM</div>
-              <span class="text-white text-sm">Sandra Meier</span>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">21.03.2026</span></td>
-          <td><span class="role-badge user">Öffentlich</span></td>
-          <td class="hide-mobile"><span style="color:#FF6B00;font-size:13px;">★ 2.5</span></td>
-          <td class="fb-status-cell">
-            <span class="status-dot pending"></span>
-            <span style="color:#FF6B00;font-size:12px;">In Prüfung</span>
-          </td>
-        </tr>
-
-        <!-- Row 3 -->
-        <tr class="mod-report-row"
-            data-id="#FB-0412"
-            data-von="Anonym" data-von-initials="?"
-            data-an="Lukas Weber" data-an-initials="LW"
-            data-datum="14.03.2026" data-typ="Anonym" data-rating="1.5"
-            data-status-label="Erledigt" data-status-class="resolved"
-            data-reason="Das anonyme Feedback enthält Aussagen die trotz Anonymität auf eine bestimmte Person hindeuten. Ausserdem enthält es beleidigende Formulierungen."
-            data-strengths="—"
-            data-improvements="Die Arbeitsqualität lässt stark zu wünschen übrig. Aufgaben werden nicht zu Ende gebracht und das Team muss ständig nachfragen. Das ist für alle frustrierend."
-            data-drivers="Impact/Results: ★☆☆☆☆ (1.0) | Ownership/Reliability: ★★☆☆☆ (2.0) | Collaboration/Social: ★★☆☆☆ (2.0) | Growth/Learning: N/A"
-            style="cursor:pointer;">
-          <td><span style="color:#666;font-size:12px;font-family:'Bodoni MT',sans-serif;">#FB-0412</span></td>
-          <td>
-            <div class="flex items-center gap-2">
-              <div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;background:#333;color:#666;">?</div>
-              <span style="color:#666;font-size:13px;">Anonym</span>
-            </div>
-          </td>
-          <td>
-            <div class="flex items-center gap-2">
-              <div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">LW</div>
-              <span class="text-white text-sm">Lukas Weber</span>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">14.03.2026</span></td>
-          <td><span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">Anonym</span></td>
-          <td class="hide-mobile"><span style="color:#E52620;font-size:13px;">★ 1.5</span></td>
-          <td class="fb-status-cell">
-            <span class="status-dot resolved"></span>
-            <span style="color:#22c55e;font-size:12px;">Erledigt</span>
-          </td>
-        </tr>
-
-        </tbody>
+        <tbody id="feedbackTableBody1"></tbody>
       </table>
     </div>
 
@@ -500,20 +196,18 @@
 
 
   <!-- ═══════════════════════════════════════════════════════
-     TAB 3: BENUTZERVERWALTUNG
-     ═══════════════════════════════════════════════════════ -->
+       TAB 3: BENUTZERVERWALTUNG
+       ═══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="tab-users">
 
-    <!-- Search + Add User -->
+    <!-- Search + Filter -->
     <div class="admin-card">
       <div class="flex items-center gap-3 mb-5">
         <div class="search-wrapper flex-1">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="admin-search" id="userSearch" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)…">
+          <span class="search-icon">&#128269;</span>
+          <input type="text" class="admin-search" id="userSearch" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)...">
         </div>
       </div>
-
-      <!-- Filter Pills -->
       <div class="flex gap-2 flex-wrap">
         <span class="tag-pill">
           <input type="radio" name="userFilter" id="filterAll" value="all" checked>
@@ -550,213 +244,62 @@
           <th style="text-align:right;">Aktionen</th>
         </tr>
         </thead>
-        <tbody id="userTableBody">
-
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">ML</div>
-              <div>
-                <div class="text-white text-sm font-medium">Maximilian Läpple</div>
-                <div class="text-xs" style="color:#666;">m.laepple@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">IT</span></td>
-          <td><span class="role-badge admin">Admin</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">12 / 8</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">AK</div>
-              <div>
-                <div class="text-white text-sm font-medium">Anna Keller</div>
-                <div class="text-xs" style="color:#666;">a.keller@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">Marketing</span></td>
-          <td><span class="role-badge manager">Manager</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">24 / 15</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">MH</div>
-              <div>
-                <div class="text-white text-sm font-medium">Markus Huber</div>
-                <div class="text-xs" style="color:#666;">m.huber@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">Finance</span></td>
-          <td><span class="role-badge user">Benutzer</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">6 / 3</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">TR</div>
-              <div>
-                <div class="text-white text-sm font-medium">Thomas Rüfli</div>
-                <div class="text-xs" style="color:#666;">t.ruefli@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">Sales</span></td>
-          <td><span class="role-badge manager">Manager</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">18 / 11</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin danger" type="button" title="Deaktivieren">🚫</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">PW</div>
-              <div>
-                <div class="text-white text-sm font-medium">Patrick Weber</div>
-                <div class="text-xs" style="color:#666;">p.weber@company.ch</div>
-              </div>
-            </div>
-          </td>
-          <td><span style="color:#999;font-size:13px;">HR</span></td>
-          <td><span class="role-badge user">Benutzer</span></td>
-          <td class="hide-mobile"><span style="color:#999;font-size:13px;">2 / 0</span></td>
-          <td style="text-align:right;">
-            <div class="flex gap-2 justify-end">
-              <button class="btn-admin" type="button" title="Aktivieren" style="color:#22c55e;border-color:#22c55e33;">✅</button>
-              <button class="btn-admin" type="button" title="Rechtliche Sicherung">🔒</button>
-            </div>
-          </td>
-        </tr>
-
-        <!-- Deactivate User Confirmation Modal -->
-        <div class="modal-overlay" id="deactivateModal">
-          <div class="modal-box">
-            <h2 class="modal-title">Benutzer deaktivieren</h2>
-
-            <!-- User Info -->
-            <div class="flex items-center gap-3 mb-5">
-              <div class="avatar deactivate-avatar" id="deactivateAvatar"></div>
-              <div>
-                <div class="text-white font-medium" id="deactivateName"></div>
-                <div class="text-xs text-muted" id="deactivateEmail"></div>
-              </div>
-            </div>
-
-            <!-- Overview -->
-            <div class="deactivate-info-box mb-4">
-              <div class="admin-card-title">Übersicht</div>
-              <div class="deactivate-info-row">
-                <span>Rolle</span>
-                <span class="text-white" id="deactivateRole"></span>
-              </div>
-              <div class="deactivate-info-row">
-                <span>Abteilung</span>
-                <span class="text-white" id="deactivateDept"></span>
-              </div>
-              <div class="deactivate-info-row">
-                <span>Feedbacks gesendet / erhalten</span>
-                <span class="text-white" id="deactivateFeedbacks"></span>
-              </div>
-            </div>
-
-            <!-- Consequences -->
-            <div class="deactivate-info-box mb-4">
-              <div class="admin-card-title">Was passiert bei der Deaktivierung?</div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">1. Zugriff</span>
-                <span class="deactivate-detail-value">Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen möglich.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">2. Datenaufbewahrung</span>
-                <span class="deactivate-detail-value">Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">gelöscht oder anonymisiert</span>.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">3. Legal Hold</span>
-                <span class="deactivate-detail-value">Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Löschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">4. Reaktivierung</span>
-                <span class="deactivate-detail-value"><span class="hl-green">Jederzeit möglich.</span> Der Retention-Countdown wird zurückgesetzt.</span>
-              </div>
-
-              <div class="deactivate-detail-item">
-                <span class="deactivate-detail-label">5. AD-Sync</span>
-                <span class="deactivate-detail-value">Status wird beim nächsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.</span>
-              </div>
-            </div>
-
-            <!-- Warning -->
-            <div class="deactivate-warning mb-5">
-              <p>⚠️ Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zuerst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.</p>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex gap-3 justify-end">
-              <button class="btn-admin" type="button" id="cancelDeactivateBtn">Abbrechen</button>
-              <button class="btn-admin danger" type="button" id="confirmDeactivateBtn">🚫 Deaktivieren</button>
-            </div>
-          </div>
-        </div>
-        </tbody>
+        <tbody id="userTableBody"></tbody>
       </table>
     </div>
+
+    <!-- Deactivate User Modal -->
+    <div class="modal-overlay" id="deactivateModal">
+      <div class="modal-box">
+        <h2 class="modal-title">Benutzer deaktivieren</h2>
+        <div class="flex items-center gap-3 mb-5">
+          <div class="avatar deactivate-avatar" id="deactivateAvatar"></div>
+          <div>
+            <div class="text-white font-medium" id="deactivateName"></div>
+            <div class="text-xs text-muted" id="deactivateEmail"></div>
+          </div>
+        </div>
+        <div class="deactivate-info-box mb-4">
+          <div class="admin-card-title">Uebersicht</div>
+          <div class="deactivate-info-row"><span>Rolle</span><span class="text-white" id="deactivateRole"></span></div>
+          <div class="deactivate-info-row"><span>Abteilung</span><span class="text-white" id="deactivateDept"></span></div>
+          <div class="deactivate-info-row"><span>Feedbacks gesendet / erhalten</span><span class="text-white" id="deactivateFeedbacks"></span></div>
+        </div>
+        <div class="deactivate-info-box mb-4">
+          <div class="admin-card-title">Was passiert bei der Deaktivierung?</div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">1. Zugriff</span><span class="deactivate-detail-value">Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen moeglich.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">2. Datenaufbewahrung</span><span class="deactivate-detail-value">Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">geloescht oder anonymisiert</span>.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">3. Legal Hold</span><span class="deactivate-detail-value">Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Loeschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">4. Reaktivierung</span><span class="deactivate-detail-value"><span class="hl-green">Jederzeit moeglich.</span> Der Retention-Countdown wird zurueckgesetzt.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">5. AD-Sync</span><span class="deactivate-detail-value">Status wird beim naechsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.</span></div>
+        </div>
+        <div class="deactivate-warning mb-5">
+          <p>&#9888;&#65039; Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zuerst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.</p>
+        </div>
+        <div class="flex gap-3 justify-end">
+          <button class="btn-admin" type="button" id="cancelDeactivateBtn">Abbrechen</button>
+          <button class="btn-admin danger" type="button" id="confirmDeactivateBtn">&#128683; Deaktivieren</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
-<!-- ═══ Toast ═══ -->
-<div id="toast">✓ Aktion erfolgreich</div>
 
-<script src="js/admin.js"></script>
-<script src="js/app.js"></script>
+<!-- Toast -->
+<div id="toast"></div>
 
-<!-- ═══ Report Detail Modal ═══════════════════════════════ -->
+<!-- Report Detail Modal -->
 <div class="modal-overlay" id="reportDetailModal">
   <div class="modal-box" style="max-width:560px;max-height:90vh;overflow-y:auto;">
-
-    <!-- Header -->
     <div class="flex items-center justify-between mb-5">
       <div>
-        <h2 class="modal-title" style="margin-bottom:4px;">Meldung prüfen</h2>
+        <h2 class="modal-title" style="margin-bottom:4px;">Meldung pruefen</h2>
         <span style="font-size:12px;color:#666;font-family:'Bodoni MT',sans-serif;" id="reportModalId"></span>
       </div>
-      <button id="closeReportModalBtn" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;" title="Schliessen">✕</button>
+      <button id="closeReportModalBtn" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;" title="Schliessen">&#10005;</button>
     </div>
-
-    <!-- Von / An -->
     <div class="deactivate-info-box mb-4" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div>
         <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Von</div>
@@ -766,53 +309,31 @@
         </div>
       </div>
       <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">An (Empfänger)</div>
+        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">An (Empfaenger)</div>
         <div class="flex items-center gap-2">
           <div class="avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;" id="reportModalAnAvatar"></div>
           <span class="text-white text-sm" id="reportModalAn"></span>
         </div>
       </div>
     </div>
-
-    <!-- Meta Info -->
     <div class="deactivate-info-box mb-4">
-      <div class="deactivate-info-row">
-        <span>Datum</span>
-        <span class="text-white" id="reportModalDatum"></span>
-      </div>
-      <div class="deactivate-info-row">
-        <span>Typ</span>
-        <span class="text-white" id="reportModalTyp"></span>
-      </div>
-      <div class="deactivate-info-row">
-        <span>Ø Bewertung</span>
-        <span style="color:#FF6B00;" id="reportModalRating"></span>
-      </div>
-      <div class="deactivate-info-row" style="border:none;padding-bottom:0;">
-        <span>Status</span>
-        <span id="reportModalStatus"></span>
-      </div>
+      <div class="deactivate-info-row"><span>Datum</span><span class="text-white" id="reportModalDatum"></span></div>
+      <div class="deactivate-info-row"><span>Typ</span><span class="text-white" id="reportModalTyp"></span></div>
+      <div class="deactivate-info-row"><span>&Oslash; Bewertung</span><span style="color:#FF6B00;" id="reportModalRating"></span></div>
+      <div class="deactivate-info-row" style="border:none;padding-bottom:0;"><span>Status</span><span id="reportModalStatus"></span></div>
     </div>
-
-    <!-- Meldungsgrund -->
     <div class="mb-4">
-      <p style="font-family:'Bodoni MT',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#E52620;margin-bottom:10px;">⚠ Meldungsgrund</p>
+      <p style="font-family:'Bodoni MT',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#E52620;margin-bottom:10px;">&#9888; Meldungsgrund</p>
       <div style="background:#1a1a1a;border:1px solid rgba(229,38,32,0.2);border-radius:10px;padding:16px;">
         <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalReason"></p>
       </div>
     </div>
-
-    <!-- Gemeldetes Feedback (was die Person erhalten hat) -->
     <div class="mb-4">
       <p style="font-family:'Bodoni MT',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#999;margin-bottom:10px;">Gemeldetes Feedback (erhalten von <span id="reportModalVonInline"></span>)</p>
-
-      <!-- Drivers -->
       <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;margin-bottom:12px;">
         <p style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Bewertungen</p>
         <div id="reportModalDrivers" style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#888;font-family:'DM Sans',sans-serif;"></div>
       </div>
-
-      <!-- Strengths -->
       <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;margin-bottom:12px;">
         <div class="flex items-center gap-2 mb-2">
           <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
@@ -820,8 +341,6 @@
         </div>
         <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalStrengths"></p>
       </div>
-
-      <!-- Areas to Improve -->
       <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;">
         <div class="flex items-center gap-2 mb-2">
           <span style="width:7px;height:7px;border-radius:50%;background:#FF6B00;display:inline-block;"></span>
@@ -830,23 +349,17 @@
         <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalImprovements"></p>
       </div>
     </div>
-
-    <!-- Aktionen -->
     <div class="flex gap-2 pt-2" style="border-top:1px solid #2e2e2e;padding-top:16px;">
-      <button id="reportActionReview" class="btn-admin" type="button" style="color:#FF6B00;border-color:rgba(255,107,0,0.3);flex:1;">
-        🔍 In Prüfung setzen
-      </button>
-      <button id="reportActionResolve" class="btn-admin" type="button" style="color:#22c55e;border-color:rgba(34,197,94,0.3);flex:1;">
-        ✅ Erledigen
-      </button>
-      <button id="reportActionDismiss" class="btn-admin" type="button" style="color:#666;flex:1;">
-        ✕ Ablehnen
-      </button>
+      <button id="reportActionReview" class="btn-admin" type="button" style="color:#FF6B00;border-color:rgba(255,107,0,0.3);flex:1;">&#128269; In Pruefung setzen</button>
+      <button id="reportActionResolve" class="btn-admin" type="button" style="color:#22c55e;border-color:rgba(34,197,94,0.3);flex:1;">&#9989; Erledigen</button>
+      <button id="reportActionDismiss" class="btn-admin" type="button" style="color:#666;flex:1;">&#10005; Ablehnen</button>
     </div>
-
   </div>
 </div>
-<!-- ═══ Ende Report Detail Modal ══════════════════════════ -->
 
+<script src="js/data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/render.js"></script>
+<script src="js/pages/admin.js"></script>
 </body>
 </html>

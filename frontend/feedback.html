@@ -41,46 +41,7 @@
 <body class="min-h-screen pt-24 pb-12 px-4" style="background: var(--color-base);">
 
 <!-- Navbar -->
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <img src="img/777ch_Logo.svg" alt="Logo" class="nav-logo">
-    <div class="nav-content">
-      <div class="nav-links">
-        <a href="index.html" class="nav-link">Inbox</a>
-        <a href="" class="nav-link active">Feedback geben</a>
-        <a href="history.html" class="nav-link">Verlauf</a>
-        <a href="admin.html" class="nav-link">Admin</a>
-      </div>
-      <div class="nav-icons">
-        <div class="avatar anon-avatar">
-          <!-- Profil-Dropdown-Wrapper -->
-          <div class="nav-profile-wrapper" id="profileWrapper">
-            <button class="nav-profile-btn" id="profileBtn" aria-expanded="false">
-              <span class="nav-avatar">MM</span>
-            </button>
-
-            <!-- Dropdown -->
-            <div class="profile-dropdown" id="profileDropdown">
-              <div class="profile-dropdown-header">
-                <span class="profile-dropdown-name">Max Muster</span>
-                <span class="profile-dropdown-email">m.muster@firma.ch</span>
-              </div>
-              <div class="profile-dropdown-divider"></div>
-              <button class="profile-dropdown-logout" id="logoutBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                  <polyline points="16 17 21 12 16 7"/>
-                  <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Abmelden
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+<div id="navbar-container"></div>
 
 <div class="max-w-3xl mx-auto">
 
@@ -89,33 +50,24 @@
     <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
       Feedback
     </h1>
-    <p class="text-sm" style="color: var(--color-text-dim);">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
+    <p class="text-sm" style="color: var(--color-text-dim);">Feedback einreichen — waehle eine Person und bewerte sie in den vier Drivers.</p>
   </div>
 
   <form id="feedbackForm" novalidate>
 
-    <!-- Empfänger (AD-Liste) -->
+    <!-- Empfaenger (AD-Liste) -->
     <div class="fade-up delay-1 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Empfänger</p>
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Empfaenger</p>
       <div>
         <label class="block font-normal text-sm mb-2" style="color: var(--color-text-dim);">Mitarbeiter aus dem Active Directory</label>
-        <select id="recipientSelect" class="fancy-input" required>
-          <option value="">Person auswählen…</option>
-          <option value="maximilian.laepple">Maximilian Läpple</option>
-          <option value="max.mustermann">Max Mustermann</option>
-          <option value="anna.keller">Anna Keller</option>
-          <option value="markus.huber">Markus Huber</option>
-          <option value="thomas.ruefli">Thomas Müller</option>
-          <option value="jana.steiner">Jana Steiner</option>
-          <option value="patrick.weber">Patrick Weber</option>
-        </select>
+        <select id="recipientSelect" class="fancy-input" required></select>
       </div>
     </div>
 
     <!-- Sichtbarkeit -->
     <div class="fade-up delay-2 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
       <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Sichtbarkeit</p>
-      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Wähle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
+      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Waehle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
       <div class="flex gap-4 mb-4">
         <label class="visibility-option flex-1" id="vis-public-label">
@@ -132,16 +84,16 @@
           <div class="visibility-card">
             <img class="visibility-icon" alt="Icon" src="img/incognito.svg"/>
             <span class="visibility-title">Anonym</span>
-            <span class="visibility-desc">Identität wird geschützt</span>
+            <span class="visibility-desc">Identitaet wird geschuetzt</span>
           </div>
         </label>
       </div>
 
-      <!-- Anonymitäts-Warnung -->
+      <!-- Anonymitaets-Warnung -->
       <div id="anonWarning" class="anon-warning" style="display:none;">
-        <div class="anon-warning-icon">⚠️</div>
+        <div class="anon-warning-icon">&#9888;&#65039;</div>
         <p class="anon-warning-text">
-          Du hast ausgewählt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
+          Du hast ausgewaehlt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persoenlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identitaet offenbaren koennten. Achte darauf, was du schreibst und welche Sprache du waehlst, um echte Anonymitaet zu gewaehrleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
         </p>
         <label class="anon-checkbox-label mt-3">
           <input type="checkbox" id="anonUnderstood">
@@ -151,8 +103,8 @@
 
       <!-- Rate Limit Hinweis -->
       <div id="anonRateLimit" class="rate-limit-notice" style="display:none;">
-        <span style="color: var(--color-orange);">ℹ</span>
-        <span>Anonymes Feedback kann von einer Person pro Jahr genau 1× an dieselbe person gesendet werden.</span>
+        <span style="color: var(--color-orange);">&#8505;</span>
+        <span>Anonymes Feedback kann von einer Person pro Jahr genau 1x an dieselbe Person gesendet werden.</span>
       </div>
     </div>
 
@@ -162,109 +114,27 @@
       <!-- Drivers & Stars -->
       <div class="fade-up delay-3 mb-6">
         <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-2">Bewertung</p>
-        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
+        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens 2 der 4 Drivers muessen bewertet werden. Maximal 2 duerfen leer oder N/A bleiben.</p>
 
-        <div class="flex flex-col gap-3">
-
-          <!-- Driver 1: Impact/Results -->
-          <div class="cat-card" id="driver-impact">
-            <div class="flex items-center justify-between mb-1">
-              <div class="flex items-center gap-3">
-                <div class="num-badge">01</div>
-                <span class="text-white text-sm font-medium">Impact / Results</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" id="na-impact" title="N/A — Nicht beurteilbar">N/A</button>
-                <div class="stars" id="stars-impact">
-                  <input type="radio" name="impact" id="imp5" value="5"/><label for="imp5" data-tooltip="Exceptional impact — Drives significant outcomes, anticipates obstacles, and delivers high-impact results even in complex situations.">★</label>
-                  <input type="radio" name="impact" id="imp4" value="4"/><label for="imp4" data-tooltip="Strong impact — Consistently delivers high-quality outcomes independently; meets goals reliably.">★</label>
-                  <input type="radio" name="impact" id="imp3" value="3"/><label for="imp3" data-tooltip="Reliable with guidance — Delivers expected results when scope is clear and guidance is available.">★</label>
-                  <input type="radio" name="impact" id="imp2" value="2"/><label for="imp2" data-tooltip="Inconsistent results — Puts in effort but outcomes are uneven; requires frequent correction or rework.">★</label>
-                  <input type="radio" name="impact" id="imp1" value="1"/><label for="imp1" data-tooltip="Very low impact — Struggles to deliver outcomes; work often incomplete or not meeting expectations.">★</label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Driver 2: Ownership/Reliability -->
-          <div class="cat-card" id="driver-ownership">
-            <div class="flex items-center justify-between mb-1">
-              <div class="flex items-center gap-3">
-                <div class="num-badge">02</div>
-                <span class="text-white text-sm font-medium">Ownership / Reliability</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" id="na-ownership" title="N/A — Nicht beurteilbar">N/A</button>
-                <div class="stars" id="stars-ownership">
-                  <input type="radio" name="ownership" id="own5" value="5"/><label for="own5" data-tooltip="Full accountability — Acts as a true owner: anticipates needs, removes blockers, and ensures outcomes without supervision.">★</label>
-                  <input type="radio" name="ownership" id="own4" value="4"/><label for="own4" data-tooltip="Strong ownership — Proactively takes responsibility, follows through end-to-end, and manages priorities well.">★</label>
-                  <input type="radio" name="ownership" id="own3" value="3"/><label for="own3" data-tooltip="Dependable with oversight — Owns assigned tasks and follows through with occasional check-ins.">★</label>
-                  <input type="radio" name="ownership" id="own2" value="2"/><label for="own2" data-tooltip="Partial ownership — Takes responsibility when prompted; follow-through is inconsistent.">★</label>
-                  <input type="radio" name="ownership" id="own1" value="1"/><label for="own1" data-tooltip="Low ownership — Avoids responsibility; tasks often slip without follow-up or accountability.">★</label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Driver 3: Collaboration/Social -->
-          <div class="cat-card" id="driver-collaboration">
-            <div class="flex items-center justify-between mb-1">
-              <div class="flex items-center gap-3">
-                <div class="num-badge">03</div>
-                <span class="text-white text-sm font-medium">Collaboration / Social</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" id="na-collaboration" title="N/A — Nicht beurteilbar">N/A</button>
-                <div class="stars" id="stars-collaboration">
-                  <input type="radio" name="collaboration" id="col5" value="5"/><label for="col5" data-tooltip="Elevates others — Strengthens team dynamics, fosters trust, communicates exceptionally well, and improves collaboration across the group.">★</label>
-                  <input type="radio" name="collaboration" id="col4" value="4"/><label for="col4" data-tooltip="Strong collaborator — Actively contributes to team success; communicates effectively and is reliable and pleasant to work with.">★</label>
-                  <input type="radio" name="collaboration" id="col3" value="3"/><label for="col3" data-tooltip="Cooperative and clear — Communicates clearly, works well with others, and maintains professional interactions.">★</label>
-                  <input type="radio" name="collaboration" id="col2" value="2"/><label for="col2" data-tooltip="Basic collaboration — Engages with others but may be inconsistent, unclear, or occasionally hard to work with.">★</label>
-                  <input type="radio" name="collaboration" id="col1" value="1"/><label for="col1" data-tooltip="Difficult to work with — Communication is unclear or unconstructive; collaboration is limited or strained.">★</label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Driver 4: Growth/Learning -->
-          <div class="cat-card" id="driver-growth">
-            <div class="flex items-center justify-between mb-1">
-              <div class="flex items-center gap-3">
-                <div class="num-badge">04</div>
-                <span class="text-white text-sm font-medium">Growth / Learning</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <button type="button" class="na-btn" id="na-growth" title="N/A — Nicht beurteilbar">N/A</button>
-                <div class="stars" id="stars-growth">
-                  <input type="radio" name="growth" id="gro5" value="5"/><label for="gro5" data-tooltip="Accelerated growth — Continuously improves, seeks challenges, and rapidly expands skills beyond current role expectations.">★</label>
-                  <input type="radio" name="growth" id="gro4" value="4"/><label for="gro4" data-tooltip="Proactive growth — Actively seeks feedback, learns quickly, and applies improvements effectively.">★</label>
-                  <input type="radio" name="growth" id="gro3" value="3"/><label for="gro3" data-tooltip="Steady development — Accepts feedback and shows clear, incremental improvement over time.">★</label>
-                  <input type="radio" name="growth" id="gro2" value="2"/><label for="gro2" data-tooltip="Limited growth — Open to feedback but applies it inconsistently; progress is slow.">★</label>
-                  <input type="radio" name="growth" id="gro1" value="1"/><label for="gro1" data-tooltip="Resistant to growth — Struggles to accept feedback; shows little effort to improve.">★</label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
+        <div class="flex flex-col gap-3" id="drivers-container"></div>
 
         <!-- Validierungshinweis Drivers -->
         <div id="driverValidation" class="validation-msg">
-          <span>⚠ Mindestens 2 Drivers müssen bewertet werden.</span>
+          <span>&#9888; Mindestens 2 Drivers muessen bewertet werden.</span>
         </div>
       </div>
 
       <!-- Actionable Feedback -->
       <div class="fade-up delay-4 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
         <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-5">Actionable Feedback</p>
-        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
+        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens eines der beiden Felder muss ausgefuellt werden (min. 200 Zeichen).</p>
 
         <div class="mb-5">
           <div class="flex items-center gap-2 mb-2">
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-success); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="strengths">Strengths</label>
           </div>
-          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten…"></textarea>
+          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Staerken und positives Verhalten..."></textarea>
           <div class="char-counter" id="strengths-counter">
             <span id="strengths-count">0</span> / 200 Zeichen min.
           </div>
@@ -277,14 +147,14 @@
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-orange); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="improvements">Areas to improve</label>
           </div>
-          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen…"></textarea>
+          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und moegliche Massnahmen..."></textarea>
           <div class="char-counter" id="improvements-counter">
             <span id="improvements-count">0</span> / 200 Zeichen min.
           </div>
         </div>
 
         <div id="textValidation" class="validation-msg">
-          <span>⚠ Mindestens ein Feld muss mit 200+ Zeichen ausgefüllt werden.</span>
+          <span>&#9888; Mindestens ein Feld muss mit 200+ Zeichen ausgefuellt werden.</span>
         </div>
       </div>
 
@@ -294,36 +164,22 @@
 
         <div class="text-sm leading-relaxed mb-4" style="color: var(--color-text-dim);">
           <p class="mb-2">By submitting this feedback you confirm adherence to the following:</p>
-          <ul class="coc-list">
-            <li>Respectful Language Only — All feedback must be professional, courteous, and respectful. Avoid offensive, discriminatory, or inflammatory language. Focus on observations and behaviors, not insults or personal attacks.</li>
-            <li>No Retaliation — Feedback must never be used as a tool for punishment, revenge, or embarrassment. The platform exists for growth and development, not for retribution.</li>
-            <li>Anonymity Awareness — If submitting feedback anonymously, ensure your comments do not include identifiable details such as names, projects, locations, or language cues that could reveal your identity. Always write with privacy in mind.</li>
-            <li>Focus on Behaviors and Impact, Not Personality — Comments should highlight what someone does and the effect it has, rather than speculating about personality, motives, or character traits.</li>
-            <li>Honesty and Accuracy — Provide truthful feedback based on your direct observations. Avoid exaggerations, assumptions, or hearsay. Constructive feedback is valuable only if it reflects reality.</li>
-            <li>Confidentiality and Data Use — Feedback is intended only for the recipient and their direct manager. Do not share it outside the platform, discuss it with colleagues, or use it as material for gossip or evaluation of others.</li>
-            <li>Constructive Criticism Only — When pointing out areas for improvement, pair your observations with actionable suggestions or specific examples. Avoid vague or purely negative statements.</li>
-            <li>Compliance with Company Policies — All feedback must comply with the company's HR policies, ethics, and legal obligations. Avoid references or statements that could violate these rules.</li>
-            <li>Platform Etiquette / Avoid Rating Abuse — Complete your feedback sincerely. Do not artificially inflate or deflate scores, leave empty ratings intentionally, or provide meaningless comments. Ratings should reflect honest evaluation.</li>
-          </ul>
+          <ul class="coc-list" id="coc-list"></ul>
         </div>
 
         <label class="anon-checkbox-label">
           <input type="checkbox" id="cocAccepted" required>
           <span>Ich akzeptiere den <a href="#" style="color: var(--color-orange); text-decoration:underline;">Code of Conduct</a></span>
         </label>
-
-<!--        <div class="mt-3">-->
-<!--          <a href="#" class="text-xs" style="color: var(&#45;&#45;color-red); text-decoration:underline;">Report a concern → Whistleblowing Platform</a>-->
-<!--        </div>-->
       </div>
 
       <!-- Submit -->
       <div class="fade-up delay-6 flex flex-col items-center gap-4 pt-2 pb-8">
         <button type="submit" class="btn-submit w-full" id="submitBtn" disabled>
-          Feedback absenden →
+          Feedback absenden &rarr;
         </button>
         <p class="text-xs text-center" style="color: var(--color-text-ghost);">
-          Einmal abgesendet, ist das Feedback endgültig. Du hast 5 Minuten um Tippfehler zu korrigieren.
+          Einmal abgesendet, ist das Feedback endgueltig. Du hast 5 Minuten um Tippfehler zu korrigieren.
         </p>
       </div>
 
@@ -332,8 +188,11 @@
   </form>
 </div>
 
-<div id="toast">✓ Feedback erfolgreich eingereicht</div>
+<div id="toast"></div>
 
-<script src="js/feedback.js"></script>
+<script src="js/data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/render.js"></script>
+<script src="js/pages/feedback.js"></script>
 </body>
 </html>
