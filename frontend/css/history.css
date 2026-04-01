@@ -1,0 +1,297 @@
+/* ═══════════════════════════════════════════════════════
+   History Page — Gesendete Feedbacks
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── History Card ──────────────────────────────────────── */
+.history-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+.history-card:hover {
+  border-color: #4a4a4a;
+}
+.history-card.editable {
+  border-color: var(--color-orange);
+  box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.1);
+}
+
+/* ─── Empfänger-Info ────────────────────────────────────── */
+.history-recipient {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+.history-date {
+  font-size: 13px;
+  color: var(--color-text-faint);
+}
+.history-timestamp {
+  font-size: 12px;
+  color: var(--color-text-ghost);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ─── Visibility Badge ──────────────────────────────────── */
+.vis-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.vis-badge.named {
+  background: rgba(255, 107, 0, 0.1);
+  color: var(--color-orange);
+  border: 1px solid rgba(255, 107, 0, 0.2);
+}
+.vis-badge.anon {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text-faint);
+  border: 1px solid var(--color-border-strong);
+}
+
+/* ─── Driver-Ratings Mini-Anzeige ───────────────────────── */
+.history-drivers {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.history-driver {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--color-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+.history-driver-name {
+  font-size: 12px;
+  color: var(--color-text-dim);
+  font-family: 'DM Sans', sans-serif;
+}
+.history-driver-stars {
+  font-size: 13px;
+  color: var(--color-orange);
+  letter-spacing: 1px;
+}
+.history-driver-stars .empty {
+  color: var(--color-star-empty);
+}
+.history-driver-na {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-faint);
+  letter-spacing: 0.05em;
+}
+
+/* ─── Text-Vorschau ─────────────────────────────────────── */
+.history-text-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-ghost);
+  margin-bottom: 4px;
+}
+.history-text-content {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── Edit-Timer Bar ────────────────────────────────────── */
+.edit-timer-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 107, 0, 0.06);
+  border: 1px solid rgba(255, 107, 0, 0.15);
+  border-radius: var(--radius-md);
+}
+.edit-timer-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.edit-timer-text {
+  font-size: 13px;
+  color: var(--color-orange);
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+}
+.edit-timer-progress {
+  flex: 1;
+  height: 3px;
+  background: var(--color-border-strong);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.edit-timer-fill {
+  height: 100%;
+  background: var(--color-orange);
+  border-radius: 99px;
+  transition: width 1s linear;
+}
+.edit-timer-fill.critical {
+  background: var(--color-red);
+}
+.edit-timer-time {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Bodoni MT', sans-serif;
+  color: var(--color-orange);
+  min-width: 42px;
+  text-align: right;
+}
+.edit-timer-time.critical {
+  color: var(--color-red);
+}
+
+/* ─── Lock Badge ────────────────────────────────────────── */
+.lock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-text-ghost);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ─── Edit Button (History) ─────────────────────────────── */
+.btn-edit-history {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--color-orange);
+  color: var(--color-orange);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-edit-history:hover {
+  background: rgba(255, 107, 0, 0.1);
+}
+.btn-edit-history:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: var(--color-border-strong);
+  color: var(--color-text-ghost);
+}
+.btn-edit-history:disabled:hover {
+  background: transparent;
+}
+
+/* ─── Inline-Edit Overlay ───────────────────────────────── */
+.edit-overlay {
+  display: none;
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--color-card);
+  border: 1px solid var(--color-orange);
+  border-radius: var(--radius-md);
+}
+.edit-overlay.active {
+  display: block;
+}
+.edit-overlay textarea {
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--color-text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.edit-overlay textarea:focus {
+  border-color: var(--color-orange);
+}
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+.btn-edit-cancel {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-dim);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-edit-cancel:hover {
+  border-color: var(--color-text-ghost);
+  color: var(--color-text-muted);
+}
+.btn-edit-save {
+  background: var(--gradient-brand);
+  border: none;
+  color: var(--color-text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-edit-save:hover {
+  opacity: 0.9;
+}
+
+/* ─── Edited Badge ──────────────────────────────────────── */
+.edited-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--color-text-ghost);
+  font-style: italic;
+}
+
+/* ─── History Empty State ───────────────────────────────── */
+.history-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-dim);
+}
+.history-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+/* ─── History Count Badge ───────────────────────────────── */
+.history-count {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-text-faint);
+}
