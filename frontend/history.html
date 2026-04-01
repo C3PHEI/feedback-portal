@@ -1,0 +1,92 @@
+<!doctype html>
+<html class="no-js" lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback Hub — Feedback geben</title>
+  <meta name="description" content="Internes Feedback-Formular">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#151515">
+
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            base:    'var(--color-base)',
+            surface: 'var(--color-surface)',
+            card:    'var(--color-card)',
+            border:  'var(--color-border)',
+            red:     'var(--color-red)',
+            orange:  'var(--color-orange)',
+          },
+          fontFamily: {
+            display: ['Bodoni MT', 'sans-serif'],
+            body:    ['DM Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Zentrale Farb-Konfiguration (immer zuerst laden) -->
+  <link rel="stylesheet" href="css/colors.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="min-h-screen pt-24 pb-12 px-4" style="background: var(--color-base);">
+
+<!-- Navbar -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <img src="img/777ch_Logo.svg" alt="Logo" class="nav-logo">
+    <div class="nav-content">
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Inbox</a>
+        <a href="feedback.html" class="nav-link">Feedback geben</a>
+        <a href="" class="nav-link active">Verlauf</a>
+        <a href="admin.html" class="nav-link">Admin</a>
+      </div>
+      <div class="nav-icons">
+        <div class="avatar anon-avatar">
+          <!-- Profil-Dropdown-Wrapper -->
+          <div class="nav-profile-wrapper" id="profileWrapper">
+            <button class="nav-profile-btn" id="profileBtn" aria-expanded="false">
+              <span class="nav-avatar">MM</span>
+            </button>
+
+            <!-- Dropdown -->
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="profile-dropdown-header">
+                <span class="profile-dropdown-name">Max Muster</span>
+                <span class="profile-dropdown-email">m.muster@firma.ch</span>
+              </div>
+              <div class="profile-dropdown-divider"></div>
+              <button class="profile-dropdown-logout" id="logoutBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                  <polyline points="16 17 21 12 16 7"/>
+                  <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Abmelden
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-3xl mx-auto">
+
+</div>
+
+<div id="toast">✓ Feedback erfolgreich eingereicht</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
