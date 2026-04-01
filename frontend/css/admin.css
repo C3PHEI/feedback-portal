@@ -744,6 +744,17 @@
   font-family: 'DM Sans', sans-serif;
 }
 
+/* ─── Moderation Report Row ────────────────────────── */
+.mod-report-row {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.mod-report-row:hover {
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+.mod-report-row:hover td:first-child span {
+  color: var(--color-orange) !important;
+}
 
 /* ═══════════════════════════════════════════════════════
    Responsive

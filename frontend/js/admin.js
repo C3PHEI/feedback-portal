@@ -110,20 +110,13 @@ document.addEventListener('DOMContentLoaded', function () {
   modFilters.forEach(function (radio) {
     radio.addEventListener('change', function () {
       var filter = radio.value;
-      var items = document.querySelectorAll('.feedback-preview');
-      items.forEach(function (item) {
-        if (filter === 'all') {
-          item.style.display = '';
-          return;
-        }
-        var dot = item.querySelector('.status-dot');
-        if (filter === 'open') {
-          item.style.display = (dot && dot.classList.contains('flagged')) ? '' : 'none';
-        } else if (filter === 'review') {
-          item.style.display = (dot && dot.classList.contains('pending')) ? '' : 'none';
-        } else if (filter === 'resolved') {
-          item.style.display = (dot && dot.classList.contains('resolved')) ? '' : 'none';
-        }
+      var rows = document.querySelectorAll('.mod-report-row');
+      rows.forEach(function (row) {
+        if (filter === 'all') { row.style.display = ''; return; }
+        var sc = row.dataset.statusClass;
+        if (filter === 'open')     { row.style.display = (sc === 'flagged')  ? '' : 'none'; }
+        if (filter === 'review')   { row.style.display = (sc === 'pending')  ? '' : 'none'; }
+        if (filter === 'resolved') { row.style.display = (sc === 'resolved') ? '' : 'none'; }
       });
     });
   });
@@ -192,26 +185,108 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ─── Feedback Detail Expand/Collapse ─── */
-  var fbToggleRows = document.querySelectorAll('.fb-row-toggle');
-  fbToggleRows.forEach(function (row) {
-    row.addEventListener('click', function () {
-      var targetId = row.dataset.target;
-      var detailRow = document.getElementById(targetId);
-      var chevron = row.querySelector('.fb-chevron');
-      if (!detailRow) return;
+  /* ─── Report Detail Modal — Moderation ─── */
+  var reportDetailModal   = document.getElementById('reportDetailModal');
+  var closeReportModalBtn = document.getElementById('closeReportModalBtn');
 
-      if (detailRow.style.display === 'none') {
-        detailRow.style.display = '';
-        if (chevron) chevron.style.transform = 'rotate(180deg)';
-        row.style.background = 'rgba(255,255,255,0.02)';
-      } else {
-        detailRow.style.display = 'none';
-        if (chevron) chevron.style.transform = 'rotate(0deg)';
-        row.style.background = '';
-      }
+  function openReportModal(row) {
+    var d = row.dataset;
+
+    document.getElementById('reportModalId').textContent          = d.id;
+    document.getElementById('reportModalVon').textContent         = d.von;
+    document.getElementById('reportModalVonInline').textContent   = d.von;
+    document.getElementById('reportModalAn').textContent          = d.an;
+    document.getElementById('reportModalVonAvatar').textContent   = d.vonInitials;
+    document.getElementById('reportModalAnAvatar').textContent    = d.anInitials;
+    document.getElementById('reportModalDatum').textContent       = d.datum;
+    document.getElementById('reportModalTyp').textContent         = d.typ;
+    document.getElementById('reportModalRating').textContent      = '★ ' + d.rating;
+    document.getElementById('reportModalReason').textContent      = d.reason;
+    document.getElementById('reportModalStrengths').textContent   = d.strengths;
+    document.getElementById('reportModalImprovements').textContent = d.improvements;
+
+    // Status Badge
+    var statusEl = document.getElementById('reportModalStatus');
+    var statusColors = { flagged: '#E52620', pending: '#FF6B00', resolved: '#22c55e' };
+    var statusLabels = { flagged: 'Gemeldet', pending: 'In Prüfung', resolved: 'Erledigt' };
+    var sc = d.statusClass;
+    statusEl.innerHTML = '<span class="status-dot ' + sc + '"></span>'
+      + '<span style="color:' + (statusColors[sc] || '#999') + ';font-size:13px;">'
+      + (statusLabels[sc] || d.statusLabel) + '</span>';
+
+    // Driver Bewertungen
+    var driversEl = document.getElementById('reportModalDrivers');
+    driversEl.innerHTML = '';
+    if (d.drivers) {
+      d.drivers.split('|').forEach(function (part) {
+        var p = document.createElement('div');
+        p.style.cssText = 'display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #222;';
+        var parts = part.trim().split(':');
+        var name  = parts[0] ? parts[0].trim() : '';
+        var val   = parts[1] ? parts[1].trim() : '';
+        p.innerHTML = '<span style="color:#666;">' + name + '</span>'
+          + '<span style="color:#FF6B00;">' + val + '</span>';
+        driversEl.appendChild(p);
+      });
+      // letztes border entfernen
+      var last = driversEl.lastChild;
+      if (last) last.style.borderBottom = 'none';
+    }
+
+    reportDetailModal.classList.add('show');
+  }
+
+  function closeReportModal() {
+    reportDetailModal.classList.remove('show');
+  }
+
+// Zeilen-Klick → Modal öffnen
+  var modReportRows = document.querySelectorAll('.mod-report-row');
+  modReportRows.forEach(function (row) {
+    row.addEventListener('click', function () {
+      openReportModal(row);
     });
   });
+
+// Schliessen
+  if (closeReportModalBtn) {
+    closeReportModalBtn.addEventListener('click', closeReportModal);
+  }
+  if (reportDetailModal) {
+    reportDetailModal.addEventListener('click', function (e) {
+      if (e.target === reportDetailModal) closeReportModal();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeReportModal();
+  });
+
+// Aktions-Buttons im Modal
+  var reportActionReview  = document.getElementById('reportActionReview');
+  var reportActionResolve = document.getElementById('reportActionResolve');
+  var reportActionDismiss = document.getElementById('reportActionDismiss');
+
+  if (reportActionReview) {
+    reportActionReview.addEventListener('click', function () {
+      var id = document.getElementById('reportModalId').textContent;
+      showAdminToast(id + ' — Status auf «In Prüfung» gesetzt');
+      closeReportModal();
+    });
+  }
+  if (reportActionResolve) {
+    reportActionResolve.addEventListener('click', function () {
+      var id = document.getElementById('reportModalId').textContent;
+      showAdminToast(id + ' — Meldung erledigt');
+      closeReportModal();
+    });
+  }
+  if (reportActionDismiss) {
+    reportActionDismiss.addEventListener('click', function () {
+      var id = document.getElementById('reportModalId').textContent;
+      showAdminToast(id + ' — Meldung abgelehnt');
+      closeReportModal();
+    });
+  }
 
   /* ─── Deactivate User Modal ─── */
   var deactivateModal = document.getElementById('deactivateModal');
