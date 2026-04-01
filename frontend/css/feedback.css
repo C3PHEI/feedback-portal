@@ -1,0 +1,202 @@
+/* ══════════════════════════════════════════════════════
+   FEEDBACK HUB — feedback.css
+   Spezifische Styles für feedback.html
+   Ladereihenfolge: colors.css → style.css → feedback.css
+   ══════════════════════════════════════════════════════ */
+
+/* ─── Feature 2: Visibility Cards ───────────────────────── */
+.visibility-option input {
+  display: none;
+}
+.visibility-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 12px;
+  background: var(--color-card);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.visibility-card:hover {
+  border-color: #4a4a4a;
+  background: #2a2a2a;
+}
+.visibility-option input:checked + .visibility-card {
+  border-color: var(--color-orange);
+  background: rgba(255, 107, 0, 0.06);
+  box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.2);
+}
+.visibility-icon {
+  height: 50px;
+  width: 50px;
+}
+.visibility-title {
+  color: var(--color-text-primary);
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+}
+.visibility-desc {
+  color: var(--color-text-dim);
+  font-size: 13px;
+}
+
+/* ─── Feature 2: Anonymous Warning ──────────────────────── */
+.anon-warning {
+  background: rgba(255, 107, 0, 0.06);
+  border: 1px solid rgba(255, 107, 0, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+.anon-warning-icon {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.anon-warning-text {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ─── Anonymous Checkbox ────────────────────────────────── */
+.anon-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  user-select: none;
+}
+.anon-checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-orange);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ─── Feature 9: Rate Limit Notice ──────────────────────── */
+.rate-limit-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 107, 0, 0.06);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--color-text-dim);
+}
+
+/* ─── Feature 2: Greyed-out Feedback Section ────────────── */
+.feedback-section-locked {
+  opacity: 0.3;
+  pointer-events: none;
+  filter: grayscale(0.5);
+  transition: opacity 0.3s, filter 0.3s;
+}
+
+/* ─── Feature 8: Character Counter ──────────────────────── */
+.char-counter {
+  text-align: right;
+  font-size: 13px;
+  color: var(--color-text-faint);
+  margin-top: 6px;
+  transition: color 0.2s;
+}
+.char-counter.char-ok {
+  color: var(--color-success);
+}
+.char-counter.char-warn {
+  color: var(--color-red);
+}
+
+/* ─── Validation Messages ───────────────────────────────── */
+.validation-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: rgba(229, 38, 32, 0.08);
+  border: 1px solid rgba(229, 38, 32, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--color-red);
+}
+
+/* ─── Feature 10: Code of Conduct List ──────────────────── */
+.coc-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+.coc-list li {
+  padding: 6px 0 6px 20px;
+  position: relative;
+  color: var(--color-text-dim);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.coc-list li::before {
+  content: '•';
+  position: absolute;
+  left: 6px;
+  color: var(--color-orange);
+}
+
+/* ─── N/A Button ────────────────────────────────────────── */
+.na-btn {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-faint);
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.05em;
+}
+.na-btn:hover {
+  border-color: var(--color-text-ghost);
+  color: var(--color-text-dim);
+}
+.na-btn.na-active {
+  background: rgba(229, 38, 32, 0.15);
+  border-color: var(--color-red);
+  color: var(--color-red);
+}
+
+/* ─── N/A Card State ────────────────────────────────────── */
+.na-card {
+  border-color: var(--color-border-stronger) !important;
+  opacity: 0.6;
+}
+
+/* ─── Toast ─────────────────────────────────────────────── */
+#toast {
+  display: none;
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-surface);
+  border: 1px solid var(--color-orange);
+  border-radius: 12px;
+  padding: 14px 28px;
+  color: var(--color-text-primary);
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  white-space: nowrap;
+}

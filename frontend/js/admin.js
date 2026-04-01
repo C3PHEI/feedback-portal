@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function () {
               borderWidth: 1,
               cornerRadius: 8,
               padding: 12,
-              titleFont: { family: "'Syne', sans-serif", weight: '600' }
+              titleFont: { family: "'Bodoni MT', sans-serif", weight: '600' }
             }
           },
           scales: {
