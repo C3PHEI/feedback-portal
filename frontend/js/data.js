@@ -289,7 +289,7 @@ var MockData = (function () {
     {
       dot: 'active',
       title: 'AD Sync',
-      details: ['Letzter Sync: Heute, 02:00 UTC', 'N\u00E4chster Sync: Morgen, 02:00 UTC', '35 User synchronisiert']
+      details: ['Letzter Sync: Heute, 02:00 UTC', 'Nächster Sync: Morgen, 02:00 UTC', '35 User synchronisiert']
     },
     {
       dot: 'active',

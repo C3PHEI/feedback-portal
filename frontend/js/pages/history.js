@@ -94,14 +94,45 @@
     // Edit overlay (only for editable)
     var editOverlayHtml = '';
     if (isEditable) {
+      // Driver Stars HTML für Edit-Overlay
+      var driverEditHtml = fb.drivers.map(function (d, idx) {
+        var key = ['impact','ownership','collaboration','growth'][idx];
+        var label = d.name;
+
+        var starsInputs = '';
+        for (var i = 5; i >= 1; i--) {
+          var checked = (!d.na && d.rating === i) ? ' checked' : '';
+          starsInputs += '<input type="radio" name="editDriver-' + fb.id + '-' + key + '" ' +
+            'id="ed-' + fb.id + '-' + key + '-' + i + '" value="' + i + '"' + checked + '/>' +
+            '<label for="ed-' + fb.id + '-' + key + '-' + i + '">\u2605</label>';
+        }
+
+        var naActive = d.na ? ' na-active' : '';
+        var starsDisabled = d.na ? ' stars-disabled' : '';
+        var naCard = d.na ? ' na-card' : '';
+
+        return '<div class="cat-card' + naCard + '" id="editDriver-' + fb.id + '-' + key + '" style="padding:14px 18px; margin-bottom:8px;">' +
+          '<div class="flex items-center justify-between">' +
+          '<span class="text-white text-sm font-medium">' + label + '</span>' +
+          '<div class="flex items-center gap-2">' +
+          '<button type="button" class="na-btn' + naActive + '" id="editNa-' + fb.id + '-' + key + '">N/A</button>' +
+          '<div class="stars" id="editStars-' + fb.id + '-' + key + '"' +
+          (d.na ? ' style="opacity:0.3;pointer-events:none;"' : '') + '>' +
+          starsInputs + '</div>' +
+          '</div></div></div>';
+      }).join('');
+
       editOverlayHtml = '<div class="edit-overlay" id="editOverlay-' + fb.id + '">' +
-        '<div class="mb-4"><div class="history-text-label mb-2">Staerken bearbeiten</div>' +
+        '<div class="history-text-label mb-3" style="color:var(--color-text-muted);">Bewertungen bearbeiten</div>' +
+        driverEditHtml +
+        '<hr class="divider my-4"/>' +
+        '<div class="mb-4"><div class="history-text-label mb-2">Stärken bearbeiten</div>' +
         '<textarea rows="4" id="editStrengths-' + fb.id + '">' + fb.strengths + '</textarea></div>' +
-        '<div class="mb-2"><div class="history-text-label mb-2">Verbesserungsvorschlaege bearbeiten</div>' +
+        '<div class="mb-2"><div class="history-text-label mb-2">Verbesserungsvorschläge bearbeiten</div>' +
         '<textarea rows="4" id="editImprovements-' + fb.id + '">' + fb.improvements + '</textarea></div>' +
         '<div class="edit-actions">' +
         '<button class="btn-edit-cancel" id="cancelEdit-' + fb.id + '">Abbrechen</button>' +
-        '<button class="btn-edit-save" id="saveEdit-' + fb.id + '">Aenderungen speichern</button>' +
+        '<button class="btn-edit-save" id="saveEdit-' + fb.id + '">Änderungen speichern</button>' +
         '</div></div>';
     }
 
@@ -113,9 +144,9 @@
       headerRight + '</div>' +
       timerHtml +
       renderDrivers(fb.drivers) +
-      '<div class="mb-3"><div class="history-text-label">Staerken</div>' +
+      '<div class="mb-3"><div class="history-text-label">Stärken</div>' +
       '<div class="history-text-content" id="strengths-' + fb.id + '">' + fb.strengths + '</div></div>' +
-      '<div><div class="history-text-label">Verbesserungsvorschlaege</div>' +
+      '<div><div class="history-text-label">Verbesserungsvorschläge</div>' +
       '<div class="history-text-content" id="improvements-' + fb.id + '">' + fb.improvements + '</div></div>' +
       editOverlayHtml +
       '</div>';
@@ -225,24 +256,74 @@
       });
     });
 
+    // N/A Toggle für Edit-Overlay Driver
+    var naKeys = ['impact', 'ownership', 'collaboration', 'growth'];
+    document.querySelectorAll('[id^="editNa-"]').forEach(function (naBtn) {
+      naBtn.addEventListener('click', function () {
+        var parts = naBtn.id.replace('editNa-', '').split('-');
+        var cardId = parts[0];
+        var key = parts[1];
+        var starsEl = document.getElementById('editStars-' + cardId + '-' + key);
+        var driverCard = document.getElementById('editDriver-' + cardId + '-' + key);
+        var isNa = naBtn.classList.toggle('na-active');
+
+        if (isNa) {
+          starsEl.style.opacity = '0.3';
+          starsEl.style.pointerEvents = 'none';
+          starsEl.querySelectorAll('input').forEach(function (r) { r.checked = false; });
+          driverCard.classList.add('na-card');
+        } else {
+          starsEl.style.opacity = '';
+          starsEl.style.pointerEvents = '';
+          driverCard.classList.remove('na-card');
+        }
+      });
+    });
+
     var saveBtns = document.querySelectorAll('[id^="saveEdit-"]');
     saveBtns.forEach(function (saveBtn) {
       var cardId = saveBtn.id.replace('saveEdit-', '');
       saveBtn.addEventListener('click', function () {
+        // Texte speichern
         var newStrengths = document.getElementById('editStrengths-' + cardId);
         var newImprovements = document.getElementById('editImprovements-' + cardId);
         var strengthsDisplay = document.getElementById('strengths-' + cardId);
         var improvementsDisplay = document.getElementById('improvements-' + cardId);
-
         if (newStrengths && strengthsDisplay) strengthsDisplay.textContent = newStrengths.value;
         if (newImprovements && improvementsDisplay) improvementsDisplay.textContent = newImprovements.value;
+
+        // Driver-Ratings in der Karte aktualisieren
+        var keys = ['impact', 'ownership', 'collaboration', 'growth'];
+        var driverEls = document.querySelectorAll('#card-' + cardId + ' .history-driver');
+        driverEls.forEach(function (driverEl, idx) {
+          var key = keys[idx];
+          var naBtn = document.getElementById('editNa-' + cardId + '-' + key);
+          var valEl = driverEl.querySelector('.history-driver-stars, .history-driver-na');
+          if (!valEl || !naBtn) return;
+
+          if (naBtn.classList.contains('na-active')) {
+            valEl.className = 'history-driver-na';
+            valEl.textContent = 'N/A';
+          } else {
+            var selected = document.querySelector(
+              'input[name="editDriver-' + cardId + '-' + key + '"]:checked'
+            );
+            if (selected) {
+              valEl.className = 'history-driver-stars';
+              var filled = parseInt(selected.value);
+              var empty = 5 - filled;
+              valEl.innerHTML = '\u2605'.repeat(filled) +
+                (empty > 0 ? '<span class="empty">' + '\u2605'.repeat(empty) + '</span>' : '');
+            }
+          }
+        });
 
         var overlay = document.getElementById('editOverlay-' + cardId);
         var editBtn = document.getElementById('editBtn-' + cardId);
         if (overlay) overlay.classList.remove('active');
         if (editBtn && !editBtn.disabled) editBtn.style.display = '';
 
-        Render.showToast('Aenderungen gespeichert');
+        Render.showToast('änderungen gespeichert');
       });
     });
   }
