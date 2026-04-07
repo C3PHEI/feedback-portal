@@ -600,3 +600,205 @@ select.fancy-input option {
 .profile-dropdown-logout:hover {
   background: rgba(229, 38, 32, 0.08);
 }
+
+/* ─── Inbox Driver Chips ────────────────────────────────── */
+.inbox-driver-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.inbox-driver-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 99px;
+  transition: border-color 0.15s;
+}
+.inbox-driver-chip:hover {
+  border-color: var(--color-orange);
+}
+.inbox-driver-chip.na {
+  opacity: 0.45;
+}
+.chip-label {
+  font-family: 'Bodoni MT', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.chip-stars {
+  font-size: 11px;
+  color: var(--color-orange);
+  letter-spacing: 1px;
+}
+.chip-empty {
+  color: var(--color-star-empty);
+}
+.chip-val.na {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-text-ghost);
+  letter-spacing: 0.06em;
+}
+
+/* ─── Inbox Detail Hint ─────────────────────────────────── */
+.inbox-detail-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 600;
+  color: var(--color-text-ghost);
+  letter-spacing: 0.04em;
+  transition: color 0.15s;
+}
+.inbox-card:hover .inbox-detail-hint {
+  color: var(--color-orange);
+}
+
+/* ─── Modal (shared, used by inbox + admin) ─────────────── */
+.modal-title {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+}
+
+/* ─── Modal Overlay ────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show {
+  display: flex;
+}
+.modal-box {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+.modal-title {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+}
+
+/* ─── Inbox Driver Chips ────────────────────────────────── */
+.inbox-driver-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.inbox-driver-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 99px;
+  transition: border-color 0.15s;
+}
+.inbox-driver-chip:hover {
+  border-color: var(--color-orange);
+}
+.inbox-driver-chip.na {
+  opacity: 0.45;
+}
+.chip-label {
+  font-family: 'Bodoni MT', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.chip-stars {
+  font-size: 11px;
+  color: var(--color-orange);
+  letter-spacing: 1px;
+}
+.chip-empty {
+  color: var(--color-star-empty);
+}
+.chip-val.na {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-text-ghost);
+  letter-spacing: 0.06em;
+}
+
+/* ─── Inbox Card Expand ─────────────────────────────────── */
+.inbox-card {
+  cursor: pointer;
+}
+.inbox-card.expanded {
+  border-color: var(--color-orange);
+  box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.1);
+}
+.inbox-card-header {
+  cursor: pointer;
+}
+.inbox-chevron {
+  font-size: 18px;
+  color: var(--color-text-ghost);
+  transition: transform 0.25s ease, color 0.15s;
+  display: inline-block;
+  line-height: 1;
+}
+.inbox-card.expanded .inbox-chevron {
+  color: var(--color-orange);
+}
+
+/* ─── Inbox Detail Block ────────────────────────────────── */
+.inbox-detail-block {
+  display: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+.inbox-detail-block.active {
+  display: block;
+  animation: fadeUp 0.25s ease both;
+}
+.inbox-detail-section {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.inbox-detail-section-title {
+  font-family: 'Bodoni MT', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-ghost);
+  margin-bottom: 10px;
+}
+.inbox-detail-text {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  font-family: 'DM Sans', sans-serif;
+}

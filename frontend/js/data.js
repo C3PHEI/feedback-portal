@@ -1,7 +1,7 @@
 /**
  * data.js
  * Feedback Hub — Mock-Daten (API-Response-Format)
- * Gleiche Struktur wie spaetere Backend-API-Responses
+ * Gleiche Struktur wie spätere Backend-API-Responses
  */
 
 var MockData = (function () {
@@ -23,7 +23,7 @@ var MockData = (function () {
      ═══════════════════════════════════════════════════════ */
 
   var users = [
-    { id: 'maximilian.laepple', name: 'Maximilian Laepple',  initials: 'ML', email: 'm.laepple@company.ch',  department: 'IT',        role: 'admin',   active: true,  feedbackReceived: 12, feedbackGiven: 8  },
+    { id: 'maximilian.läpple', name: 'Maximilian Läpple',  initials: 'ML', email: 'm.läpple@company.ch',  department: 'IT',        role: 'admin',   active: true,  feedbackReceived: 12, feedbackGiven: 8  },
     { id: 'anna.keller',        name: 'Anna Keller',         initials: 'AK', email: 'a.keller@company.ch',   department: 'Marketing', role: 'manager', active: true,  feedbackReceived: 24, feedbackGiven: 15 },
     { id: 'markus.huber',       name: 'Markus Huber',        initials: 'MH', email: 'm.huber@company.ch',    department: 'Finance',   role: 'user',    active: true,  feedbackReceived: 6,  feedbackGiven: 3  },
     { id: 'thomas.ruefli',      name: 'Thomas Ruefli',       initials: 'TR', email: 't.ruefli@company.ch',   department: 'Sales',     role: 'manager', active: true,  feedbackReceived: 18, feedbackGiven: 11 },
@@ -33,11 +33,11 @@ var MockData = (function () {
   ];
 
   /* ═══════════════════════════════════════════════════════
-     Recipients (fuer Feedback-Formular Dropdown)
+     Recipients (für Feedback-Formular Dropdown)
      ═══════════════════════════════════════════════════════ */
 
   var recipients = [
-    { value: 'maximilian.laepple', label: 'Maximilian Laepple' },
+    { value: 'maximilian.läpple', label: 'Maximilian Läpple' },
     { value: 'max.mustermann',     label: 'Max Mustermann' },
     { value: 'anna.keller',        label: 'Anna Keller' },
     { value: 'markus.huber',       label: 'Markus Huber' },
@@ -69,7 +69,15 @@ var MockData = (function () {
       preview: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Weiter so.',
       date: 'heute',
       unread: true,
-      link: 'feedbackResponce.html'
+      link: 'feedbackResponce.html',
+      drivers: [
+        { name: 'Impact / Results',        rating: 5, na: false },
+        { name: 'Ownership / Reliability', rating: 4, na: false },
+        { name: 'Collaboration / Social',  rating: 5, na: false },
+        { name: 'Growth / Learning',       rating: null, na: true }
+      ],
+      strengths: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Ihre Praesentationen waren klar strukturiert und ueberzeugend vorgetragen.',
+      improvements: 'Koennte in groesseren Meetings etwas mehr Raum fuer andere Meinungen lassen. Manchmal werden Entscheidungen etwas zu schnell getroffen ohne alle Perspektiven einzuholen.'
     },
     {
       id: 'fb-inbox-2',
@@ -78,7 +86,15 @@ var MockData = (function () {
       preview: 'Selbstaendiges Arbeiten hat sich stark verbessert. Koennte noch etwas mehr auf andere zugehen bei Fragen.',
       date: 'gestern',
       unread: true,
-      link: null
+      link: null,
+      drivers: [
+        { name: 'Impact / Results',        rating: 4, na: false },
+        { name: 'Ownership / Reliability', rating: 5, na: false },
+        { name: 'Collaboration / Social',  rating: null, na: true },
+        { name: 'Growth / Learning',       rating: 4, na: false }
+      ],
+      strengths: 'Selbstaendiges Arbeiten hat sich stark verbessert. Zuverlaessig und immer gut vorbereitet.',
+      improvements: 'Koennte noch etwas mehr auf andere zugehen bei Fragen. Proaktiver Austausch wuerde dem Team helfen.'
     },
     {
       id: 'fb-inbox-3',
@@ -87,7 +103,15 @@ var MockData = (function () {
       preview: 'Immer hilfsbereit und offen fuer neue Ansaetze. Macht die Zusammenarbeit wirklich angenehm.',
       date: 'Mo, 17.03.',
       unread: true,
-      link: null
+      link: null,
+      drivers: [
+        { name: 'Impact / Results',        rating: null, na: true },
+        { name: 'Ownership / Reliability', rating: 4, na: false },
+        { name: 'Collaboration / Social',  rating: 5, na: false },
+        { name: 'Growth / Learning',       rating: 5, na: false }
+      ],
+      strengths: 'Immer hilfsbereit und offen fuer neue Ansaetze. Macht die Zusammenarbeit wirklich angenehm.',
+      improvements: 'Mehr Fokus auf Impact-getriebene Resultate waere wuenschenswert.'
     }
   ];
 
@@ -111,8 +135,8 @@ var MockData = (function () {
         { name: 'Collaboration / Social',  rating: null, na: true },
         { name: 'Growth / Learning',       rating: 3, na: false }
       ],
-      strengths: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Ihre Praesentationen waren klar strukturiert und ueberzeugend vorgetragen.',
-      improvements: 'Koennte in groesseren Meetings etwas mehr Raum fuer andere Meinungen lassen. Manchmal werden Entscheidungen etwas zu schnell getroffen ohne alle Perspektiven einzuholen.'
+      strengths: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Ihre Präsentationen waren klar strukturiert und ueberzeugend vorgetragen.',
+      improvements: 'Könnte in grösseren Meetings etwas mehr Raum für andere Meinungen lassen. Manchmal werden Entscheidungen etwas zu schnell getroffen ohne alle Perspektiven einzuholen.'
     },
     {
       id: 2,
@@ -129,14 +153,14 @@ var MockData = (function () {
         { name: 'Collaboration / Social',  rating: 4, na: false },
         { name: 'Growth / Learning',       rating: null, na: true }
       ],
-      strengths: 'Zuverlaessige Lieferung aller Arbeitspakete, immer puenktlich und in guter Qualitaet. Seine Code-Reviews sind besonders wertvoll fuer das Team.',
-      improvements: 'Dokumentation koennte ausfuehrlicher sein. Manchmal sind Zusammenhaenge im Code nicht sofort nachvollziehbar fuer neue Teammitglieder.'
+      strengths: 'Zuverlässige Lieferung aller Arbeitspakete, immer pünktlich und in guter Qualität. Seine Code-Reviews sind besonders wertvoll für das Team.',
+      improvements: 'Dokumentation könnte ausführlicher sein. Manchmal sind Zusammenhänge im Code nicht sofort nachvollziehbar für neue Teammitglieder.'
     },
     {
       id: 3,
       to: { name: 'Maria Fischer', initials: null },
       submittedAt: '2026-03-28T14:33:00',
-      dateLabel: '28. Maerz 2026',
+      dateLabel: '28. März 2026',
       visibility: 'anon',
       edited: false,
       locked: true,
@@ -147,14 +171,14 @@ var MockData = (function () {
         { name: 'Collaboration / Social',  rating: null, na: true },
         { name: 'Growth / Learning',       rating: null, na: true }
       ],
-      strengths: 'Bringt immer neue Ideen ein und ist bereit, Verantwortung zu uebernehmen. Ihre Arbeitsweise ist strukturiert und vorausschauend geplant.',
-      improvements: 'Zeitmanagement bei parallelen Projekten koennte verbessert werden. Prioritaeten sind manchmal nicht klar kommuniziert.'
+      strengths: 'Bringt immer neue Ideen ein und ist bereit, Verantwortung zu übernehmen. Ihre Arbeitsweise ist strukturiert und vorausschauend geplant.',
+      improvements: 'Zeitmanagement bei parallelen Projekten könnte verbessert werden. Prioritäten sind manchmal nicht klar kommuniziert.'
     },
     {
       id: 4,
       to: { name: 'Thomas Huber', initials: 'TH' },
       submittedAt: '2026-03-15T11:05:00',
-      dateLabel: '15. Maerz 2026',
+      dateLabel: '15. März 2026',
       visibility: 'named',
       edited: false,
       locked: true,
@@ -165,8 +189,8 @@ var MockData = (function () {
         { name: 'Collaboration / Social',  rating: 4, na: false },
         { name: 'Growth / Learning',       rating: 4, na: false }
       ],
-      strengths: 'Hervorragender Teamplayer mit einem sehr guten technischen Verstaendnis. Loest komplexe Probleme selbstaendig und bringt das Team auf ein hoeheres Niveau.',
-      improvements: 'Koennte seine Erkenntnisse noch besser mit dem Rest des Teams teilen. Wissenstransfer waere ein wertvolles Ziel fuer die kommenden Monate.'
+      strengths: 'Hervorragender Teamplayer mit einem sehr guten technischen Verständnis. Löst komplexe Probleme selbständig und bringt das Team auf ein höheres Niveau.',
+      improvements: 'Könnte seine Erkenntnisse noch besser mit dem Rest des Teams teilen. Wissenstransfer wäre ein wertvolles Ziel fuer die kommenden Monate.'
     }
   ];
 
@@ -233,7 +257,7 @@ var MockData = (function () {
     'Respectful Language Only — All feedback must be professional, courteous, and respectful. Avoid offensive, discriminatory, or inflammatory language. Focus on observations and behaviors, not insults or personal attacks.',
     'No Retaliation — Feedback must never be used as a tool for punishment, revenge, or embarrassment. The platform exists for growth and development, not for retribution.',
     'Anonymity Awareness — If submitting feedback anonymously, ensure your comments do not include identifiable details such as names, projects, locations, or language cues that could reveal your identity. Always write with privacy in mind.',
-    'Focus on Behaviors and Impact, Not Personality — Comments should highlight what someone does and the effect it has, rather than speculating about personality, motives, or character traits.',
+    'Focus on Behaviors and Impact, Not Personality — Comments should highlight what someone dös and the effect it has, rather than speculating about personality, motives, or character traits.',
     'Honesty and Accuracy — Provide truthful feedback based on your direct observations. Avoid exaggerations, assumptions, or hearsay. Constructive feedback is valuable only if it reflects reality.',
     'Confidentiality and Data Use — Feedback is intended only for the recipient and their direct manager. Do not share it outside the platform, discuss it with colleagues, or use it as material for gossip or evaluation of others.',
     'Constructive Criticism Only — When pointing out areas for improvement, pair your observations with actionable suggestions or specific examples. Avoid vague or purely negative statements.',
