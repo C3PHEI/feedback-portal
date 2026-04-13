@@ -55,9 +55,9 @@
     var filled = Math.round(avg);
     var empty  = 5 - filled;
     var html   = '';
-    for (var i = 0; i < filled; i++) html += '\u2605';
+    for (var i = 0; i < filled; i++) html += '★';
     if (empty > 0) html += '<span class="empty">';
-    for (var j = 0; j < empty; j++) html += '\u2605';
+    for (var j = 0; j < empty; j++) html += '★';
     if (empty > 0) html += '</span>';
     return html;
   }
@@ -124,7 +124,7 @@
         '<svg class="dept-member-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
         '</div>' +
         '<div class="dept-member-score">' +
-        '<span class="dept-member-avg">' + (overall !== null ? overall.toFixed(1) : '\u2014') + '</span>' +
+        '<span class="dept-member-avg">' + (overall !== null ? overall.toFixed(1) : '-') + '</span>' +
         '<span class="dept-review-count">' + total + ' Feedback' + (total !== 1 ? 's' : '') + '</span>' +
         anonBadge +
         '</div>' +
@@ -171,7 +171,7 @@
     if (statsEl) {
       statsEl.innerHTML =
         '<div class="dept-stat-pill">' +
-        '<div class="dept-stat-value orange">' + (overall !== null ? overall.toFixed(1) : '\u2014') + '</div>' +
+        '<div class="dept-stat-value orange">' + (overall !== null ? overall.toFixed(1) : '-') + '</div>' +
         '<div class="dept-stat-label">Gesamt \u00D8</div>' +
         '</div>' +
         '<div class="dept-stat-pill">' +
@@ -195,7 +195,7 @@
           '<line x1="12" y1="17" x2="12.01" y2="17"/>' +
           '</svg>' +
           '<span>Durchschnitt basiert auf <strong>' + total + '</strong> Bewertung' + (total === 1 ? '' : 'en') +
-          '. Diese Werte spiegeln m\u00F6glicherweise nicht das vollst\u00E4ndige Feedback wider.</span>';
+          '. Diese Werte spiegeln möglicherweise nicht das vollständige Feedback wider.</span>';
       } else {
         lowEl.style.display = 'none';
       }
@@ -250,13 +250,13 @@
           var chips = fb.drivers.map(function (d) {
             var shortName = d.name.split('/')[0].trim();
             var chipClass = 'dept-history-driver-chip' + (d.na ? ' na-chip' : '');
-            var score     = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '\u2605</span>';
+            var score     = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '★</span>';
             return '<span class="' + chipClass + '">' + shortName + ' ' + score + '</span>';
           }).join('');
 
           /* ── Expandable Detail (Strengths + Improvements) ── */
-          var hasStrengths    = fb.strengths && fb.strengths !== '\u2014';
-          var hasImprovements = fb.improvements && fb.improvements !== '\u2014';
+          var hasStrengths    = fb.strengths && fb.strengths !== '-';
+          var hasImprovements = fb.improvements && fb.improvements !== '-';
           var hasDetail       = hasStrengths || hasImprovements;
 
           var detailHtml = '';
@@ -354,7 +354,7 @@
     var user       = FeedbackAPI.getCurrentUser();
     var subtitleEl = document.getElementById('dept-subtitle');
     if (subtitleEl && user && user.department) {
-      subtitleEl.textContent = 'Team-Feedback-Verlauf \u2014 ' + user.department;
+      subtitleEl.textContent = 'Team-Feedback-Verlauf - ' + user.department;
     }
 
     var team = FeedbackAPI.getDepartmentTeam();

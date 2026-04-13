@@ -77,13 +77,13 @@ var MockData = (function () {
         { name: 'Growth / Learning',       rating: null, na: true }
       ],
       strengths: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Ihre Praesentationen waren klar strukturiert und ueberzeugend vorgetragen.',
-      improvements: 'Koennte in groesseren Meetings etwas mehr Raum fuer andere Meinungen lassen. Manchmal werden Entscheidungen etwas zu schnell getroffen ohne alle Perspektiven einzuholen.'
+      improvements: 'Könnte in grösseren Meetings etwas mehr Raum für andere Meinungen lassen. Manchmal werden Entscheidungen etwas zu schnell getroffen ohne alle Perspektiven einzuholen.'
     },
     {
       id: 'fb-inbox-2',
       from: { name: 'Markus Huber', initials: 'MH', anonymous: false },
       stars: 4,
-      preview: 'Selbstaendiges Arbeiten hat sich stark verbessert. Koennte noch etwas mehr auf andere zugehen bei Fragen.',
+      preview: 'Selbständiges Arbeiten hat sich stark verbessert. Könnte noch etwas mehr auf andere zugehen bei Fragen.',
       date: 'gestern',
       unread: true,
       link: null,
@@ -93,14 +93,14 @@ var MockData = (function () {
         { name: 'Collaboration / Social',  rating: null, na: true },
         { name: 'Growth / Learning',       rating: 4, na: false }
       ],
-      strengths: 'Selbstaendiges Arbeiten hat sich stark verbessert. Zuverlaessig und immer gut vorbereitet.',
-      improvements: 'Koennte noch etwas mehr auf andere zugehen bei Fragen. Proaktiver Austausch wuerde dem Team helfen.'
+      strengths: 'Selbständiges Arbeiten hat sich stark verbessert. Zuverlässig und immer gut vorbereitet.',
+      improvements: 'Könnte noch etwas mehr auf andere zugehen bei Fragen. Proaktiver Austausch würde dem Team helfen.'
     },
     {
       id: 'fb-inbox-3',
       from: { name: 'Anonymes Feedback', initials: null, anonymous: true },
       stars: 5,
-      preview: 'Immer hilfsbereit und offen fuer neue Ansaetze. Macht die Zusammenarbeit wirklich angenehm.',
+      preview: 'Immer hilfsbereit und offen für neue Ansätze. Macht die Zusammenarbeit wirklich angenehm.',
       date: 'Mo, 17.03.',
       unread: true,
       link: null,
@@ -110,8 +110,8 @@ var MockData = (function () {
         { name: 'Collaboration / Social',  rating: 5, na: false },
         { name: 'Growth / Learning',       rating: 5, na: false }
       ],
-      strengths: 'Immer hilfsbereit und offen fuer neue Ansaetze. Macht die Zusammenarbeit wirklich angenehm.',
-      improvements: 'Mehr Fokus auf Impact-getriebene Resultate waere wuenschenswert.'
+      strengths: 'Immer hilfsbereit und offen für neue Ansätze. Macht die Zusammenarbeit wirklich angenehm.',
+      improvements: 'Mehr Fokus auf Impact-getriebene Resultate wäre wünschenswert.'
     }
   ];
 
@@ -190,7 +190,7 @@ var MockData = (function () {
         { name: 'Growth / Learning',       rating: 4, na: false }
       ],
       strengths: 'Hervorragender Teamplayer mit einem sehr guten technischen Verständnis. Löst komplexe Probleme selbständig und bringt das Team auf ein höheres Niveau.',
-      improvements: 'Könnte seine Erkenntnisse noch besser mit dem Rest des Teams teilen. Wissenstransfer wäre ein wertvolles Ziel fuer die kommenden Monate.'
+      improvements: 'Könnte seine Erkenntnisse noch besser mit dem Rest des Teams teilen. Wissenstransfer wäre ein wertvolles Ziel für die kommenden Monate.'
     }
   ];
 
@@ -282,15 +282,15 @@ var MockData = (function () {
   ];
 
   var adminChartActivity = {
-    labels: ['Okt', 'Nov', 'Dez', 'Jan', 'Feb', 'M\u00E4r'],
+    labels: ['Okt', 'Nov', 'Dez', 'Jan', 'Feb', 'Mär'],
     datasets: [
-      { label: '\u00D6ffentlich', data: [8, 11, 7, 10, 9, 10] },
+      { label: 'Öffentlich', data: [8, 11, 7, 10, 9, 10] },
       { label: 'Anonym',         data: [3, 5, 4, 6, 5, 8] }
     ]
   };
 
   var adminChartVisibility = {
-    labels: ['\u00D6ffentlich', 'Anonym'],
+    labels: ['Öffentlich', 'Anonym'],
     data: [55, 31]
   };
 
@@ -333,7 +333,7 @@ var MockData = (function () {
 
   var moderationStats = [
     { number: 3,  label: 'Offene Meldungen', color: '#E52620' },
-    { number: 7,  label: 'In Pr\u00FCfung',  color: '#FF6B00' },
+    { number: 7,  label: 'In Prüfung',  color: '#FF6B00' },
     { number: 42, label: 'Erledigt',          color: '#22c55e' }
   ];
 
@@ -343,28 +343,28 @@ var MockData = (function () {
       von: 'Anna Keller',    vonInitials: 'AK',
       an: 'Markus Huber',    anInitials: 'MH',
       datum: '28.03.2026',
-      typ: '\u00D6ffentlich',
+      typ: 'Öffentlich',
       rating: '3.8',
       statusLabel: 'Gemeldet',
       statusClass: 'flagged',
-      reason: 'Das Feedback enth\u00E4lt abwertende Formulierungen \u00FCber meine pers\u00F6nliche Arbeitsweise, die ich als unangemessen und diskriminierend empfinde. Es \u00FCberschreitet die Grenzen konstruktiver Kritik.',
-      strengths: 'Anna bringt sehr viel Energie und Engagement in jedes Projekt. Sie kommuniziert proaktiv und sorgt daf\u00FCr, dass alle Beteiligten gut informiert sind. Ihre Pr\u00E4sentationen sind klar strukturiert.',
-      improvements: 'Manchmal werden Entscheidungen ohne ausreichende R\u00FCcksprache getroffen. Es w\u00E4re hilfreich, bei wichtigen Entscheidungen mehr Stimmen einzuholen und den Prozess transparenter zu gestalten.',
-      drivers: 'Impact/Results: \u2605\u2605\u2605\u2605\u2606 (3.8) | Ownership/Reliability: \u2605\u2605\u2605\u2605\u2606 (4.0) | Collaboration/Social: \u2605\u2605\u2605\u2606\u2606 (3.2) | Growth/Learning: N/A'
+      reason: 'Das Feedback enthält abwertende Formulierungen über meine persönliche Arbeitsweise, die ich als unangemessen und diskriminierend empfinde. Es überschreitet die Grenzen konstruktiver Kritik.',
+      strengths: 'Anna bringt sehr viel Energie und Engagement in jedes Projekt. Sie kommuniziert proaktiv und sorgt dafür, dass alle Beteiligten gut informiert sind. Ihre Präsentationen sind klar strukturiert.',
+      improvements: 'Manchmal werden Entscheidungen ohne ausreichende Rücksprache getroffen. Es wäre hilfreich, bei wichtigen Entscheidungen mehr Stimmen einzuholen und den Prozess transparenter zu gestalten.',
+      drivers: 'Impact/Results: ★★★★☆ (3.8) | Ownership/Reliability: ★★★★☆ (4.0) | Collaboration/Social: ★★★☆☆ (3.2) | Growth/Learning: N/A'
     },
     {
       id: '#FB-0451',
       von: 'Thomas Bauer',   vonInitials: 'TB',
       an: 'Sandra Meier',    anInitials: 'SM',
       datum: '21.03.2026',
-      typ: '\u00D6ffentlich',
+      typ: 'Öffentlich',
       rating: '2.5',
-      statusLabel: 'In Pr\u00FCfung',
+      statusLabel: 'In Prüfung',
       statusClass: 'pending',
-      reason: 'Der Absender hat mehrfach \u00E4hnliche negative Bewertungen an mich gesendet. Ich vermute, dass dies gezielte Bel\u00E4stigung ist und nicht konstruktives Feedback.',
-      strengths: 'Sandra zeigt Einsatz und ist immer p\u00FCnktlich. Sie erledigt ihre Aufgaben zuverl\u00E4ssig.',
+      reason: 'Der Absender hat mehrfach ähnliche negative Bewertungen an mich gesendet. Ich vermute, dass dies gezielte Belästigung ist und nicht konstruktives Feedback.',
+      strengths: 'Sandra zeigt Einsatz und ist immer pünktlich. Sie erledigt ihre Aufgaben zuverlässig.',
       improvements: 'Die Kommunikation mit Kollegen ist schwierig. Oft werden Meetings ohne Vorwarnung abgesagt und Deadlines nicht eingehalten. Es fehlt an Eigeninitiative.',
-      drivers: 'Impact/Results: \u2605\u2605\u2606\u2606\u2606 (2.0) | Ownership/Reliability: \u2605\u2605\u2605\u2606\u2606 (3.0) | Collaboration/Social: \u2605\u2605\u2606\u2606\u2606 (2.5) | Growth/Learning: \u2605\u2605\u2605\u2606\u2606 (3.0)'
+      drivers: 'Impact/Results: ★★☆☆☆ (2.0) | Ownership/Reliability: ★★★☆☆ (3.0) | Collaboration/Social: ★★☆☆☆ (2.5) | Growth/Learning: ★★★☆☆ (3.0)'
     },
     {
       id: '#FB-0412',
@@ -375,10 +375,10 @@ var MockData = (function () {
       rating: '1.5',
       statusLabel: 'Erledigt',
       statusClass: 'resolved',
-      reason: 'Das anonyme Feedback enth\u00E4lt Aussagen die trotz Anonymit\u00E4t auf eine bestimmte Person hindeuten. Ausserdem enth\u00E4lt es beleidigende Formulierungen.',
-      strengths: '\u2014',
-      improvements: 'Die Arbeitsqualit\u00E4t l\u00E4sst stark zu w\u00FCnschen \u00FCbrig. Aufgaben werden nicht zu Ende gebracht und das Team muss st\u00E4ndig nachfragen. Das ist f\u00FCr alle frustrierend.',
-      drivers: 'Impact/Results: \u2605\u2606\u2606\u2606\u2606 (1.0) | Ownership/Reliability: \u2605\u2605\u2606\u2606\u2606 (2.0) | Collaboration/Social: \u2605\u2605\u2606\u2606\u2606 (2.0) | Growth/Learning: N/A'
+      reason: 'Das anonyme Feedback enthält Aussagen die trotz Anonymität auf eine bestimmte Person hindeuten. Ausserdem enthält es beleidigende Formulierungen.',
+      strengths: '-',
+      improvements: 'Die Arbeitsqualität lässt stark zu wünschen übrig. Aufgaben werden nicht zu Ende gebracht und das Team muss ständig nachfragen. Das ist für alle frustrierend.',
+      drivers: 'Impact/Results: ★☆☆☆☆ (1.0) | Ownership/Reliability: ★★☆☆☆ (2.0) | Collaboration/Social: ★★☆☆☆ (2.0) | Growth/Learning: N/A'
     }
   ];
 
@@ -461,7 +461,7 @@ var MockData = (function () {
             { name: 'Growth / Learning',       rating: null, na: true }
           ],
           strengths: 'Jana ist immer freundlich und offen im Umgang mit dem Team. Sie bringt eine positive Energie in den Arbeitsalltag.',
-          improvements: 'Die Qualität der Arbeitsergebnisse muss sich deutlich verbessern. Aufgaben werden oft unvollstaändig abgegeben und erfordern umfangreiche Nacharbeit durch Kollegen.'
+          improvements: 'Die Qualität der Arbeitsergebnisse muss sich deutlich verbessern. Aufgaben werden oft unvollständig abgegeben und erfordern umfangreiche Nacharbeit durch Kollegen.'
         },
         {
           id: 'fb-js-2',

@@ -97,7 +97,7 @@
     el.innerHTML = vis.labels.map(function (l, i) {
       return '<div class="dash-donut-legend-item">' +
         '<span class="dash-dot" style="background:' + colors[i] + ';"></span>' +
-        '<span>' + l + ' \u2014 ' + vis.data[i] + '</span></div>';
+        '<span>' + l + ' - ' + vis.data[i] + '</span></div>';
     }).join('');
   }
 
@@ -137,7 +137,7 @@
 
       var typBadge = r.typ === 'Anonym'
         ? '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">Anonym</span>'
-        : '<span class="role-badge user">\u00D6ffentlich</span>';
+        : '<span class="role-badge user">Öffentlich</span>';
 
       var ratingColor = r.typ === 'Anonym' ? '#E52620' : '#FF6B00';
 
@@ -157,7 +157,7 @@
         '<td><div class="flex items-center gap-2"><div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + r.anInitials + '</div><span class="text-white text-sm">' + r.an + '</span></div></td>' +
         '<td><span style="color:#999;font-size:13px;">' + r.datum + '</span></td>' +
         '<td>' + typBadge + '</td>' +
-        '<td class="hide-mobile"><span style="color:' + ratingColor + ';font-size:13px;">\u2605 ' + r.rating + '</span></td>' +
+        '<td class="hide-mobile"><span style="color:' + ratingColor + ';font-size:13px;">★ ' + r.rating + '</span></td>' +
         '<td class="fb-status-cell"><span class="status-dot ' + r.statusClass + '"></span><span style="color:' + statusColor + ';font-size:12px;">' + r.statusLabel + '</span></td>' +
         '</tr>';
     }).join('\n');
@@ -415,14 +415,14 @@
       document.getElementById('reportModalAnAvatar').textContent = d.anInitials;
       document.getElementById('reportModalDatum').textContent = d.datum;
       document.getElementById('reportModalTyp').textContent = d.typ;
-      document.getElementById('reportModalRating').textContent = '\u2605 ' + d.rating;
+      document.getElementById('reportModalRating').textContent = '★ ' + d.rating;
       document.getElementById('reportModalReason').textContent = d.reason;
       document.getElementById('reportModalStrengths').textContent = d.strengths;
       document.getElementById('reportModalImprovements').textContent = d.improvements;
 
       var statusEl = document.getElementById('reportModalStatus');
       var statusColors = { flagged: '#E52620', pending: '#FF6B00', resolved: '#22c55e' };
-      var statusLabels = { flagged: 'Gemeldet', pending: 'In Pr\u00FCfung', resolved: 'Erledigt' };
+      var statusLabels = { flagged: 'Gemeldet', pending: 'In Prüfung', resolved: 'Erledigt' };
       var sc = d.statusClass;
       statusEl.innerHTML = '<span class="status-dot ' + sc + '"></span><span style="color:' + (statusColors[sc] || '#999') + ';font-size:13px;">' + (statusLabels[sc] || d.statusLabel) + '</span>';
 
@@ -462,15 +462,15 @@
     var reportActionDismiss = document.getElementById('reportActionDismiss');
 
     if (reportActionReview) reportActionReview.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' \u2014 Status auf \u00ABIn Pr\u00FCfung\u00BB gesetzt');
+      Render.showToast(document.getElementById('reportModalId').textContent + ' - Status auf «In Prüfung» gesetzt');
       closeReportModal();
     });
     if (reportActionResolve) reportActionResolve.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' \u2014 Meldung erledigt');
+      Render.showToast(document.getElementById('reportModalId').textContent + ' - Meldung erledigt');
       closeReportModal();
     });
     if (reportActionDismiss) reportActionDismiss.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' \u2014 Meldung abgelehnt');
+      Render.showToast(document.getElementById('reportModalId').textContent + ' - Meldung abgelehnt');
       closeReportModal();
     });
 
@@ -493,7 +493,7 @@
         var dept = row.querySelector('td:nth-child(2) span').textContent;
         var roleBadge = row.querySelector('.role-badge');
         var role = roleBadge ? roleBadge.textContent.trim() : '';
-        var feedbacks = row.querySelector('.hide-mobile span') ? row.querySelector('.hide-mobile span').textContent : '\u2014';
+        var feedbacks = row.querySelector('.hide-mobile span') ? row.querySelector('.hide-mobile span').textContent : '-';
         var initials = row.querySelector('.avatar').textContent.trim();
 
         document.getElementById('deactivateAvatar').textContent = initials;

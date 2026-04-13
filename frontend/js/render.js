@@ -15,9 +15,9 @@ var Render = (function () {
     var filled = Math.round(count);
     var empty = max - filled;
     var html = '';
-    for (var i = 0; i < filled; i++) html += '\u2605';
+    for (var i = 0; i < filled; i++) html += '★';
     if (empty > 0) html += '<span class="empty">';
-    for (var j = 0; j < empty; j++) html += '\u2605';
+    for (var j = 0; j < empty; j++) html += '★';
     if (empty > 0) html += '</span>';
     return html;
   }

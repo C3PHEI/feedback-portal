@@ -34,8 +34,8 @@
         }
         return '<div class="inbox-driver-chip">' +
           '<span class="chip-label">' + driverShortLabel(d.name) + '</span>' +
-          '<span class="chip-stars">' + '\u2605'.repeat(d.rating) +
-          '<span class="chip-empty">' + '\u2605'.repeat(5 - d.rating) + '</span></span>' +
+          '<span class="chip-stars">' + '★'.repeat(d.rating) +
+          '<span class="chip-empty">' + '★'.repeat(5 - d.rating) + '</span></span>' +
           '</div>';
       }).join('') +
       '</div>';
@@ -51,8 +51,8 @@
       if (d.na) {
         val = '<span class="na-display">N/A</span>';
       } else {
-        var filled = '\u2605'.repeat(d.rating);
-        var empty = '<span style="color:var(--color-star-empty);">' + '\u2605'.repeat(5 - d.rating) + '</span>';
+        var filled = '★'.repeat(d.rating);
+        var empty = '<span style="color:var(--color-star-empty);">' + '★'.repeat(5 - d.rating) + '</span>';
         val = '<span style="color:var(--color-orange);font-size:16px;letter-spacing:2px;">' + filled + empty + '</span>' +
           '<span style="font-size:12px;color:var(--color-text-dim);margin-left:6px;">' + d.rating + ' / 5</span>';
       }
@@ -77,7 +77,7 @@
       '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>' +
       '<span class="inbox-detail-section-title" style="margin-bottom:0;">Strengths</span>' +
       '</div>' +
-      '<p class="inbox-detail-text">' + (fb.strengths || '\u2014') + '</p>' +
+      '<p class="inbox-detail-text">' + (fb.strengths || '-') + '</p>' +
       '</div>' +
 
       // Improvements
@@ -86,7 +86,7 @@
       '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-orange);display:inline-block;"></span>' +
       '<span class="inbox-detail-section-title" style="margin-bottom:0;">Areas to Improve</span>' +
       '</div>' +
-      '<p class="inbox-detail-text">' + (fb.improvements || '\u2014') + '</p>' +
+      '<p class="inbox-detail-text">' + (fb.improvements || '-') + '</p>' +
       '</div>' +
 
       '</div>';

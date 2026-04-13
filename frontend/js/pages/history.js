@@ -70,7 +70,7 @@
     // Badges
     var badgesHtml = '<span class="history-date">' + fb.dateLabel + '</span>';
     if (isEditable) {
-      badgesHtml += '<span class="history-timestamp" id="timestamp-' + fb.id + '">\u2014</span>';
+      badgesHtml += '<span class="history-timestamp" id="timestamp-' + fb.id + '">-</span>';
     }
     badgesHtml += visBadge(fb.visibility);
     if (fb.edited) {
@@ -104,7 +104,7 @@
           var checked = (!d.na && d.rating === i) ? ' checked' : '';
           starsInputs += '<input type="radio" name="editDriver-' + fb.id + '-' + key + '" ' +
             'id="ed-' + fb.id + '-' + key + '-' + i + '" value="' + i + '"' + checked + '/>' +
-            '<label for="ed-' + fb.id + '-' + key + '-' + i + '">\u2605</label>';
+            '<label for="ed-' + fb.id + '-' + key + '-' + i + '">★</label>';
         }
 
         var naActive = d.na ? ' na-active' : '';
@@ -199,7 +199,7 @@
 
         timerBar.innerHTML =
           '<span class="edit-timer-icon">\uD83D\uDD12</span>' +
-          '<span style="font-size:13px; color: var(--color-text-ghost); font-family: DM Sans, sans-serif;">Bearbeitungszeit abgelaufen \u2014 Feedback ist gesperrt</span>';
+          '<span style="font-size:13px; color: var(--color-text-ghost); font-family: DM Sans, sans-serif;">Bearbeitungszeit abgelaufen - Feedback ist gesperrt</span>';
         timerBar.style.background = 'rgba(255, 255, 255, 0.02)';
         timerBar.style.borderColor = 'var(--color-border)';
 
@@ -312,8 +312,8 @@
               valEl.className = 'history-driver-stars';
               var filled = parseInt(selected.value);
               var empty = 5 - filled;
-              valEl.innerHTML = '\u2605'.repeat(filled) +
-                (empty > 0 ? '<span class="empty">' + '\u2605'.repeat(empty) + '</span>' : '');
+              valEl.innerHTML = '★'.repeat(filled) +
+                (empty > 0 ? '<span class="empty">' + '★'.repeat(empty) + '</span>' : '');
             }
           }
         });

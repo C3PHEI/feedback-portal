@@ -37,7 +37,7 @@
       for (var i = 5; i >= 1; i--) {
         var id = d.prefix + i;
         starsHtml += '<input type="radio" name="' + d.key + '" id="' + id + '" value="' + i + '"/>' +
-          '<label for="' + id + '" data-tooltip="' + d.tooltips[i - 1] + '">\u2605</label>';
+          '<label for="' + id + '" data-tooltip="' + d.tooltips[i - 1] + '">★</label>';
       }
 
       return '<div class="cat-card" id="driver-' + d.key + '">' +
@@ -47,7 +47,7 @@
         '<span class="text-white text-sm font-medium">' + d.label + '</span>' +
         '</div>' +
         '<div class="flex items-center gap-2">' +
-        '<button type="button" class="na-btn" id="na-' + d.key + '" title="N/A \u2014 Nicht beurteilbar">N/A</button>' +
+        '<button type="button" class="na-btn" id="na-' + d.key + '" title="N/A - Nicht beurteilbar">N/A</button>' +
         '<div class="stars" id="stars-' + d.key + '">' + starsHtml + '</div>' +
         '</div></div></div>';
     }).join('\n');
