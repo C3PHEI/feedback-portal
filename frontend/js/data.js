@@ -515,7 +515,8 @@ var MockData = (function () {
     adminDepartments:     adminDepartments,
     adminSystemStatus:    adminSystemStatus,
     moderationStats:      moderationStats,
-    moderationReports:    moderationReports
+    moderationReports:    moderationReports,
+    departmentTeam:       departmentTeam
   };
 
 })();
