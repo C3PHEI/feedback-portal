@@ -5,6 +5,7 @@
  * Daten kommen via FeedbackAPI.getDepartmentTeam()
  * Anonyme Feedbacks: kein Absender, nur Datum (kein Timestamp).
  * Durchschnittswerte + Warnung bei <= 2 Reviews.
+ * Feedbacks sind aufklappbar mit Strengths + Areas to Improve.
  */
 
 (function () {
@@ -54,9 +55,9 @@
     var filled = Math.round(avg);
     var empty  = 5 - filled;
     var html   = '';
-    for (var i = 0; i < filled; i++) html += '★';
+    for (var i = 0; i < filled; i++) html += '\u2605';
     if (empty > 0) html += '<span class="empty">';
-    for (var j = 0; j < empty; j++) html += '★';
+    for (var j = 0; j < empty; j++) html += '\u2605';
     if (empty > 0) html += '</span>';
     return html;
   }
@@ -72,7 +73,7 @@
     if (!team || !team.length) {
       el.innerHTML =
         '<div class="dept-empty">' +
-        '<div class="dept-empty-icon">👥</div>' +
+        '<div class="dept-empty-icon">\uD83D\uDC65</div>' +
         '<div>Keine Teammitglieder gefunden.</div>' +
         '</div>';
       return;
@@ -100,51 +101,31 @@
       }).join('');
 
       var anonBadge = anonCount > 0
-        ? ' <span class="anon-count">' +
-        '<svg class="anon-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
-        '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>' +
-        '<circle cx="12" cy="12" r="3"/>' +
-        '<line x1="1" y1="1" x2="23" y2="23"/>' +
-        '</svg>' +
-        anonCount + ' anonym' +
+        ? '<span class="dept-anon-badge">' +
+        '<img src="img/incognito.svg" alt="" class="dept-anon-badge-icon"/>' +
+        '<span>' + anonCount + ' anonym</span>' +
         '</span>'
         : '';
 
       var lowHint = isLow
         ? '<div class="dept-card-low-hint">' +
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
-        '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' +
-        '<line x1="12" y1="9" x2="12" y2="13"/>' +
-        '<line x1="12" y1="17" x2="12.01" y2="17"/>' +
-        '</svg>' +
-        'Durchschnitt basiert auf ' + total + ' Bewertung' + (total === 1 ? '' : 'en') + '. Möglicherweise nicht repräsentativ.' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+        '<span>Wenige Bewertungen</span>' +
         '</div>'
         : '';
 
-      var overallHtml = total === 0
-        ? '<span style="color:var(--color-text-ghost);font-size:12px;">Noch keine Bewertungen</span>'
-        : '<span style="color:var(--color-orange);font-family:\'Bodoni MT\',sans-serif;font-size:18px;font-weight:700;">' +
-        (overall !== null ? overall.toFixed(1) : '—') +
-        '</span>' +
-        '<span style="color:var(--color-text-ghost);font-size:11px;font-family:\'DM Sans\',sans-serif;"> / 5.0 Ø</span>';
-
-      html +=
-        '<div class="dept-member-card" data-member-id="' + member.id + '">' +
-        '<div class="flex items-center justify-between mb-3">' +
-        '<div class="flex items-center gap-3">' +
-        '<div class="avatar" style="width:38px;height:38px;font-size:12px;border-radius:9px;">' + member.initials + '</div>' +
-        '<div>' +
+      html += '<div class="dept-member-card" data-member-id="' + member.id + '">' +
+        '<div class="dept-member-top">' +
+        '<div class="avatar" style="width:40px;height:40px;font-size:13px;border-radius:10px;">' + member.initials + '</div>' +
+        '<div class="dept-member-info">' +
         '<div class="dept-member-name">' + member.name + '</div>' +
-        '<div class="dept-member-meta">' + member.department + '</div>' +
+        '<div class="dept-member-dept">' + member.department + '</div>' +
         '</div>' +
+        '<svg class="dept-member-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
         '</div>' +
-        '<svg class="dept-member-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-        '<polyline points="9 18 15 12 9 6"/>' +
-        '</svg>' +
-        '</div>' +
-        '<div class="flex items-center justify-between">' + overallHtml + '</div>' +
-        '<div class="dept-review-count">' +
-        '<span>' + total + ' Feedback' + (total !== 1 ? 's' : '') + '</span>' +
+        '<div class="dept-member-score">' +
+        '<span class="dept-member-avg">' + (overall !== null ? overall.toFixed(1) : '\u2014') + '</span>' +
+        '<span class="dept-review-count">' + total + ' Feedback' + (total !== 1 ? 's' : '') + '</span>' +
         anonBadge +
         '</div>' +
         (total > 0 ? '<div class="dept-mini-drivers">' + miniDrivers + '</div>' : '') +
@@ -190,8 +171,8 @@
     if (statsEl) {
       statsEl.innerHTML =
         '<div class="dept-stat-pill">' +
-        '<div class="dept-stat-value orange">' + (overall !== null ? overall.toFixed(1) : '—') + '</div>' +
-        '<div class="dept-stat-label">Gesamt Ø</div>' +
+        '<div class="dept-stat-value orange">' + (overall !== null ? overall.toFixed(1) : '\u2014') + '</div>' +
+        '<div class="dept-stat-label">Gesamt \u00D8</div>' +
         '</div>' +
         '<div class="dept-stat-pill">' +
         '<div class="dept-stat-value">' + total + '</div>' +
@@ -214,7 +195,7 @@
           '<line x1="12" y1="17" x2="12.01" y2="17"/>' +
           '</svg>' +
           '<span>Durchschnitt basiert auf <strong>' + total + '</strong> Bewertung' + (total === 1 ? '' : 'en') +
-          '. Diese Werte spiegeln möglicherweise nicht das vollständige Feedback wider.</span>';
+          '. Diese Werte spiegeln m\u00F6glicherweise nicht das vollst\u00E4ndige Feedback wider.</span>';
       } else {
         lowEl.style.display = 'none';
       }
@@ -245,6 +226,7 @@
       } else {
         historyEl.innerHTML = feedbacks.map(function (fb) {
 
+          /* ── Absender-Info ── */
           var fromHtml = fb.anonymous
             ? '<div class="dept-history-from">' +
             '<div class="avatar anon-avatar" style="width:28px;height:28px;border-radius:7px;">' +
@@ -264,21 +246,89 @@
             '<span class="dept-history-from-label">' + fb.fromName + '</span>' +
             '</div>';
 
+          /* ── Driver Chips ── */
           var chips = fb.drivers.map(function (d) {
             var shortName = d.name.split('/')[0].trim();
             var chipClass = 'dept-history-driver-chip' + (d.na ? ' na-chip' : '');
-            var score     = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '★</span>';
+            var score     = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '\u2605</span>';
             return '<span class="' + chipClass + '">' + shortName + ' ' + score + '</span>';
           }).join('');
 
-          return '<div class="dept-history-item">' +
-            '<div class="dept-history-header">' +
+          /* ── Expandable Detail (Strengths + Improvements) ── */
+          var hasStrengths    = fb.strengths && fb.strengths !== '\u2014';
+          var hasImprovements = fb.improvements && fb.improvements !== '\u2014';
+          var hasDetail       = hasStrengths || hasImprovements;
+
+          var detailHtml = '';
+          if (hasDetail) {
+            detailHtml = '<div class="dept-fb-detail" id="dept-detail-' + fb.id + '">';
+
+            if (hasStrengths) {
+              detailHtml +=
+                '<div class="dept-fb-text-block">' +
+                '<div class="dept-fb-text-label">' +
+                '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+                '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' +
+                '</svg>' +
+                ' Strengths' +
+                '</div>' +
+                '<p class="dept-fb-text-content">' + fb.strengths + '</p>' +
+                '</div>';
+            }
+
+            if (hasImprovements) {
+              detailHtml +=
+                '<div class="dept-fb-text-block">' +
+                '<div class="dept-fb-text-label">' +
+                '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+                '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' +
+                '</svg>' +
+                ' Areas to Improve' +
+                '</div>' +
+                '<p class="dept-fb-text-content">' + fb.improvements + '</p>' +
+                '</div>';
+            }
+
+            detailHtml += '</div>';
+          }
+
+          /* ── Chevron für aufklappbar ── */
+          var chevronHtml = hasDetail
+            ? '<span class="dept-history-chevron" id="dept-chevron-' + fb.id + '">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+            '<polyline points="6 9 12 15 18 9"/>' +
+            '</svg>' +
+            '</span>'
+            : '';
+
+          return '<div class="dept-history-item' + (hasDetail ? ' has-detail' : '') + '" id="dept-item-' + fb.id + '">' +
+            '<div class="dept-history-header" data-fb-id="' + fb.id + '"' + (hasDetail ? ' data-expandable="true"' : '') + '>' +
             fromHtml +
+            '<div class="dept-history-header-right">' +
             '<span class="dept-history-date">' + fb.date + '</span>' +
+            chevronHtml +
+            '</div>' +
             '</div>' +
             '<div class="dept-history-drivers-mini">' + chips + '</div>' +
+            detailHtml +
             '</div>';
         }).join('');
+
+        /* ── Klick-Events für Aufklappen ── */
+        historyEl.querySelectorAll('.dept-history-header[data-expandable]').forEach(function (header) {
+          header.addEventListener('click', function () {
+            var fbId    = header.getAttribute('data-fb-id');
+            var detail  = document.getElementById('dept-detail-' + fbId);
+            var chevron = document.getElementById('dept-chevron-' + fbId);
+            var item    = document.getElementById('dept-item-' + fbId);
+
+            if (!detail) return;
+
+            var isOpen = detail.classList.toggle('open');
+            if (item)    item.classList.toggle('expanded', isOpen);
+            if (chevron) chevron.classList.toggle('rotated', isOpen);
+          });
+        });
       }
     }
 
@@ -304,7 +354,7 @@
     var user       = FeedbackAPI.getCurrentUser();
     var subtitleEl = document.getElementById('dept-subtitle');
     if (subtitleEl && user && user.department) {
-      subtitleEl.textContent = 'Team-Feedback-Verlauf — ' + user.department;
+      subtitleEl.textContent = 'Team-Feedback-Verlauf \u2014 ' + user.department;
     }
 
     var team = FeedbackAPI.getDepartmentTeam();

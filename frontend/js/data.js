@@ -405,7 +405,9 @@ var MockData = (function () {
             { name: 'Ownership / Reliability', rating: 5, na: false },
             { name: 'Collaboration / Social',  rating: 3, na: false },
             { name: 'Growth / Learning',       rating: null, na: true }
-          ]
+          ],
+          strengths: 'Markus liefert konstant gute Ergebnisse und übernimmt zuverlässig Verantwortung für seine Aufgaben. Seine technische Kompetenz ist beeindruckend und er findet oft effiziente Lösungen.',
+          improvements: 'Könnte in Team-Meetings aktiver kommunizieren und seine Ideen früher einbringen. Manchmal arbeitet er zu isoliert, statt früh Feedback von Kollegen einzuholen.'
         },
         {
           id: 'fb-mh-2',
@@ -418,7 +420,9 @@ var MockData = (function () {
             { name: 'Ownership / Reliability', rating: 4, na: false },
             { name: 'Collaboration / Social',  rating: null, na: true },
             { name: 'Growth / Learning',       rating: 4, na: false }
-          ]
+          ],
+          strengths: 'Zeigt eine hohe Lernbereitschaft und entwickelt sich kontinuierlich weiter. Nimmt Feedback gut an und setzt es konsequent um.',
+          improvements: 'Die Arbeitsgeschwindigkeit könnte bei komplexeren Aufgaben noch etwas gesteigert werden. Priorisierung zwischen mehreren Projekten fällt manchmal schwer.'
         },
         {
           id: 'fb-mh-3',
@@ -431,7 +435,9 @@ var MockData = (function () {
             { name: 'Ownership / Reliability', rating: 4, na: false },
             { name: 'Collaboration / Social',  rating: 4, na: false },
             { name: 'Growth / Learning',       rating: 3, na: false }
-          ]
+          ],
+          strengths: 'Exzellente Problemlösungsfähigkeiten. Hat beim letzten Sprint die kritischsten Bugs identifiziert und eigenstaendig geloest. Sehr zuverlaessig bei Deadlines.',
+          improvements: 'Könnte mehr Initiative zeigen, Wissen mit Junior-Kollegen zu teilen. Dokumentation der eigenen Arbeit ist manchmal lückenhaft.'
         }
       ]
     },
@@ -453,7 +459,9 @@ var MockData = (function () {
             { name: 'Ownership / Reliability', rating: 3, na: false },
             { name: 'Collaboration / Social',  rating: 2, na: false },
             { name: 'Growth / Learning',       rating: null, na: true }
-          ]
+          ],
+          strengths: 'Jana ist immer freundlich und offen im Umgang mit dem Team. Sie bringt eine positive Energie in den Arbeitsalltag.',
+          improvements: 'Die Qualität der Arbeitsergebnisse muss sich deutlich verbessern. Aufgaben werden oft unvollstaändig abgegeben und erfordern umfangreiche Nacharbeit durch Kollegen.'
         },
         {
           id: 'fb-js-2',
@@ -466,7 +474,9 @@ var MockData = (function () {
             { name: 'Ownership / Reliability', rating: 3, na: false },
             { name: 'Collaboration / Social',  rating: 4, na: false },
             { name: 'Growth / Learning',       rating: 3, na: false }
-          ]
+          ],
+          strengths: 'Gute Teamplayerin, die sich aktiv in Diskussionen einbringt. Hat sich in den letzten Monaten bei der Zusammenarbeit deutlich verbessert.',
+          improvements: 'Sollte mehr Eigeninitiative bei der Lösung von Problemen zeigen, anstatt sofort nach Hilfe zu fragen. Zeitmanagement könnte strukturierter sein.'
         }
       ]
     },
@@ -488,7 +498,9 @@ var MockData = (function () {
             { name: 'Ownership / Reliability', rating: 5, na: false },
             { name: 'Collaboration / Social',  rating: 4, na: false },
             { name: 'Growth / Learning',       rating: 5, na: false }
-          ]
+          ],
+          strengths: 'Max ist ein absoluter Leistungsträger. Seine Arbeit ist immer von hoechster Qualität, und er übernimmt proaktiv Verantwortung für schwierige Aufgaben. Inspiriert das Team mit seinem Einsatz.',
+          improvements: 'Kännte manchmal etwas geduldiger mit weniger erfahrenen Kollegen sein. Bei Codereviews wäre ein etwas konstruktiverer Ton hilfreich.'
         }
       ]
     }
