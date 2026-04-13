@@ -156,19 +156,19 @@
       </div>
       <div class="flex gap-2 flex-wrap">
         <span class="tag-pill">
-          <input type="radio" name="modFilter" id="modAll" valü="all" checked>
+          <input type="radio" name="modFilter" id="modAll" value="all" checked>
           <label for="modAll">Alle</label>
         </span>
         <span class="tag-pill">
-          <input type="radio" name="modFilter" id="modOpen" valü="open">
+          <input type="radio" name="modFilter" id="modOpen" value="open">
           <label for="modOpen">Offene Meldung</label>
         </span>
         <span class="tag-pill">
-          <input type="radio" name="modFilter" id="modReview" valü="review">
+          <input type="radio" name="modFilter" id="modReview" value="review">
           <label for="modReview">In Prüfung</label>
         </span>
         <span class="tag-pill">
-          <input type="radio" name="modFilter" id="modResolved" valü="resolved">
+          <input type="radio" name="modFilter" id="modResolved" value="resolved">
           <label for="modResolved">Erledigt</label>
         </span>
       </div>
@@ -210,23 +210,23 @@
       </div>
       <div class="flex gap-2 flex-wrap">
         <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterAll" valü="all" checked>
+          <input type="radio" name="userFilter" id="filterAll" value="all" checked>
           <label for="filterAll">Alle</label>
         </span>
         <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterAdmin" valü="admin">
+          <input type="radio" name="userFilter" id="filterAdmin" value="admin">
           <label for="filterAdmin">Admins</label>
         </span>
         <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterManager" valü="manager">
+          <input type="radio" name="userFilter" id="filterManager" value="manager">
           <label for="filterManager">Manager</label>
         </span>
         <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterUser" valü="user">
+          <input type="radio" name="userFilter" id="filterUser" value="user">
           <label for="filterUser">Benutzer</label>
         </span>
         <span class="tag-pill">
-          <input type="radio" name="userFilter" id="filterInactive" valü="inactive">
+          <input type="radio" name="userFilter" id="filterInactive" value="inactive">
           <label for="filterInactive">Inaktiv</label>
         </span>
       </div>
@@ -267,11 +267,11 @@
         </div>
         <div class="deactivate-info-box mb-4">
           <div class="admin-card-title">Was passiert bei der Deaktivierung?</div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">1. Zugriff</span><span class="deactivate-detail-valü">Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen moeglich.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">2. Datenaufbewahrung</span><span class="deactivate-detail-valü">Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">geloescht oder anonymisiert</span>.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">3. Legal Hold</span><span class="deactivate-detail-valü">Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Loeschung <span class="hl-orange">ausgenommen</span>, bis der Tag manüll entfernt wird.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">4. Reaktivierung</span><span class="deactivate-detail-valü"><span class="hl-green">Jederzeit moeglich.</span> Der Retention-Countdown wird zurückgesetzt.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">5. AD-Sync</span><span class="deactivate-detail-valü">Status wird beim nächsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">1. Zugriff</span><span class="deactivate-detail-value">Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen möglich.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">2. Datenaufbewahrung</span><span class="deactivate-detail-value">Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">gelöscht oder anonymisiert</span>.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">3. Legal Hold</span><span class="deactivate-detail-value">Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Löschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">4. Reaktivierung</span><span class="deactivate-detail-value"><span class="hl-green">Jederzeit möglich.</span> Der Retention-Countdown wird zurückgesetzt.</span></div>
+          <div class="deactivate-detail-item"><span class="deactivate-detail-label">5. AD-Sync</span><span class="deactivate-detail-value">Status wird beim nächsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.</span></div>
         </div>
         <div class="deactivate-warning mb-5">
           <p>&#9888;&#65039; Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zürst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.</p>
@@ -329,7 +329,7 @@
       </div>
     </div>
     <div class="mb-4">
-      <p style="font-family:'Bodoni MT',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#999;margin-bottom:10px;">Gemeldetes Feedback (erhalten von <span id="reportModalVonInline"></span>)</p>
+      <p style="font-family:'Bodoni MT',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#999;margin-bottom:10px;">Gemeldetes Feedback (erhalten von<span id="reportModalVonInline"></span>)</p>
       <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;margin-bottom:12px;">
         <p style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Bewertungen</p>
         <div id="reportModalDrivers" style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#888;font-family:'DM Sans',sans-serif;"></div>

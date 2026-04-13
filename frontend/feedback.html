@@ -32,7 +32,7 @@
       }
     }
   </script>
-  <!-- Zentrale Farb-Konfiguration (immer zürst laden) -->
+  <!-- Zentrale Farb-Konfiguration (immer zuerst laden) -->
   <link rel="stylesheet" href="css/colors.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/feedback.css">
@@ -55,9 +55,9 @@
 
   <form id="feedbackForm" novalidate>
 
-    <!-- Empfaenger (AD-Liste) -->
+    <!-- Empfänger (AD-Liste) -->
     <div class="fade-up delay-1 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Empfaenger</p>
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Empfänger</p>
       <div>
         <label class="block font-normal text-sm mb-2" style="color: var(--color-text-dim);">Mitarbeiter aus dem Active Directory</label>
         <select id="recipientSelect" class="fancy-input" required></select>
@@ -67,11 +67,11 @@
     <!-- Sichtbarkeit -->
     <div class="fade-up delay-2 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
       <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Sichtbarkeit</p>
-      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Wähle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zürst getroffen werden.</p>
+      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Wähle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
       <div class="flex gap-4 mb-4">
         <label class="visibility-option flex-1" id="vis-public-label">
-          <input type="radio" name="visibility" id="vis-public" valü="public">
+          <input type="radio" name="visibility" id="vis-public" value="public">
           <div class="visibility-card">
             <img class="visibility-icon" alt="Icon" src="img/person.svg"/>
             <span class="visibility-title">Namentlich</span>
@@ -80,7 +80,7 @@
         </label>
 
         <label class="visibility-option flex-1" id="vis-private-label">
-          <input type="radio" name="visibility" id="vis-private" valü="private">
+          <input type="radio" name="visibility" id="vis-private" value="private">
           <div class="visibility-card">
             <img class="visibility-icon" alt="Icon" src="img/incognito.svg"/>
             <span class="visibility-title">Anonym</span>
@@ -134,7 +134,7 @@
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-success); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="strengths">Strengths</label>
           </div>
-          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Staerken und positives Verhalten..."></textarea>
+          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten..."></textarea>
           <div class="char-counter" id="strengths-counter">
             <span id="strengths-count">0</span> / 200 Zeichen min.
           </div>
@@ -147,7 +147,7 @@
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-orange); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="improvements">Areas to improve</label>
           </div>
-          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und moegliche Massnahmen..."></textarea>
+          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen..."></textarea>
           <div class="char-counter" id="improvements-counter">
             <span id="improvements-count">0</span> / 200 Zeichen min.
           </div>
