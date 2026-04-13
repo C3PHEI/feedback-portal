@@ -1,7 +1,7 @@
 /**
  * api.js
  * Feedback Hub — Abstraktionsschicht
- * Spaeter: fetch() gegen echte API-Endpoints ersetzen
+ * Später: fetch() gegen echte API-Endpoints ersetzen
  */
 
 var FeedbackAPI = (function () {
@@ -82,6 +82,10 @@ var FeedbackAPI = (function () {
     return MockData.moderationReports;
   }
 
+  function getDepartmentTeam() {
+    return MockData.departmentTeam;
+  }
+
   return {
     getCurrentUser:          getCurrentUser,
     getRecipients:           getRecipients,
@@ -99,7 +103,8 @@ var FeedbackAPI = (function () {
     getAdminDepartments:     getAdminDepartments,
     getAdminSystemStatus:    getAdminSystemStatus,
     getModerationStats:      getModerationStats,
-    getModerationReports:    getModerationReports
+    getModerationReports:    getModerationReports,
+    getDepartmentTeam:       getDepartmentTeam
   };
 
 })();

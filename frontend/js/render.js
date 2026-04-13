@@ -64,10 +64,17 @@ var Render = (function () {
       { href: 'index.html',    label: 'Inbox',           key: 'inbox' },
       { href: 'feedback.html', label: 'Feedback geben',  key: 'feedback' },
       { href: 'history.html',  label: 'Verlauf',         key: 'history' },
+      { href: 'department.html', label: 'Abteilung',      key: 'department' },
       { href: 'admin.html',    label: 'Admin',           key: 'admin' }
     ];
 
-    var linksHtml = links.map(function (l) {
+    var filteredLinks = links.filter(function (l) {
+      if (l.key === 'department') return user && (user.role === 'manager' || user.role === 'admin');
+      if (l.key === 'admin')      return user && user.role === 'admin';
+      return true;
+    });
+
+    var linksHtml = filteredLinks.map(function (l) {
       var activeClass = l.key === activePage ? ' active' : '';
       var href = l.key === activePage ? '' : l.href;
       return '<a href="' + href + '" class="nav-link' + activeClass + '">' + l.label + '</a>';

@@ -383,6 +383,118 @@ var MockData = (function () {
   ];
 
   /* ═══════════════════════════════════════════════════════
+     Department — Team-Feedback-Verlauf (Manager-Ansicht)
+     ═══════════════════════════════════════════════════════ */
+
+  var departmentTeam = [
+    {
+      id: 'markus.huber',
+      name: 'Markus Huber',
+      initials: 'MH',
+      role: 'user',
+      department: 'IT',
+      feedbacks: [
+        {
+          id: 'fb-mh-1',
+          anonymous: false,
+          fromName: 'Anna Keller',
+          fromInitials: 'AK',
+          date: '08.04.2026',
+          drivers: [
+            { name: 'Impact / Results',        rating: 4, na: false },
+            { name: 'Ownership / Reliability', rating: 5, na: false },
+            { name: 'Collaboration / Social',  rating: 3, na: false },
+            { name: 'Growth / Learning',       rating: null, na: true }
+          ]
+        },
+        {
+          id: 'fb-mh-2',
+          anonymous: true,
+          fromName: null,
+          fromInitials: null,
+          date: '21.03.2026',
+          drivers: [
+            { name: 'Impact / Results',        rating: 3, na: false },
+            { name: 'Ownership / Reliability', rating: 4, na: false },
+            { name: 'Collaboration / Social',  rating: null, na: true },
+            { name: 'Growth / Learning',       rating: 4, na: false }
+          ]
+        },
+        {
+          id: 'fb-mh-3',
+          anonymous: false,
+          fromName: 'Thomas Ruefli',
+          fromInitials: 'TR',
+          date: '05.03.2026',
+          drivers: [
+            { name: 'Impact / Results',        rating: 5, na: false },
+            { name: 'Ownership / Reliability', rating: 4, na: false },
+            { name: 'Collaboration / Social',  rating: 4, na: false },
+            { name: 'Growth / Learning',       rating: 3, na: false }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'jana.steiner',
+      name: 'Jana Steiner',
+      initials: 'JS',
+      role: 'user',
+      department: 'IT',
+      feedbacks: [
+        {
+          id: 'fb-js-1',
+          anonymous: true,
+          fromName: null,
+          fromInitials: null,
+          date: '10.04.2026',
+          drivers: [
+            { name: 'Impact / Results',        rating: 2, na: false },
+            { name: 'Ownership / Reliability', rating: 3, na: false },
+            { name: 'Collaboration / Social',  rating: 2, na: false },
+            { name: 'Growth / Learning',       rating: null, na: true }
+          ]
+        },
+        {
+          id: 'fb-js-2',
+          anonymous: false,
+          fromName: 'Markus Huber',
+          fromInitials: 'MH',
+          date: '28.02.2026',
+          drivers: [
+            { name: 'Impact / Results',        rating: 3, na: false },
+            { name: 'Ownership / Reliability', rating: 3, na: false },
+            { name: 'Collaboration / Social',  rating: 4, na: false },
+            { name: 'Growth / Learning',       rating: 3, na: false }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'max.mustermann',
+      name: 'Max Mustermann',
+      initials: 'MM',
+      role: 'user',
+      department: 'IT',
+      feedbacks: [
+        {
+          id: 'fb-mm-1',
+          anonymous: false,
+          fromName: 'Jana Steiner',
+          fromInitials: 'JS',
+          date: '01.04.2026',
+          drivers: [
+            { name: 'Impact / Results',        rating: 5, na: false },
+            { name: 'Ownership / Reliability', rating: 5, na: false },
+            { name: 'Collaboration / Social',  rating: 4, na: false },
+            { name: 'Growth / Learning',       rating: 5, na: false }
+          ]
+        }
+      ]
+    }
+  ];
+
+  /* ═══════════════════════════════════════════════════════
      Public API
      ═══════════════════════════════════════════════════════ */
 
