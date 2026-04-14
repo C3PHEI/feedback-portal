@@ -1,6 +1,7 @@
 /**
  * pages/admin.js
  * Feedback Hub — Admin-Seite dynamisch rendern
+ * test
  */
 
 (function () {
