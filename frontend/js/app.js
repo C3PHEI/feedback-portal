@@ -68,9 +68,6 @@ function startEditMode() {
    ═══════════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', function () {
-
-  /* ─── feedbackResponce.html listeners ─── */
-
   var editBtn = document.getElementById('editBtn');
   if (editBtn) {
     editBtn.addEventListener('click', startEditMode);
@@ -81,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 /* ─── Profile Dropdown ────────────────────────────────────
-   Für index.html + feedbackResponce.html
+   Für index.html
    ──────────────────────────────────────────────────────── */
 const profileBtn      = document.getElementById('profileBtn');
 const profileDropdown = document.getElementById('profileDropdown');

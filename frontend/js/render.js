@@ -60,12 +60,13 @@ var Render = (function () {
 
   function navbar(activePage) {
     var user = FeedbackAPI.getCurrentUser();
+
     var links = [
-      { href: 'index.html',    label: 'Inbox',           key: 'inbox' },
-      { href: 'feedback.html', label: 'Feedback geben',  key: 'feedback' },
-      { href: 'history.html',  label: 'Verlauf',         key: 'history' },
-      { href: 'department.html', label: 'Abteilung',      key: 'department' },
-      { href: 'admin.html',    label: 'Admin',           key: 'admin' }
+      { href: 'index.html',      label: I18n.t('nav.inbox'),      key: 'inbox' },
+      { href: 'feedback.html',   label: I18n.t('nav.feedback'),   key: 'feedback' },
+      { href: 'history.html',    label: I18n.t('nav.history'),    key: 'history' },
+      { href: 'department.html', label: I18n.t('nav.department'), key: 'department' },
+      { href: 'admin.html',      label: I18n.t('nav.admin'),      key: 'admin' }
     ];
 
     var filteredLinks = links.filter(function (l) {
@@ -80,6 +81,10 @@ var Render = (function () {
       return '<a href="' + href + '" class="nav-link' + activeClass + '">' + l.label + '</a>';
     }).join('\n        ');
 
+    // Aktive Sprache für Switcher-Buttons
+    var langDe = I18n.getLang() === 'de' ? ' lang-btn-active' : '';
+    var langEn = I18n.getLang() === 'en' ? ' lang-btn-active' : '';
+
     return '<nav class="site-nav">\n' +
       '  <div class="site-nav-inner">\n' +
       '    <img src="img/777ch_Logo.svg" alt="Logo" class="nav-logo">\n' +
@@ -92,25 +97,40 @@ var Render = (function () {
       '              <span class="nav-avatar">' + user.initials + '</span>\n' +
       '            </button>\n' +
       '            <div class="profile-dropdown" id="profileDropdown">\n' +
+
+      // ── Header mit Name / E-Mail ──────────────────────
       '              <div class="profile-dropdown-header">\n' +
       '                <span class="profile-dropdown-name">' + user.name + '</span>\n' +
       '                <span class="profile-dropdown-email">' + user.email + '</span>\n' +
       '              </div>\n' +
       '              <div class="profile-dropdown-divider"></div>\n' +
+
+      // ── Sprachumschalter ──────────────────────────────
+      '              <div class="profile-dropdown-lang">\n' +
+      '                <span class="profile-dropdown-lang-label">' + I18n.t('profile.language') + '</span>\n' +
+      '                <div class="lang-switcher">\n' +
+      '                  <button class="lang-btn' + langDe + '" data-lang-btn="de" onclick="I18n.setLang(\'de\')" type="button">DE</button>\n' +
+      '                  <button class="lang-btn' + langEn + '" data-lang-btn="en" onclick="I18n.setLang(\'en\')" type="button">EN</button>\n' +
+      '                </div>\n' +
+      '              </div>\n' +
+      '              <div class="profile-dropdown-divider"></div>\n' +
+
+      // ── Abmelden / Sign out ───────────────────────────
       '              <button class="profile-dropdown-logout" id="logoutBtn">\n' +
       '                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n' +
       '                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>\n' +
       '                  <polyline points="16 17 21 12 16 7"/>\n' +
       '                  <line x1="21" y1="12" x2="9" y2="12"/>\n' +
       '                </svg>\n' +
-      '                Abmelden\n' +
+      '                ' + I18n.t('profile.logout') + '\n' +
       '              </button>\n' +
-      '            </div>\n' +
-      '          </div>\n' +
-      '        </div>\n' +
-      '      </div>\n' +
-      '    </div>\n' +
-      '  </div>\n' +
+
+      '            </div>\n' +  // /profile-dropdown
+      '          </div>\n' +    // /nav-profile-wrapper
+      '        </div>\n' +      // /avatar
+      '      </div>\n' +        // /nav-icons
+      '    </div>\n' +          // /nav-content
+      '  </div>\n' +            // /site-nav-inner
       '</nav>';
   }
 

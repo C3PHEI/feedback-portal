@@ -69,7 +69,6 @@ var MockData = (function () {
       preview: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Weiter so.',
       date: 'heute',
       unread: true,
-      link: 'feedbackResponce.html',
       drivers: [
         { name: 'Impact / Results',        rating: 5, na: false },
         { name: 'Ownership / Reliability', rating: 4, na: false },
