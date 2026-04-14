@@ -96,7 +96,7 @@
           Du hast ausgewaehlt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
         </p>
         <label class="anon-checkbox-label mt-3">
-          <input type="checkbox" id="anonUnderstood" data-i18n="feedback.anon_confirm">
+          <input type="checkbox" id="anonUnderstood">
           <span data-i18n="feedback.anon_confirm">Ich habe gelesen und verstanden</span>
         </label>
       </div>
@@ -134,7 +134,7 @@
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-success); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="strengths" data-i18n="feedback.strengths_label">Strengths</label>
           </div>
-          <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten..."></textarea>
+          <textarea class="fancy-input" id="strengths" rows="4" data-i18n-placeholder="feedback.strengths_placeholder"></textarea>
           <div class="char-counter" id="strengths-counter">
             <span id="strengths-count">0</span><span data-i18n="feedback.char_min"> / 200 Zeichen min.</span>
           </div>
@@ -147,7 +147,7 @@
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-orange); display:inline-block;"></span>
             <label class="text-white text-sm font-medium" for="improvements" data-i18n="feedback.improvements_label">Areas to improve</label>
           </div>
-          <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen..."></textarea>
+          <textarea class="fancy-input" id="improvements" rows="4" data-i18n-placeholder="feedback.improvements_placeholder"></textarea>
           <div class="char-counter" id="improvements-counter">
             <span id="improvements-count">0</span><span data-i18n="feedback.char_min"> / 200 Zeichen min.</span>
           </div>

@@ -16,7 +16,7 @@
     var el = document.getElementById('recipientSelect');
     if (!el) return;
     var recipients = FeedbackAPI.getRecipients();
-    var html = '<option value="">Person auswählen...</option>';
+    var html = '<option value="">' + I18n.t('feedback.recipient_placeholder') + '</option>';
     recipients.forEach(function (r) {
       html += '<option value="' + r.value + '">' + r.label + '</option>';
     });
