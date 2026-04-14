@@ -50,32 +50,32 @@
     <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
       Feedback
     </h1>
-    <p class="text-sm" style="color: var(--color-text-dim);">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
+    <p class="text-sm" style="color: var(--color-text-dim);" data-i18n="feedback.subtitle">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
   </div>
 
   <form id="feedbackForm" novalidate>
 
     <!-- Empfänger (AD-Liste) -->
     <div class="fade-up delay-1 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Empfänger</p>
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_recipient">Empfänger</p>
       <div>
-        <label class="block font-normal text-sm mb-2" style="color: var(--color-text-dim);">Mitarbeiter aus dem Active Directory</label>
+        <label class="block font-normal text-sm mb-2" style="color: var(--color-text-dim);" data-i18n="feedback.recipient_label">Mitarbeiter aus dem Active Directory</label>
         <select id="recipientSelect" class="fancy-input" required></select>
       </div>
     </div>
 
     <!-- Sichtbarkeit -->
     <div class="fade-up delay-2 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Sichtbarkeit</p>
-      <p class="text-sm mb-4" style="color: var(--color-text-faint);">Wähle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
+      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_visibility">Sichtbarkeit</p>
+      <p class="text-sm mb-4" style="color: var(--color-text-faint);" data-i18n="feedback.visibility_intro">Wähle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
       <div class="flex gap-4 mb-4">
         <label class="visibility-option flex-1" id="vis-public-label">
           <input type="radio" name="visibility" id="vis-public" value="public">
           <div class="visibility-card">
             <img class="visibility-icon" alt="Icon" src="img/person.svg"/>
-            <span class="visibility-title">Namentlich</span>
-            <span class="visibility-desc">Dein Name ist sichtbar</span>
+            <span class="visibility-title" data-i18n="feedback.vis_public">Namentlich</span>
+            <span class="visibility-desc" data-i18n="feedback.vis_public_sub">Dein Name ist sichtbar</span>
           </div>
         </label>
 
@@ -83,8 +83,8 @@
           <input type="radio" name="visibility" id="vis-private" value="private">
           <div class="visibility-card">
             <img class="visibility-icon" alt="Icon" src="img/incognito.svg"/>
-            <span class="visibility-title">Anonym</span>
-            <span class="visibility-desc">Identität wird geschützt</span>
+            <span class="visibility-title" data-i18n="feedback.vis_private">Anonym</span>
+            <span class="visibility-desc" data-i18n="feedback.vis_private_sub">Dein Name wird nicht angezeigt.</span>
           </div>
         </label>
       </div>
@@ -92,8 +92,8 @@
       <!-- Anonymitäts-Warnung -->
       <div id="anonWarning" class="anon-warning" style="display:none;">
         <div class="anon-warning-icon">&#9888;&#65039;</div>
-        <p class="anon-warning-text">
-          Du hast ausgewaehlt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persoenlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identitaet offenbaren koennten. Achte darauf, was du schreibst und welche Sprache du waehlst, um echte Anonymitaet zu gewaehrleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
+        <p class="anon-warning-text" data-i18n="feedback.anon_understood">
+          Du hast ausgewaehlt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
         </p>
         <label class="anon-checkbox-label mt-3">
           <input type="checkbox" id="anonUnderstood">
