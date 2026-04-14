@@ -33,8 +33,8 @@ var I18n = (function () {
       /* ─── index.html ──────────────────────────────────── */
       'inbox.title':          'Inbox',
       'inbox.subtitle':       'Feedback das du erhalten hast',
-      'inbox.avg_title':      'Durchschnittliche Bewertungen',
-      'inbox.reviews':        'Bewertung',
+      'inbox.avg_title':      'Durchschnittliche Feedbacks',
+      'inbox.reviews':        'Feedback',
       'inbox.anonymous':      'Anonym',
       'inbox.warning':        '⚠ Durchschnittswerte sind ein Richtwert und kein abschliessendes Urteil.',
       'inbox.strengths':      'Stärken',
@@ -57,7 +57,7 @@ var I18n = (function () {
       'history.locked':             '🔒 Gesperrt',
       'history.status_edited':      'Bearbeitet',
       'history.editable':           'Noch bearbeitbar',
-      'history.edit_ratings':       'Bewertungen bearbeiten',
+      'history.edit_ratings':       'Feedback bearbeiten',
       'history.edit_strenghts':     'Stärken bearbeiten',
       'history.edit_improvements':  'Verbesserungsvorschläge bearbeiten',
       'history.cancel':             'Abbrechen',
@@ -99,7 +99,7 @@ var I18n = (function () {
       'feedback.anon_warning_text':       'Du hast ausgewählt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.',
       'feedback.anon_confirm':            'Ich habe gelesen und verstanden',
       'feedback.rate_limit_text':         'Anonymes Feedback kann von einer Person pro Jahr genau 1x an dieselbe Person gesendet werden.',
-      'feedback.section_rating':          'Bewertung',
+      'feedback.section_rating':          'Feedbacks',
       'feedback.text_intro':              'Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).',
       'feedback.char_min':                ' / 200 Zeichen min.',
       'feedback.coc.items': [
@@ -111,7 +111,7 @@ var I18n = (function () {
                                           'Vertraulichkeit und Datennutzung — Feedback ist ausschliesslich für den Empfänger und dessen direkten Vorgesetzten bestimmt. Teile es nicht ausserhalb der Plattform, besprich es nicht mit Kollegen und nutze es nicht für Klatsch oder die Beurteilung anderer.',
                                           'Nur konstruktive Kritik — Wenn du Verbesserungsbereiche ansprichst, verbinde deine Beobachtungen mit konkreten Vorschlägen oder Beispielen. Vermeide vage oder rein negative Aussagen.',
                                           'Einhaltung der Unternehmensrichtlinien — Jedes Feedback muss den HR-Richtlinien, ethischen Grundsätzen und rechtlichen Verpflichtungen des Unternehmens entsprechen. Vermeide Aussagen, die gegen diese Regeln verstossen könnten.',
-                                          'Plattform-Etikette / Kein Bewertungsmissbrauch — Fülle dein Feedback gewissenhaft aus. Verfälsche Bewertungen nicht absichtlich nach oben oder unten, lasse Felder nicht absichtlich leer und hinterlasse keine nichtssagenden Kommentare. Bewertungen sollen eine ehrliche Einschätzung widerspiegeln.',
+                                          'Plattform-Etikette / Kein Feedbacksmissbrauch — Fülle dein Feedback gewissenhaft aus. Verfälsche Feedbacks nicht absichtlich nach oben oder unten, lasse Felder nicht absichtlich leer und hinterlasse keine nichtssagenden Kommentare. Bewertungen sollen eine ehrliche Einschätzung widerspiegeln.',
       ],
 
       /* ─── department.html ─────────────────────────────── */
@@ -120,7 +120,7 @@ var I18n = (function () {
       'dept.role_badge':        'Abteilungsleiter',
       'dept.disclaimer':        'Durchschnittswerte sind ein Orientierungswert und kein abschliessendes Urteil. Individuelle Feedbacks sind aus Datenschutzgründen (DSG\u00a0/\u00a0DSGVO) nicht einsehbar.',
       'dept.drawer_disclaimer': 'Individuelle Feedbacks sind aus Datenschutzgründen nicht einsehbar.',
-      'dept.low_warning':       'Zu wenig Bewertungen für aussagekräftige Durchschnittswerte.',
+      'dept.low_warning':       'Zu wenig Feedbacks für aussagekräftige Durchschnittswerte.',
       'dept.no_feedback':       'Noch kein Feedback erhalten.',
       'dept.stat_reviews':      'Feedbacks',
       'dept.stat_avg':          'Ø Gesamt',
@@ -128,15 +128,15 @@ var I18n = (function () {
       'dept.section_history':   'Feedback-Verlauf',
       'dept.from':              'Von',
       'dept.no_members':        'Keine Teammitglieder gefunden.',
-      'dept.avg_hint_singular': 'Durchschnitt basiert auf <strong>{n}</strong> Bewertung. Diese Werte spiegeln möglicherweise nicht das vollständige Feedback wider.',
-      'dept.avg_hint_plural':   'Durchschnitt basiert auf <strong>{n}</strong> Bewertungen. Diese Werte spiegeln möglicherweise nicht das vollständige Feedback wider.',
-      'dept.no_ratings':        'Noch keine Bewertungen vorhanden.',
+      'dept.avg_hint_singular': 'Durchschnitt basiert auf <strong>{n}</strong> Feedback. Diese Werte spiegeln möglicherweise nicht das vollständige Feedback wider.',
+      'dept.avg_hint_plural':   'Durchschnitt basiert auf <strong>{n}</strong> Feedbacks. Diese Werte spiegeln möglicherweise nicht das vollständige Feedback wider.',
+      'dept.no_ratings':        'Noch keine Feedbacks vorhanden.',
       'dept.anon_feedback':     'Anonymes Feedback',
       'dept.anonymous':         'Anonym',
       'dept.strengths_label':   'Stärken',
       'dept.improvements_label':'Verbesserungsbereiche',
       'dept.total_avg':         'Gesamt \u00D8',
-      'dept.few_ratings':       'Wenige Bewertungen',
+      'dept.few_ratings':       'Wenige Feedbacks',
       'dept.avg_per_driver':    'Durchschnitt pro Driver',
 
       /* ─── admin.html ──────────────────────────────────── */
@@ -149,7 +149,7 @@ var I18n = (function () {
       'admin.total_feedback':   'Feedbacks Total',
       'admin.total_users':      'Benutzer',
       'admin.anonymous_rate':   'Anonym-Quote',
-      'admin.avg_rating':       'Ø Bewertung',
+      'admin.avg_rating':       'Ø Feedback',
 
       /* ─── Drivers (hardcoded in JS) ───────────────────── */
       'driver.impact':          'Impact & Results',
