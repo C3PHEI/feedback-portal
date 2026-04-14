@@ -1,11 +1,6 @@
 /**
  * pages/department.js
  * Feedback Hub — Abteilungsleiter: Team-Feedback-Verlauf
- *
- * Daten kommen via FeedbackAPI.getDepartmentTeam()
- * Anonyme Feedbacks: kein Absender, nur Datum (kein Timestamp).
- * Durchschnittswerte + Warnung bei <= 2 Reviews.
- * Feedbacks sind aufklappbar mit Strengths + Areas to Improve.
  */
 
 (function () {
@@ -74,7 +69,7 @@
       el.innerHTML =
         '<div class="dept-empty">' +
         '<div class="dept-empty-icon">\uD83D\uDC65</div>' +
-        '<div>Keine Teammitglieder gefunden.</div>' +
+        '<div>' + I18n.t('dept.no_members') + '</div>' +
         '</div>';
       return;
     }
@@ -103,14 +98,14 @@
       var anonBadge = anonCount > 0
         ? '<span class="dept-anon-badge">' +
         '<img src="img/incognito.svg" alt="" class="dept-anon-badge-icon"/>' +
-        '<span>' + anonCount + ' anonym</span>' +
+        '<span>' + anonCount + ' ' + I18n.t('dept.anonymous') + '</span>' +
         '</span>'
         : '';
 
       var lowHint = isLow
         ? '<div class="dept-card-low-hint">' +
         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
-        '<span>Wenige Bewertungen</span>' +
+        '<span>' + I18n.t('dept.few_ratings') + '</span>' +
         '</div>'
         : '';
 
@@ -172,7 +167,7 @@
       statsEl.innerHTML =
         '<div class="dept-stat-pill">' +
         '<div class="dept-stat-value orange">' + (overall !== null ? overall.toFixed(1) : '-') + '</div>' +
-        '<div class="dept-stat-label">Gesamt \u00D8</div>' +
+        '<div class="dept-stat-label">' + I18n.t('dept.total_avg') + '</div>' +
         '</div>' +
         '<div class="dept-stat-pill">' +
         '<div class="dept-stat-value">' + total + '</div>' +
@@ -180,7 +175,7 @@
         '</div>' +
         '<div class="dept-stat-pill">' +
         '<div class="dept-stat-value">' + anonCount + '</div>' +
-        '<div class="dept-stat-label">Anonym</div>' +
+        '<div class="dept-stat-label">' + I18n.t('dept.anonymous') + '</div>' +
         '</div>';
     }
 
@@ -188,14 +183,14 @@
     if (lowEl) {
       if (isLow) {
         lowEl.style.display = 'flex';
+        var key = total === 1 ? 'dept.avg_hint_singular' : 'dept.avg_hint_plural';
         lowEl.innerHTML =
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px;">' +
           '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' +
           '<line x1="12" y1="9" x2="12" y2="13"/>' +
           '<line x1="12" y1="17" x2="12.01" y2="17"/>' +
           '</svg>' +
-          '<span>Durchschnitt basiert auf <strong>' + total + '</strong> Bewertung' + (total === 1 ? '' : 'en') +
-          '. Diese Werte spiegeln möglicherweise nicht das vollständige Feedback wider.</span>';
+          '<span>' + I18n.t(key).replace('{n}', total) + '</span>';
       } else {
         lowEl.style.display = 'none';
       }
@@ -204,7 +199,7 @@
     var driversEl = document.getElementById('drawer-drivers');
     if (driversEl) {
       if (total === 0) {
-        driversEl.innerHTML = '<div style="color:var(--color-text-ghost);font-size:13px;padding:12px 0;">Noch keine Bewertungen vorhanden.</div>';
+        driversEl.innerHTML = '<div style="color:var(--color-text-ghost);font-size:13px;padding:12px 0;">' + I18n.t('dept.no_ratings') + '</div>';
       } else {
         driversEl.innerHTML = driverAvgs.map(function (d) {
           var right = d.avg !== null
@@ -222,7 +217,7 @@
     var historyEl = document.getElementById('drawer-history');
     if (historyEl) {
       if (!feedbacks.length) {
-        historyEl.innerHTML = '<div style="color:var(--color-text-ghost);font-size:13px;padding:12px 0;">Noch keine Feedbacks vorhanden.</div>';
+        historyEl.innerHTML = '<div style="color:var(--color-text-ghost);font-size:13px;padding:12px 0;">' + I18n.t('dept.no_feedback') + '</div>';
       } else {
         historyEl.innerHTML = feedbacks.map(function (fb) {
 
@@ -232,13 +227,13 @@
             '<div class="avatar anon-avatar" style="width:28px;height:28px;border-radius:7px;">' +
             '<img class="anon-avatar-icon" alt="Anonym" src="img/incognito.svg" style="width:14px;height:14px;"/>' +
             '</div>' +
-            '<span class="dept-history-from-label" style="color:var(--color-text-ghost);">Anonymes Feedback</span>' +
+            '<span class="dept-history-from-label" style="color:var(--color-text-ghost);">' + I18n.t('dept.anon_feedback') + '</span>' +
             '<span class="anon-badge-sm">' +
             '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
             '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>' +
             '<circle cx="12" cy="12" r="3"/>' +
             '<line x1="1" y1="1" x2="23" y2="23"/>' +
-            '</svg> Anonym' +
+            '</svg> ' + I18n.t('common.anonymous') +
             '</span>' +
             '</div>'
             : '<div class="dept-history-from">' +
@@ -270,7 +265,7 @@
                 '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
                 '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' +
                 '</svg>' +
-                ' Strengths' +
+                ' ' + I18n.t('dept.strengths_label') +
                 '</div>' +
                 '<p class="dept-fb-text-content">' + fb.strengths + '</p>' +
                 '</div>';
@@ -283,7 +278,7 @@
                 '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
                 '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' +
                 '</svg>' +
-                ' Areas to Improve' +
+                ' ' + I18n.t('dept.improvements_label') +
                 '</div>' +
                 '<p class="dept-fb-text-content">' + fb.improvements + '</p>' +
                 '</div>';
