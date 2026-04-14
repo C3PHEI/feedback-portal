@@ -1,7 +1,6 @@
 /**
  * pages/admin.js
  * Feedback Hub — Admin-Seite dynamisch rendern
- * test
  */
 
 (function () {
@@ -15,8 +14,8 @@
     if (!el) return;
     var stats = FeedbackAPI.getAdminStats();
     el.innerHTML =
-      '<div class="stat-card"><div class="stat-number" style="color:#22c55e">' + stats.totalFeedbacks + '</div><div class="stat-label">Feedbacks</div></div>' +
-      '<div class="stat-card"><div class="stat-number highlight">' + stats.totalUsers + '</div><div class="stat-label">Benutzer</div></div>';
+      '<div class="stat-card"><div class="stat-number" style="color:#22c55e">' + stats.totalFeedbacks + '</div><div class="stat-label">' + I18n.t('admin.total_feedback') + '</div></div>' +
+      '<div class="stat-card"><div class="stat-number highlight">' + stats.totalUsers + '</div><div class="stat-label">' + I18n.t('admin.total_users') + '</div></div>';
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -132,15 +131,15 @@
         ? '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;background:#333;color:#666;">?</div>'
         : '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + r.vonInitials + '</div>';
 
-      var vonName = r.von === 'Anonym'
-        ? '<span style="color:#666;font-size:13px;">Anonym</span>'
+      var vonName = r.von === I18n.t('common.anonymous')
+        ? '<span style="color:#666;font-size:13px;">' + I18n.t('common.anonymous') + '</span>'
         : '<span class="text-white text-sm">' + r.von + '</span>';
 
-      var typBadge = r.typ === 'Anonym'
-        ? '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">Anonym</span>'
-        : '<span class="role-badge user">Öffentlich</span>';
+      var typBadge = r.typ === I18n.t('common.anonymous')
+        ? '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' + I18n.t('common.anonymous') + '</span>'
+        : '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
 
-      var ratingColor = r.typ === 'Anonym' ? '#E52620' : '#FF6B00';
+      var ratingColor = r.typ === I18n.t('common.anonymous') ? '#E52620' : '#FF6B00';
 
       return '<tr class="mod-report-row"' +
         ' data-id="' + r.id + '"' +
@@ -175,14 +174,18 @@
 
     el.innerHTML = users.map(function (u) {
       var roleCls = u.role === 'admin' ? 'admin' : u.role === 'manager' ? 'manager' : 'user';
-      var roleLabel = u.role === 'admin' ? 'Admin' : u.role === 'manager' ? 'Manager' : 'Benutzer';
+      var roleLabel = u.role === 'admin'
+        ? I18n.t('admin.role_badge')
+        : u.role === 'manager'
+          ? I18n.t('admin.role_manager')
+          : I18n.t('admin.role_user');
       var feedbackStr = u.feedbackReceived + ' / ' + u.feedbackGiven;
 
       var actionBtn;
       if (u.active) {
-        actionBtn = '<button class="btn-admin danger" type="button" title="Deaktivieren">\uD83D\uDEAB</button>';
+        actionBtn = '<button class="btn-admin danger" type="button" data-i18n-title="admin.btn_deactivate" title="' + I18n.t('admin.btn_deactivate') + '">\uD83D\uDEAB</button>';
       } else {
-        actionBtn = '<button class="btn-admin" type="button" title="Aktivieren" style="color:#22c55e;border-color:#22c55e33;">\u2705</button>';
+        actionBtn = '<button class="btn-admin" type="button" data-i18n-title="admin.btn_activate" title="' + I18n.t('admin.btn_activate') + '" style="color:#22c55e;border-color:#22c55e33;">\u2705</button>';
       }
 
       return '<tr>' +
@@ -195,7 +198,7 @@
         '<td class="hide-mobile"><span style="color:#999;font-size:13px;">' + feedbackStr + '</span></td>' +
         '<td style="text-align:right;"><div class="flex gap-2 justify-end">' +
         actionBtn +
-        '<button class="btn-admin" type="button" title="Rechtliche Sicherung">\uD83D\uDD12</button>' +
+        '<button class="btn-admin" type="button" data-i18n-title="admin.btn_legal_hold" title="' + I18n.t('admin.btn_legal_hold') + '">\uD83D\uDD12</button>' +
         '</div></td></tr>';
     }).join('\n');
   }
@@ -219,44 +222,37 @@
         type: 'bar',
         data: {
           labels: activityData.labels,
-          datasets: [
-            {
-              label: activityData.datasets[0].label,
-              data: activityData.datasets[0].data,
-              backgroundColor: '#FF6B00',
-              borderRadius: 6, borderSkipped: false,
-              barPercentage: 0.7, categoryPercentage: 0.6
-            },
-            {
-              label: activityData.datasets[1].label,
-              data: activityData.datasets[1].data,
-              backgroundColor: '#E52620',
-              borderRadius: 6, borderSkipped: false,
-              barPercentage: 0.7, categoryPercentage: 0.6
-            }
-          ]
+          datasets: activityData.datasets.map(function (ds, i) {
+            var colors = ['#FF6B00', '#E52620'];
+            return {
+              label: ds.label,
+              data: ds.data,
+              backgroundColor: colors[i] + '33',
+              borderColor: colors[i],
+              borderWidth: 2,
+              borderRadius: 6,
+              borderSkipped: false
+            };
+          })
         },
         options: {
           responsive: true, maintainAspectRatio: false,
           plugins: {
-            legend: {
-              display: true, position: 'top', align: 'end',
-              labels: { boxWidth: 10, boxHeight: 10, borderRadius: 3, useBorderRadius: true, padding: 16, font: { size: 11, family: "'DM Sans', sans-serif" }, color: '#999' }
-            },
-            tooltip: { backgroundColor: '#1e1e1e', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#2e2e2e', borderWidth: 1, cornerRadius: 8, padding: 12, titleFont: { family: "'Bodoni MT', sans-serif", weight: '600' } }
+            legend: { display: true, position: 'top', labels: { color: '#777', font: { size: 12 }, boxWidth: 12, padding: 16 } },
+            tooltip: { backgroundColor: '#1e1e1e', titleColor: '#fff', bodyColor: '#aaa', borderColor: '#2e2e2e', borderWidth: 1, cornerRadius: 8, padding: 12 }
           },
           scales: {
-            x: { grid: { display: false }, ticks: { color: '#666', font: { size: 11 } } },
-            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false }, ticks: { color: '#555', font: { size: 11 }, stepSize: 5 } }
+            x: { grid: { display: false }, ticks: { color: '#555' } },
+            y: { grid: { color: '#1e1e1e' }, ticks: { color: '#555', stepSize: 5 }, beginAtZero: true }
           }
         }
       });
     }
 
     var visData = FeedbackAPI.getAdminChartVisibility();
-    var visibilityCanvas = document.getElementById('visibilityChart');
-    if (visibilityCanvas) {
-      new Chart(visibilityCanvas, {
+    var visCanvas = document.getElementById('visibilityChart');
+    if (visCanvas) {
+      new Chart(visCanvas.getContext('2d'), {
         type: 'doughnut',
         data: {
           labels: visData.labels,
@@ -283,7 +279,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Event Bindings (same as original admin.js)
+     Event Bindings
      ═══════════════════════════════════════════════════════ */
 
   function bindEvents() {
@@ -348,8 +344,8 @@
         rows.forEach(function (row) {
           if (filter === 'all') { row.style.display = ''; return; }
           var sc = row.dataset.statusClass;
-          if (filter === 'open') row.style.display = (sc === 'flagged') ? '' : 'none';
-          if (filter === 'review') row.style.display = (sc === 'pending') ? '' : 'none';
+          if (filter === 'open')     row.style.display = (sc === 'flagged')  ? '' : 'none';
+          if (filter === 'review')   row.style.display = (sc === 'pending')  ? '' : 'none';
           if (filter === 'resolved') row.style.display = (sc === 'resolved') ? '' : 'none';
         });
       });
@@ -362,80 +358,57 @@
         var preview = btn.closest('.feedback-preview');
         if (preview.classList.contains('expanded')) {
           preview.classList.remove('expanded');
-          btn.textContent = 'Mehr anzeigen \u2193';
+          btn.textContent = I18n.t('admin.expand_more');
         } else {
           preview.classList.add('expanded');
-          btn.textContent = 'Weniger anzeigen \u2191';
+          btn.textContent = I18n.t('admin.expand_less');
         }
       });
     });
-
-    /* Add User Modal */
-    var modal = document.getElementById('addUserModal');
-    var closeModalBtn = document.getElementById('closeModalBtn');
-    var cancelModalBtn = document.getElementById('cancelModalBtn');
-    if (closeModalBtn) closeModalBtn.addEventListener('click', function () { modal.classList.remove('show'); });
-    if (cancelModalBtn) cancelModalBtn.addEventListener('click', function () { modal.classList.remove('show'); });
-    if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) modal.classList.remove('show'); });
-
-    /* Toggle Switches */
-    var toggles = document.querySelectorAll('.toggle-switch input');
-    toggles.forEach(function (toggle) {
-      toggle.addEventListener('change', function () {
-        var label = toggle.closest('.notif-card').querySelector('.text-white');
-        var action = toggle.checked ? 'aktiviert' : 'deaktiviert';
-        Render.showToast(label.textContent + ' ' + action);
-      });
-    });
-
-    /* AD Sync */
-    var syncBtn = document.getElementById('syncAdBtn');
-    if (syncBtn) {
-      syncBtn.addEventListener('click', function () {
-        syncBtn.disabled = true;
-        syncBtn.textContent = '\u23F3 Synchronisiere\u2026';
-        setTimeout(function () {
-          syncBtn.disabled = false;
-          syncBtn.textContent = '\uD83D\uDD04 Sync starten';
-          Render.showToast('AD-Synchronisierung abgeschlossen');
-        }, 2000);
-      });
-    }
 
     /* Report Detail Modal */
     var reportDetailModal = document.getElementById('reportDetailModal');
     var closeReportModalBtn = document.getElementById('closeReportModalBtn');
 
     function openReportModal(row) {
-      var d = row.dataset;
-      document.getElementById('reportModalId').textContent = d.id;
-      document.getElementById('reportModalVon').textContent = d.von;
-      document.getElementById('reportModalVonInline').textContent = d.von;
-      document.getElementById('reportModalAn').textContent = d.an;
-      document.getElementById('reportModalVonAvatar').textContent = d.vonInitials;
-      document.getElementById('reportModalAnAvatar').textContent = d.anInitials;
-      document.getElementById('reportModalDatum').textContent = d.datum;
-      document.getElementById('reportModalTyp').textContent = d.typ;
-      document.getElementById('reportModalRating').textContent = '★ ' + d.rating;
-      document.getElementById('reportModalReason').textContent = d.reason;
-      document.getElementById('reportModalStrengths').textContent = d.strengths;
-      document.getElementById('reportModalImprovements').textContent = d.improvements;
+      document.getElementById('reportModalId').textContent = row.dataset.id;
 
-      var statusEl = document.getElementById('reportModalStatus');
-      var statusColors = { flagged: '#E52620', pending: '#FF6B00', resolved: '#22c55e' };
-      var statusLabels = { flagged: 'Gemeldet', pending: 'In Prüfung', resolved: 'Erledigt' };
-      var sc = d.statusClass;
-      statusEl.innerHTML = '<span class="status-dot ' + sc + '"></span><span style="color:' + (statusColors[sc] || '#999') + ';font-size:13px;">' + (statusLabels[sc] || d.statusLabel) + '</span>';
+      var vonAvatar = document.getElementById('reportModalVonAvatar');
+      var vonInitials = row.dataset.vonInitials;
+      if (vonInitials === '?') {
+        vonAvatar.style.background = '#333';
+        vonAvatar.style.color = '#666';
+      }
+      vonAvatar.textContent = vonInitials;
+      document.getElementById('reportModalVon').textContent = row.dataset.von === I18n.t('common.anonymous')
+        ? I18n.t('common.anonymous')
+        : row.dataset.von;
+
+      var anAvatar = document.getElementById('reportModalAnAvatar');
+      anAvatar.textContent = row.dataset.anInitials;
+      document.getElementById('reportModalAn').textContent = row.dataset.an;
+      document.getElementById('reportModalDatum').textContent = row.dataset.datum;
+
+      var typEl = document.getElementById('reportModalTyp');
+      if (row.dataset.typ === I18n.t('common.anonymous')) {
+        typEl.innerHTML = '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' + I18n.t('common.anonymous') + '</span>';
+      } else {
+        typEl.innerHTML = '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
+      }
+
+      document.getElementById('reportModalReason').textContent = row.dataset.reason;
+      document.getElementById('reportModalStrengths').textContent = row.dataset.strengths;
+      document.getElementById('reportModalImprovements').textContent = row.dataset.improvements;
 
       var driversEl = document.getElementById('reportModalDrivers');
       driversEl.innerHTML = '';
-      if (d.drivers) {
-        d.drivers.split('|').forEach(function (part) {
-          var p = document.createElement('div');
-          p.style.cssText = 'display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #222;';
-          var parts = part.trim().split(':');
+      if (row.dataset.drivers) {
+        row.dataset.drivers.split('|').forEach(function (entry) {
+          var parts = entry.split(':');
           var name = parts[0] ? parts[0].trim() : '';
           var val = parts[1] ? parts[1].trim() : '';
+          var p = document.createElement('div');
+          p.style.cssText = 'display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #2e2e2e;font-size:13px;font-family:\'DM Sans\',sans-serif;';
           p.innerHTML = '<span style="color:#666;">' + name + '</span><span style="color:#FF6B00;">' + val + '</span>';
           driversEl.appendChild(p);
         });
@@ -463,15 +436,15 @@
     var reportActionDismiss = document.getElementById('reportActionDismiss');
 
     if (reportActionReview) reportActionReview.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' - Status auf «In Prüfung» gesetzt');
+      Render.showToast(document.getElementById('reportModalId').textContent + ' - ' + I18n.t('admin.toast_review'));
       closeReportModal();
     });
     if (reportActionResolve) reportActionResolve.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' - Meldung erledigt');
+      Render.showToast(document.getElementById('reportModalId').textContent + ' - ' + I18n.t('admin.toast_resolved'));
       closeReportModal();
     });
     if (reportActionDismiss) reportActionDismiss.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' - Meldung abgelehnt');
+      Render.showToast(document.getElementById('reportModalId').textContent + ' - ' + I18n.t('admin.toast_dismissed'));
       closeReportModal();
     });
 
@@ -484,7 +457,7 @@
     if (cancelDeactivateBtn) cancelDeactivateBtn.addEventListener('click', function () { deactivateModal.classList.remove('show'); });
     if (deactivateModal) deactivateModal.addEventListener('click', function (e) { if (e.target === deactivateModal) deactivateModal.classList.remove('show'); });
 
-    var deactivateBtns = document.querySelectorAll('.btn-admin.danger[title="Deaktivieren"]');
+    var deactivateBtns = document.querySelectorAll('.btn-admin.danger[title="' + I18n.t('admin.btn_deactivate') + '"]');
     deactivateBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         var row = btn.closest('tr');
@@ -510,7 +483,7 @@
     if (confirmDeactivateBtn) {
       confirmDeactivateBtn.addEventListener('click', function () {
         if (currentDeactivateRow) {
-          Render.showToast(document.getElementById('deactivateName').textContent + ' wurde deaktiviert');
+          Render.showToast(document.getElementById('deactivateName').textContent + ' ' + I18n.t('admin.toast_deactivated'));
         }
         deactivateModal.classList.remove('show');
         currentDeactivateRow = null;

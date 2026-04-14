@@ -273,6 +273,9 @@ var MockData = (function () {
     { number: '14',                  label: 'Bearbeitet',        trend: '16% aller Feedbacks', trendType: 'neutral' }
   ];
 
+  //TODO both labels (Öffentlich / Anonym) need to switch language
+  //Look for some ideas to solve this
+
   var adminChartActivity = {
     labels: ['Okt', 'Nov', 'Dez', 'Jan', 'Feb', 'Mär'],
     datasets: [

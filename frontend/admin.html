@@ -54,12 +54,12 @@
     <div class="h-12"></div>
     <div class="flex items-end justify-between">
       <div>
-        <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight">
+        <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight" data-i18n="admin.page_title">
           Admin
         </h1>
-        <p class="text-sm mt-2" style="color:#777;">Verwaltung, Moderation und Benachrichtigungen</p>
+        <p class="text-sm mt-2" style="color:#777;" data-i18n="admin.subtitle">Verwaltung, Moderation und Benachrichtigungen</p>
       </div>
-      <span class="role-badge admin mb-1">Administrator</span>
+      <span class="role-badge admin mb-1" data-i18n="admin.role_badge_full">Administrator</span>
     </div>
   </div>
 
@@ -71,15 +71,15 @@
     <div class="admin-tabs">
       <button class="admin-tab active" id="tabBtn-dash" type="button">
         <img src="img/dashboard.svg" class="tab-icon" alt="icon">
-        Dashboard
+        <span data-i18n="admin.tab_dashboard">Dashboard</span>
       </button>
       <button class="admin-tab" id="tabBtn-moderation" type="button">
         <img src="img/moderation-icon.svg" class="tab-icon" alt="icon">
-        Feedbackmoderation
+        <span data-i18n="admin.tab_moderation">Feedbackmoderation</span>
       </button>
       <button class="admin-tab" id="tabBtn-users" type="button">
         <img src="img/user-management-icon.svg" class="tab-icon" alt="icon">
-        Benutzerverwaltung
+        <span data-i18n="admin.tab_users">Benutzerverwaltung</span>
       </button>
     </div>
   </div>
@@ -96,13 +96,13 @@
     <!-- Charts Row -->
     <div class="grid gap-4 mb-4" style="grid-template-columns: 2fr 1fr;">
       <div class="admin-card">
-        <div class="admin-card-title">Feedback-Aktivität</div>
+        <div class="admin-card-title" data-i18n="admin.chart_activity_title">Feedback-Aktivität</div>
         <div class="dash-chart-wrapper">
           <canvas id="activityChart"></canvas>
         </div>
       </div>
       <div class="admin-card">
-        <div class="admin-card-title">Sichtbarkeit</div>
+        <div class="admin-card-title" data-i18n="admin.chart_visibility_title">Sichtbarkeit</div>
         <div class="dash-chart-wrapper" style="display:flex;align-items:center;justify-content:center;">
           <canvas id="visibilityChart" style="max-width:180px;max-height:180px;"></canvas>
         </div>
@@ -113,26 +113,25 @@
     <!-- Driver Averages + Departments -->
     <div class="grid gap-4 mb-4" style="grid-template-columns: 1fr 1fr;">
       <div class="admin-card">
-        <div class="admin-card-title">&Oslash; Bewertung pro Driver</div>
+        <div class="admin-card-title" data-i18n="admin.driver_avg_title">&Oslash; Bewertung pro Driver</div>
         <div class="dash-driver-list" id="admin-driver-averages"></div>
-        <p class="dash-driver-note">&#9888; Durchschnitte sind Richtwerte — keine abschliessende Beurteilung.</p>
+        <p class="dash-driver-note" data-i18n="admin.driver_note">&#9888; Durchschnitte sind Richtwerte — keine abschliessende Beurteilung.</p>
       </div>
       <div class="admin-card">
-        <div class="admin-card-title">Feedbacks pro Abteilung</div>
+        <div class="admin-card-title" data-i18n="admin.dept_feedback_title">Feedbacks pro Abteilung</div>
         <div class="dash-dept-list" id="admin-departments"></div>
       </div>
     </div>
 
     <!-- System Status -->
     <div class="admin-card">
-      <div class="admin-card-title">System Status</div>
+      <div class="admin-card-title" data-i18n="admin.system_status_title">System Status</div>
       <div class="grid gap-4" style="grid-template-columns: repeat(3, 1fr);" id="admin-system-status"></div>
     </div>
 
     <!-- Privacy Notice -->
     <div class="dash-privacy-notice">
-      <span>&#128274;</span>
-      <span>Dieses Dashboard zeigt ausschliesslich aggregierte Daten. Individülle Feedbacks werden aus Datenschutzgründen nicht angezeigt (DSG / DSGVO).</span>
+      <span data-i18n="admin.privacy_notice">Dieses Dashboard zeigt ausschliesslich aggregierte Daten. Individuelle Feedbacks werden aus Datenschutzgründen nicht angezeigt (DSG / DSGVO).</span>
     </div>
 
   </div>
@@ -151,27 +150,32 @@
       <div class="flex items-center gap-3 mb-4">
         <div class="search-wrapper flex-1">
           <span class="search-icon">&#128269;</span>
-          <input type="text" class="admin-search" id="moderationSearch" placeholder="Feedback-ID, Benutzer oder Schlagwort suchen...">
+          <input type="text" class="admin-search" id="moderationSearch" data-i18n-placeholder="admin.mod_search_placeholder" placeholder="Feedback-ID, Benutzer oder Schlagwort suchen...">
         </div>
       </div>
       <div class="flex gap-2 flex-wrap">
         <span class="tag-pill">
           <input type="radio" name="modFilter" id="modAll" value="all" checked>
-          <label for="modAll">Alle</label>
+          <label for="modAll" data-i18n="admin.filter_all">Alle</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="modFilter" id="modOpen" value="open">
-          <label for="modOpen">Offene Meldung</label>
+          <label for="modOpen" data-i18n="admin.filter_open">Offene Meldung</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="modFilter" id="modReview" value="review">
-          <label for="modReview">In Prüfung</label>
+          <label for="modReview" data-i18n="admin.filter_review">In Prüfung</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="modFilter" id="modResolved" value="resolved">
-          <label for="modResolved">Erledigt</label>
+          <label for="modResolved" data-i18n="admin.filter_resolved">Erledigt</label>
         </span>
       </div>
+    </div>
+
+    <!-- Privacy Hint -->
+    <div class="admin-card" style="padding:12px 20px;">
+      <span style="font-size:12px;color:#555;" data-i18n="admin.privacy_hint">Individülle Feedbacks werden aus Datenschutzgründen nicht angezeigt (DSG / DSGVO).</span>
     </div>
 
     <!-- Moderation Table -->
@@ -179,13 +183,13 @@
       <table class="admin-table">
         <thead>
         <tr>
-          <th>ID</th>
-          <th>Von</th>
-          <th>An</th>
-          <th>Datum</th>
-          <th>Typ</th>
-          <th class="hide-mobile">Bewertung</th>
-          <th style="text-align:right;">Status</th>
+          <th data-i18n="admin.col_id">ID</th>
+          <th data-i18n="admin.col_from">Von</th>
+          <th data-i18n="admin.col_to">An</th>
+          <th data-i18n="admin.col_date">Datum</th>
+          <th data-i18n="admin.col_type">Typ</th>
+          <th class="hide-mobile" data-i18n="admin.col_rating">Bewertung</th>
+          <th style="text-align:right;" data-i18n="admin.col_status">Status</th>
         </tr>
         </thead>
         <tbody id="feedbackTableBody1"></tbody>
@@ -205,29 +209,29 @@
       <div class="flex items-center gap-3 mb-5">
         <div class="search-wrapper flex-1">
           <span class="search-icon">&#128269;</span>
-          <input type="text" class="admin-search" id="userSearch" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)...">
+          <input type="text" class="admin-search" id="userSearch" data-i18n-placeholder="admin.user_search_placeholder" placeholder="Benutzer suchen (Name, E-Mail, Abteilung)...">
         </div>
       </div>
       <div class="flex gap-2 flex-wrap">
         <span class="tag-pill">
           <input type="radio" name="userFilter" id="filterAll" value="all" checked>
-          <label for="filterAll">Alle</label>
+          <label for="filterAll" data-i18n="admin.filter_all">Alle</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="userFilter" id="filterAdmin" value="admin">
-          <label for="filterAdmin">Admins</label>
+          <label for="filterAdmin" data-i18n="admin.filter_admins">Admins</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="userFilter" id="filterManager" value="manager">
-          <label for="filterManager">Manager</label>
+          <label for="filterManager" data-i18n="admin.filter_managers">Manager</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="userFilter" id="filterUser" value="user">
-          <label for="filterUser">Benutzer</label>
+          <label for="filterUser" data-i18n="admin.filter_users">Benutzer</label>
         </span>
         <span class="tag-pill">
           <input type="radio" name="userFilter" id="filterInactive" value="inactive">
-          <label for="filterInactive">Inaktiv</label>
+          <label for="filterInactive" data-i18n="admin.filter_inactive">Inaktiv</label>
         </span>
       </div>
     </div>
@@ -237,11 +241,11 @@
       <table class="admin-table">
         <thead>
         <tr>
-          <th>Benutzer</th>
-          <th>Abteilung</th>
-          <th>Rolle</th>
-          <th class="hide-mobile">Feedback (Erhalten/Bekommen)</th>
-          <th style="text-align:right;">Aktionen</th>
+          <th data-i18n="admin.col_user">Benutzer</th>
+          <th data-i18n="admin.col_dept">Abteilung</th>
+          <th data-i18n="admin.col_role">Rolle</th>
+          <th class="hide-mobile" data-i18n="admin.col_feedback_col">Feedback (Erhalten/Bekommen)</th>
+          <th style="text-align:right;" data-i18n="admin.col_actions">Aktionen</th>
         </tr>
         </thead>
         <tbody id="userTableBody"></tbody>
@@ -251,7 +255,7 @@
     <!-- Deactivate User Modal -->
     <div class="modal-overlay" id="deactivateModal">
       <div class="modal-box">
-        <h2 class="modal-title">Benutzer deaktivieren</h2>
+        <h2 class="modal-title" data-i18n="admin.deactivate_title">Benutzer deaktivieren</h2>
         <div class="flex items-center gap-3 mb-5">
           <div class="avatar deactivate-avatar" id="deactivateAvatar"></div>
           <div>
@@ -260,25 +264,44 @@
           </div>
         </div>
         <div class="deactivate-info-box mb-4">
-          <div class="admin-card-title">übersicht</div>
-          <div class="deactivate-info-row"><span>Rolle</span><span class="text-white" id="deactivateRole"></span></div>
-          <div class="deactivate-info-row"><span>Abteilung</span><span class="text-white" id="deactivateDept"></span></div>
-          <div class="deactivate-info-row"><span>Feedbacks gesendet / erhalten</span><span class="text-white" id="deactivateFeedbacks"></span></div>
+          <div class="admin-card-title" data-i18n="admin.deactivate_overview">Übersicht</div>
+          <div class="deactivate-info-row">
+            <span data-i18n="admin.deactivate_role_label">Rolle</span>
+            <span class="text-white" id="deactivateRole"></span>
+          </div>
+          <div class="deactivate-info-row">
+            <span data-i18n="admin.deactivate_dept_label">Abteilung</span>
+            <span class="text-white" id="deactivateDept"></span>
+          </div>
+          <div class="deactivate-info-row">
+            <span data-i18n="admin.deactivate_feedbacks">Feedbacks gesendet / erhalten</span>
+            <span class="text-white" id="deactivateFeedbacks"></span>
+          </div>
         </div>
         <div class="deactivate-info-box mb-4">
-          <div class="admin-card-title">Was passiert bei der Deaktivierung?</div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">1. Zugriff</span><span class="deactivate-detail-value">Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen möglich.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">2. Datenaufbewahrung</span><span class="deactivate-detail-value">Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">gelöscht oder anonymisiert</span>.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">3. Legal Hold</span><span class="deactivate-detail-value">Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Löschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">4. Reaktivierung</span><span class="deactivate-detail-value"><span class="hl-green">Jederzeit möglich.</span> Der Retention-Countdown wird zurückgesetzt.</span></div>
-          <div class="deactivate-detail-item"><span class="deactivate-detail-label">5. AD-Sync</span><span class="deactivate-detail-value">Status wird beim nächsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.</span></div>
+          <div class="admin-card-title" data-i18n="admin.deactivate_what_happens">Was passiert bei der Deaktivierung?</div>
+          <div class="deactivate-detail-item">
+            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_1"></span>
+          </div>
+          <div class="deactivate-detail-item">
+            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_2"></span>
+          </div>
+          <div class="deactivate-detail-item">
+            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_3"></span>
+          </div>
+          <div class="deactivate-detail-item">
+            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_4"></span>
+          </div>
+          <div class="deactivate-detail-item">
+            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_5"></span>
+          </div>
         </div>
         <div class="deactivate-warning mb-5">
-          <p>&#9888;&#65039; Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zürst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.</p>
+          <p>&#9888;&#65039; Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zuerst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.</p>
         </div>
         <div class="flex gap-3 justify-end">
-          <button class="btn-admin" type="button" id="cancelDeactivateBtn">Abbrechen</button>
-          <button class="btn-admin danger" type="button" id="confirmDeactivateBtn">&#128683; Deaktivieren</button>
+          <button class="btn-admin" type="button" id="cancelDeactivateBtn" data-i18n="common.cancel">Abbrechen</button>
+          <button class="btn-admin danger" type="button" id="confirmDeactivateBtn" data-i18n="admin.deactivate_confirm_btn">&#128683; Deaktivieren</button>
         </div>
       </div>
     </div>
@@ -295,64 +318,63 @@
   <div class="modal-box" style="max-width:560px;max-height:90vh;overflow-y:auto;">
     <div class="flex items-center justify-between mb-5">
       <div>
-        <h2 class="modal-title" style="margin-bottom:4px;">Meldung prüfen</h2>
+        <h2 class="modal-title" style="margin-bottom:4px;" data-i18n="admin.report_modal_title">Meldung prüfen</h2>
         <span style="font-size:12px;color:#666;font-family:'Bodoni MT',sans-serif;" id="reportModalId"></span>
       </div>
-      <button id="closeReportModalBtn" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;" title="Schliessen">&#10005;</button>
+      <button id="closeReportModalBtn" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;" data-i18n-title="common.close" title="Schliessen">&#10005;</button>
     </div>
     <div class="deactivate-info-box mb-4" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Von</div>
+        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_from">Von</div>
         <div class="flex items-center gap-2">
           <div class="avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;" id="reportModalVonAvatar"></div>
           <span class="text-white text-sm" id="reportModalVon"></span>
         </div>
       </div>
       <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">An (Empfänger)</div>
+        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_to">An (Empfänger)</div>
         <div class="flex items-center gap-2">
           <div class="avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;" id="reportModalAnAvatar"></div>
           <span class="text-white text-sm" id="reportModalAn"></span>
         </div>
       </div>
+      <div>
+        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;" data-i18n="admin.report_date">Datum</div>
+        <span class="text-white text-sm" id="reportModalDatum"></span>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;" data-i18n="admin.report_type">Typ</div>
+        <span id="reportModalTyp"></span>
+      </div>
     </div>
     <div class="deactivate-info-box mb-4">
-      <div class="deactivate-info-row"><span>Datum</span><span class="text-white" id="reportModalDatum"></span></div>
-      <div class="deactivate-info-row"><span>Typ</span><span class="text-white" id="reportModalTyp"></span></div>
-      <div class="deactivate-info-row"><span>&Oslash; Bewertung</span><span style="color:#FF6B00;" id="reportModalRating"></span></div>
-      <div class="deactivate-info-row" style="border:none;padding-bottom:0;"><span>Status</span><span id="reportModalStatus"></span></div>
+      <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_reason">Meldegrund</div>
+      <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalReason"></p>
     </div>
-    <div class="mb-4">
-      <p style="font-family:'Bodoni MT',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#E52620;margin-bottom:10px;">&#9888; Meldungsgrund</p>
-      <div style="background:#1a1a1a;border:1px solid rgba(229,38,32,0.2);border-radius:10px;padding:16px;">
-        <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalReason"></p>
-      </div>
+    <div class="deactivate-info-box mb-4">
+      <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;" data-i18n="admin.report_drivers">Driver-Bewertungen</div>
+      <div id="reportModalDrivers"></div>
     </div>
-    <div class="mb-4">
-      <p style="font-family:'Bodoni MT',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#999;margin-bottom:10px;">Gemeldetes Feedback (erhalten von<span id="reportModalVonInline"></span>)</p>
-      <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;margin-bottom:12px;">
-        <p style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Bewertungen</p>
-        <div id="reportModalDrivers" style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#888;font-family:'DM Sans',sans-serif;"></div>
-      </div>
-      <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;">
         <div class="flex items-center gap-2 mb-2">
           <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
-          <span style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;">Strengths</span>
+          <span style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;" data-i18n="admin.report_strengths">Stärken</span>
         </div>
         <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalStrengths"></p>
       </div>
       <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;">
         <div class="flex items-center gap-2 mb-2">
           <span style="width:7px;height:7px;border-radius:50%;background:#FF6B00;display:inline-block;"></span>
-          <span style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;">Areas to Improve</span>
+          <span style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;" data-i18n="admin.report_improvements">Verbesserungsbereiche</span>
         </div>
         <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalImprovements"></p>
       </div>
     </div>
     <div class="flex gap-2 pt-2" style="border-top:1px solid #2e2e2e;padding-top:16px;">
-      <button id="reportActionReview" class="btn-admin" type="button" style="color:#FF6B00;border-color:rgba(255,107,0,0.3);flex:1;">&#128269; In Prüfung setzen</button>
-      <button id="reportActionResolve" class="btn-admin" type="button" style="color:#22c55e;border-color:rgba(34,197,94,0.3);flex:1;">&#9989; Erledigen</button>
-      <button id="reportActionDismiss" class="btn-admin" type="button" style="color:#666;flex:1;">&#10005; Ablehnen</button>
+      <button id="reportActionReview" class="btn-admin" type="button" style="color:#FF6B00;border-color:rgba(255,107,0,0.3);flex:1;" data-i18n="admin.report_action_review">&#128269; In Prüfung setzen</button>
+      <button id="reportActionResolve" class="btn-admin" type="button" style="color:#22c55e;border-color:rgba(34,197,94,0.3);flex:1;" data-i18n="admin.report_action_resolve">&#9989; Erledigen</button>
+      <button id="reportActionDismiss" class="btn-admin" type="button" style="color:#666;flex:1;" data-i18n="admin.report_action_dismiss">&#10005; Ablehnen</button>
     </div>
   </div>
 </div>
