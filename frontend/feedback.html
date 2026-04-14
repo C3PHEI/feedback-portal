@@ -96,15 +96,15 @@
           Du hast ausgewaehlt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten. Konzentriere dein Feedback auf Impact, Reliability, Collaboration und Learning, anstatt auf Einzelpersonen, Daten oder Orte zu verweisen.
         </p>
         <label class="anon-checkbox-label mt-3">
-          <input type="checkbox" id="anonUnderstood">
-          <span>Ich habe gelesen und verstanden</span>
+          <input type="checkbox" id="anonUnderstood" data-i18n="feedback.anon_confirm">
+          <span data-i18n="feedback.anon_confirm">Ich habe gelesen und verstanden</span>
         </label>
       </div>
 
       <!-- Rate Limit Hinweis -->
       <div id="anonRateLimit" class="rate-limit-notice" style="display:none;">
         <span style="color: var(--color-orange);">&#8505;</span>
-        <span>Anonymes Feedback kann von einer Person pro Jahr genau 1x an dieselbe Person gesendet werden.</span>
+        <span data-i18n="feedback.rate_limit_text">Anonymes Feedback kann von einer Person pro Jahr genau 1x an dieselbe Person gesendet werden.</span>
       </div>
     </div>
 
@@ -113,30 +113,30 @@
 
       <!-- Drivers & Stars -->
       <div class="fade-up delay-3 mb-6">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-2">Bewertung</p>
-        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-2" data-i18n="feedback.section_rating">Bewertung</p>
+        <p class="text-sm mb-4" style="color: var(--color-text-faint);" data-i18n="feedback.validation_drivers">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
 
         <div class="flex flex-col gap-3" id="drivers-container"></div>
 
         <!-- Validierungshinweis Drivers -->
         <div id="driverValidation" class="validation-msg">
-          <span>&#9888; Mindestens 2 Drivers müssen bewertet werden.</span>
+          <span data-i18n="feedback.validation_drivers">&#9888; Mindestens 2 Drivers müssen bewertet werden.</span>
         </div>
       </div>
 
       <!-- Actionable Feedback -->
       <div class="fade-up delay-4 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
         <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-5">Actionable Feedback</p>
-        <p class="text-sm mb-4" style="color: var(--color-text-faint);">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
+        <p class="text-sm mb-4" style="color: var(--color-text-faint);" data-i18n="feedback.text_intro">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
 
         <div class="mb-5">
           <div class="flex items-center gap-2 mb-2">
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-success); display:inline-block;"></span>
-            <label class="text-white text-sm font-medium" for="strengths">Strengths</label>
+            <label class="text-white text-sm font-medium" for="strengths" data-i18n="feedback.strengths_label">Strengths</label>
           </div>
           <textarea class="fancy-input" id="strengths" rows="4" placeholder="Beschreibe konkrete Stärken und positives Verhalten..."></textarea>
           <div class="char-counter" id="strengths-counter">
-            <span id="strengths-count">0</span> / 200 Zeichen min.
+            <span id="strengths-count">0</span><span data-i18n="feedback.char_min"> / 200 Zeichen min.</span>
           </div>
         </div>
 
@@ -145,31 +145,35 @@
         <div class="mb-2">
           <div class="flex items-center gap-2 mb-2">
             <span style="width:8px; height:8px; border-radius:50%; background: var(--color-orange); display:inline-block;"></span>
-            <label class="text-white text-sm font-medium" for="improvements">Areas to improve</label>
+            <label class="text-white text-sm font-medium" for="improvements" data-i18n="feedback.improvements_label">Areas to improve</label>
           </div>
           <textarea class="fancy-input" id="improvements" rows="4" placeholder="Beschreibe Bereiche mit Verbesserungspotenzial und mögliche Massnahmen..."></textarea>
           <div class="char-counter" id="improvements-counter">
-            <span id="improvements-count">0</span> / 200 Zeichen min.
+            <span id="improvements-count">0</span><span data-i18n="feedback.char_min"> / 200 Zeichen min.</span>
           </div>
         </div>
 
         <div id="textValidation" class="validation-msg">
-          <span>&#9888; Mindestens ein Feld muss mit 200+ Zeichen ausgefüllt werden.</span>
+          <span data-i18n="feedback.validation_text">&#9888; Mindestens ein Feld muss mit 200+ Zeichen ausgefüllt werden.</span>
         </div>
       </div>
 
       <!-- Code of Conduct -->
       <div class="fade-up delay-5 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4">Code of Conduct</p>
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_coc">Code of Conduct</p>
 
         <div class="text-sm leading-relaxed mb-4" style="color: var(--color-text-dim);">
-          <p class="mb-2">By submitting this feedback you confirm adherence to the following:</p>
+          <p class="mb-2" data-i18n="feedback.coc_intro">Mit dem Absenden bestätigst du die Einhaltung des folgenden Verhaltenskodex:</p>
           <ul class="coc-list" id="coc-list"></ul>
         </div>
 
         <label class="anon-checkbox-label">
           <input type="checkbox" id="cocAccepted" required>
-          <span>Ich akzeptiere den <a href="#" style="color: var(--color-orange); text-decoration:underline;">Code of Conduct</a></span>
+          <span>
+          <span data-i18n="feedback.coc_accept">Ich akzeptiere den</span>
+            <a href="#" style="color: var(--color-orange); text-decoration:underline;"
+              data-i18n="feedback.coc_link">Code of Conduct</a>
+         </span>
         </label>
       </div>
 
@@ -178,7 +182,7 @@
         <button type="submit" class="btn-submit w-full" id="submitBtn" disabled>
           Feedback absenden &rarr;
         </button>
-        <p class="text-xs text-center" style="color: var(--color-text-ghost);">
+        <p class="text-xs text-center" style="color: var(--color-text-ghost);" data-i18n="feedback.submit_hint">
           Einmal abgesendet, ist das Feedback endgültig. Du hast 5 Minuten um Tippfehler zu korrigieren.
         </p>
       </div>
