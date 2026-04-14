@@ -40,10 +40,6 @@ var FeedbackAPI = (function () {
     return MockData.driverDefinitions;
   }
 
-  function getCocItems() {
-    return MockData.cocItems;
-  }
-
   /* ─── Admin ─── */
 
   function getAdminStats() {
@@ -94,7 +90,6 @@ var FeedbackAPI = (function () {
     getInboxFeedbacks:       getInboxFeedbacks,
     getHistoryFeedbacks:     getHistoryFeedbacks,
     getDriverDefinitions:    getDriverDefinitions,
-    getCocItems:             getCocItems,
     getAdminStats:           getAdminStats,
     getAdminKpis:            getAdminKpis,
     getAdminChartActivity:   getAdminChartActivity,

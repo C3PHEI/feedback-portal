@@ -40,6 +40,8 @@
 
 <body class="min-h-screen pt-24 pb-12 px-4" style="background: var(--color-base);">
 
+<!-- TODO : Ratings in i18n übersetzten -->
+
 <!-- Navbar -->
 <div id="navbar-container"></div>
 
@@ -126,7 +128,7 @@
 
       <!-- Actionable Feedback -->
       <div class="fade-up delay-4 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-5">Actionable Feedback</p>
+        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-5" data-i18n="feedback.section_text">Freitext</p>
         <p class="text-sm mb-4" style="color: var(--color-text-faint);" data-i18n="feedback.text_intro">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
 
         <div class="mb-5">
@@ -179,7 +181,7 @@
 
       <!-- Submit -->
       <div class="fade-up delay-6 flex flex-col items-center gap-4 pt-2 pb-8">
-        <button type="submit" class="btn-submit w-full" id="submitBtn" disabled>
+        <button type="submit" class="btn-submit w-full" id="submitBtn" data-i18n="feedback.submit_btn" disabled>
           Feedback absenden &rarr;
         </button>
         <p class="text-xs text-center" style="color: var(--color-text-ghost);" data-i18n="feedback.submit_hint">

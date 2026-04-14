@@ -92,6 +92,17 @@ var I18n = (function () {
       'feedback.section_rating':          'Bewertung',
       'feedback.text_intro':              'Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).',
       'feedback.char_min':                ' / 200 Zeichen min.',
+      'feedback.coc.items': [
+                                          'Respektvolle Sprache — Feedback muss professionell, höflich und respektvoll sein. Vermeide beleidigende, diskriminierende oder provokante Sprache. Konzentriere dich auf Beobachtungen und Verhaltensweisen, nicht auf Beleidigungen oder persönliche Angriffe.',
+                                          'Keine Vergeltung — Feedback darf nie als Werkzeug für Bestrafung, Rache oder Bloßstellung eingesetzt werden. Die Plattform dient der Entwicklung und dem Wachstum, nicht der Vergeltung.',
+                                          'Anonymitätsbewusstsein — Wenn du Feedback anonym einreichst, stelle sicher, dass deine Kommentare keine identifizierbaren Details wie Namen, Projekte, Orte oder Sprachhinweise enthalten, die deine Identität preisgeben könnten. Schreibe stets mit Blick auf den Datenschutz.',
+                                          'Fokus auf Verhalten und Wirkung, nicht auf Persönlichkeit — Kommentare sollen aufzeigen, was jemand tut und welche Wirkung das hat, anstatt über Persönlichkeit, Motive oder Charaktereigenschaften zu spekulieren.',
+                                          'Ehrlichkeit und Genauigkeit — Gib wahrheitsgemässes Feedback basierend auf deinen eigenen direkten Beobachtungen. Vermeide Übertreibungen, Annahmen oder Hörensagen. Konstruktives Feedback ist nur dann wertvoll, wenn es die Realität widerspiegelt.',
+                                          'Vertraulichkeit und Datennutzung — Feedback ist ausschliesslich für den Empfänger und dessen direkten Vorgesetzten bestimmt. Teile es nicht ausserhalb der Plattform, besprich es nicht mit Kollegen und nutze es nicht für Klatsch oder die Beurteilung anderer.',
+                                          'Nur konstruktive Kritik — Wenn du Verbesserungsbereiche ansprichst, verbinde deine Beobachtungen mit konkreten Vorschlägen oder Beispielen. Vermeide vage oder rein negative Aussagen.',
+                                          'Einhaltung der Unternehmensrichtlinien — Jedes Feedback muss den HR-Richtlinien, ethischen Grundsätzen und rechtlichen Verpflichtungen des Unternehmens entsprechen. Vermeide Aussagen, die gegen diese Regeln verstossen könnten.',
+                                          'Plattform-Etikette / Kein Bewertungsmissbrauch — Fülle dein Feedback gewissenhaft aus. Verfälsche Bewertungen nicht absichtlich nach oben oder unten, lasse Felder nicht absichtlich leer und hinterlasse keine nichtssagenden Kommentare. Bewertungen sollen eine ehrliche Einschätzung widerspiegeln.',
+      ],
 
       /* ─── department.html ─────────────────────────────── */
       'dept.title':             'Abteilung',
@@ -190,7 +201,7 @@ var I18n = (function () {
       'feedback.section_drivers':           'Performance Drivers',
       'feedback.drivers_intro':             'Rate at least 2 of 4 areas. Mark areas that do not apply as N/A.',
       'feedback.validation_drivers':        'At least 2 drivers need to be reviewed',
-      'feedback.section_text':              'Free Text',
+      'feedback.section_text':              'Actionable Feedback',
       'feedback.strengths_label':           'Strengths',
       'feedback.strengths_hint':            'optional',
       'feedback.strengths_placeholder':     'Describe specific strengths and positive behaviour…',
@@ -211,6 +222,17 @@ var I18n = (function () {
       'feedback.section_rating':            'Rating',
       'feedback.text_intro':                'At least one of the two fields must be filled in (min. 200 characters).',
       'feedback.char_min':                  ' / 200 chars min.',
+      'feedback.coc.items': [
+                                            'Respectful Language Only — All feedback must be professional, courteous, and respectful. Avoid offensive, discriminatory, or inflammatory language. Focus on observations and behaviors, not insults or personal attacks.',
+                                            'No Retaliation — Feedback must never be used as a tool for punishment, revenge, or embarrassment. The platform exists for growth and development, not for retribution.',
+                                            'Anonymity Awareness — If submitting feedback anonymously, ensure your comments do not include identifiable details such as names, projects, locations, or language cues that could reveal your identity. Always write with privacy in mind.',
+                                            'Focus on Behaviors and Impact, Not Personality — Comments should highlight what someone dös and the effect it has, rather than speculating about personality, motives, or character traits.',
+                                            'Honesty and Accuracy — Provide truthful feedback based on your direct observations. Avoid exaggerations, assumptions, or hearsay. Constructive feedback is valuable only if it reflects reality.',
+                                            'Confidentiality and Data Use — Feedback is intended only for the recipient and their direct manager. Do not share it outside the platform, discuss it with colleagues, or use it as material for gossip or evaluation of others.',
+                                            'Constructive Criticism Only — When pointing out areas for improvement, pair your observations with actionable suggestions or specific examples. Avoid vague or purely negative statements.',
+                                            'Compliance with Company Policies — All feedback must comply with the company\'s HR policies, ethics, and legal obligations. Avoid references or statements that could violate these rules.',
+                                            'Platform Etiquette / Avoid Rating Abuse — Complete your feedback sincerely. Do not artificially inflate or deflate scores, leave empty ratings intentionally, or provide meaningless comments. Ratings should reflect honest evaluation.'
+      ],
 
       /* ─── department.html ─────────────────────────────── */
       'dept.title':             'Department',

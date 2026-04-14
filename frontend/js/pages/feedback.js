@@ -62,7 +62,7 @@
   function renderCoC() {
     var el = document.getElementById('coc-list');
     if (!el) return;
-    var items = FeedbackAPI.getCocItems();
+    var items = I18n.t('feedback.coc.items');
     el.innerHTML = items.map(function (item) {
       return '<li>' + item + '</li>';
     }).join('\n');

@@ -252,17 +252,6 @@ var MockData = (function () {
     }
   ];
 
-  var cocItems = [
-    'Respectful Language Only — All feedback must be professional, courteous, and respectful. Avoid offensive, discriminatory, or inflammatory language. Focus on observations and behaviors, not insults or personal attacks.',
-    'No Retaliation — Feedback must never be used as a tool for punishment, revenge, or embarrassment. The platform exists for growth and development, not for retribution.',
-    'Anonymity Awareness — If submitting feedback anonymously, ensure your comments do not include identifiable details such as names, projects, locations, or language cues that could reveal your identity. Always write with privacy in mind.',
-    'Focus on Behaviors and Impact, Not Personality — Comments should highlight what someone dös and the effect it has, rather than speculating about personality, motives, or character traits.',
-    'Honesty and Accuracy — Provide truthful feedback based on your direct observations. Avoid exaggerations, assumptions, or hearsay. Constructive feedback is valuable only if it reflects reality.',
-    'Confidentiality and Data Use — Feedback is intended only for the recipient and their direct manager. Do not share it outside the platform, discuss it with colleagues, or use it as material for gossip or evaluation of others.',
-    'Constructive Criticism Only — When pointing out areas for improvement, pair your observations with actionable suggestions or specific examples. Avoid vague or purely negative statements.',
-    'Compliance with Company Policies — All feedback must comply with the company\'s HR policies, ethics, and legal obligations. Avoid references or statements that could violate these rules.',
-    'Platform Etiquette / Avoid Rating Abuse — Complete your feedback sincerely. Do not artificially inflate or deflate scores, leave empty ratings intentionally, or provide meaningless comments. Ratings should reflect honest evaluation.'
-  ];
 
   /* ═══════════════════════════════════════════════════════
      Admin — Dashboard
@@ -517,7 +506,6 @@ var MockData = (function () {
     inboxFeedbacks:       inboxFeedbacks,
     historyFeedbacks:     historyFeedbacks,
     driverDefinitions:    driverDefinitions,
-    cocItems:             cocItems,
     adminStats:           adminStats,
     adminKpis:            adminKpis,
     adminChartActivity:   adminChartActivity,
