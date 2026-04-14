@@ -225,7 +225,7 @@
     if (feedbackForm) {
       feedbackForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        Render.showToast('Feedback erfolgreich eingereicht');
+        Render.showToast(I18n.t('feedback.toast_submitted'));
       });
     }
 

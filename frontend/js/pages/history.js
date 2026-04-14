@@ -37,9 +37,9 @@
       return '<span class="vis-badge anon">' +
         '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
         '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>' +
-        '<line x1="1" y1="1" x2="23" y2="23"/></svg> Anonym</span>';
+        '<line x1="1" y1="1" x2="23" y2="23"/></svg>' + I18n.t('history.anonymous') + '</span>';
     }
-    return '<span class="vis-badge named">Namentlich</span>';
+    return '<span class="vis-badge named">' + I18n.t('history.public') + '</span>';
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -61,10 +61,10 @@
     // Header
     var headerRight;
     if (isEditable) {
-      headerRight = '<button class="btn-edit-history" id="editBtn-' + fb.id + '" title="Feedback bearbeiten">' +
-        Render.editIconSvg(14) + ' Bearbeiten</button>';
+      headerRight = '<button class="btn-edit-history" id="editBtn-' + fb.id + '" title="' + I18n.t('history.edit_title') + '">' +
+        Render.editIconSvg(14) + ' ' + I18n.t('history.edit_btn') + '</button>';
     } else {
-      headerRight = '<span class="lock-badge">\uD83D\uDD12 Gesperrt</span>';
+      headerRight = '<span class="lock-badge">' + I18n.t('history.locked') + '</span>';
     }
 
     // Badges
@@ -77,7 +77,7 @@
       badgesHtml += '<span class="edited-badge">' +
         '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
         '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>' +
-        '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> bearbeitet</span>';
+        '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' + I18n.t('history.status_edited') + '</span>';
     }
 
     // Timer bar (only for editable)
@@ -85,7 +85,7 @@
     if (isEditable) {
       timerHtml = '<div class="edit-timer-bar mb-4" id="timer-' + fb.id + '">' +
         '<span class="edit-timer-icon">\uD83D\uDD13</span>' +
-        '<span class="edit-timer-text">Noch bearbeitbar</span>' +
+        '<span class="edit-timer-text">' + I18n.t('history.editable') + '</span>' +
         '<div class="edit-timer-progress"><div class="edit-timer-fill" id="timerFill-' + fb.id + '" style="width: 100%;"></div></div>' +
         '<span class="edit-timer-time" id="timerTime-' + fb.id + '">5:00</span>' +
         '</div>';
@@ -123,16 +123,16 @@
       }).join('');
 
       editOverlayHtml = '<div class="edit-overlay" id="editOverlay-' + fb.id + '">' +
-        '<div class="history-text-label mb-3" style="color:var(--color-text-muted);">Bewertungen bearbeiten</div>' +
+        '<div class="history-text-label mb-3" style="color:var(--color-text-muted);">' + I18n.t('history.edit_ratings') + '</div>' +
         driverEditHtml +
         '<hr class="divider my-4"/>' +
-        '<div class="mb-4"><div class="history-text-label mb-2">Stärken bearbeiten</div>' +
+        '<div class="mb-4"><div class="history-text-label mb-2">' + I18n.t('history.edit_strenghts') + '</div>' +
         '<textarea rows="4" id="editStrengths-' + fb.id + '">' + fb.strengths + '</textarea></div>' +
-        '<div class="mb-2"><div class="history-text-label mb-2">Verbesserungsvorschläge bearbeiten</div>' +
+        '<div class="mb-2"><div class="history-text-label mb-2">' + I18n.t('history.edit_improvements') + '</div>' +
         '<textarea rows="4" id="editImprovements-' + fb.id + '">' + fb.improvements + '</textarea></div>' +
         '<div class="edit-actions">' +
-        '<button class="btn-edit-cancel" id="cancelEdit-' + fb.id + '">Abbrechen</button>' +
-        '<button class="btn-edit-save" id="saveEdit-' + fb.id + '">Änderungen speichern</button>' +
+        '<button class="btn-edit-cancel" id="cancelEdit-' + fb.id + '">' + I18n.t('history.cancel') + '</button>' +
+        '<button class="btn-edit-save" id="saveEdit-' + fb.id + '">' + I18n.t('history.save_btn') + '</button>' +
         '</div></div>';
     }
 
@@ -144,9 +144,9 @@
       headerRight + '</div>' +
       timerHtml +
       renderDrivers(fb.drivers) +
-      '<div class="mb-3"><div class="history-text-label">Stärken</div>' +
+      '<div class="mb-3"><div class="history-text-label">' + I18n.t('history.strenghts') + '</div>' +
       '<div class="history-text-content" id="strengths-' + fb.id + '">' + fb.strengths + '</div></div>' +
-      '<div><div class="history-text-label">Verbesserungsvorschläge</div>' +
+      '<div><div class="history-text-label">' + I18n.t('history.improvements') + '</div>' +
       '<div class="history-text-content" id="improvements-' + fb.id + '">' + fb.improvements + '</div></div>' +
       editOverlayHtml +
       '</div>';
@@ -323,7 +323,7 @@
         if (overlay) overlay.classList.remove('active');
         if (editBtn && !editBtn.disabled) editBtn.style.display = '';
 
-        Render.showToast('änderungen gespeichert');
+        Render.showToast(I18n.t('history.toast_saved'));
       });
     });
   }
@@ -344,7 +344,7 @@
 
       // Count badge
       var countEl = document.getElementById('history-count');
-      if (countEl) countEl.textContent = feedbacks.length + ' gesendet';
+      if (countEl) countEl.textContent = feedbacks.length + ' ' + I18n.t("history.count");
 
       cardsEl.innerHTML = feedbacks.map(renderCard).join('\n');
     }

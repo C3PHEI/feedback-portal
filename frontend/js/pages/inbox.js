@@ -9,6 +9,8 @@
      Helper
      ═══════════════════════════════════════════════════════ */
 
+  //TODO Drivers noch binden in i18n
+
   function driverShortLabel(name) {
     var map = {
       'Impact / Results':        'Impact',
@@ -67,7 +69,7 @@
 
       // Drivers
       '<div class="inbox-detail-section">' +
-      '<div class="inbox-detail-section-title" data-i18n="inbox.reviews">Bewertungen</div>' +
+      '<div class="inbox-detail-section-title">' + I18n.t('inbox.reviews') + '</div>' +
       '<div>' + driversHtml + '</div>' +
       '</div>' +
 
@@ -75,7 +77,7 @@
       '<div class="inbox-detail-section">' +
       '<div class="flex items-center gap-2 mb-2">' +
       '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>' +
-      '<span class="inbox-detail-section-title" style="margin-bottom:0;" data-i18n="inbox.strengths">Strengths</span>' +
+      '<span class="inbox-detail-section-title" style="margin-bottom:0;">' + I18n.t('inbox.strengths') + '</span>' +
       '</div>' +
       '<p class="inbox-detail-text">' + (fb.strengths || '-') + '</p>' +
       '</div>' +
@@ -84,7 +86,7 @@
       '<div class="inbox-detail-section" style="margin-bottom:0;">' +
       '<div class="flex items-center gap-2 mb-2">' +
       '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-orange);display:inline-block;"></span>' +
-      '<span class="inbox-detail-section-title" style="margin-bottom:0;" data-i18n="inbox.improvements">Areas to Improve</span>' +
+      '<span class="inbox-detail-section-title" style="margin-bottom:0;">' + I18n.t('inbox.improvements') + '</span>' +
       '</div>' +
       '<p class="inbox-detail-text">' + (fb.improvements || '-') + '</p>' +
       '</div>' +
@@ -107,13 +109,13 @@
     }).join('\n');
 
     return '<div class="flex items-center justify-between mb-3">' +
-      '<p style="font-family:\'Bodoni MT\',sans-serif;font-weight:700;letter-spacing:0.1em;color:var(--color-text-muted);" class="text-sm uppercase" data-i18n="inbox.avg_title">Durchschnittliche Bewertungen</p>' +
+      '<p style="font-family:\'Bodoni MT\',sans-serif;font-weight:700;letter-spacing:0.1em;color:var(--color-text-muted);" class="text-sm uppercase">' + I18n.t('inbox.avg_title') + '</p>' +
       '<div class="grid grid-cols1 gap-1">' +
-      '<span class="text-sm" style="color:var(--color-text-muted);">' + averages.totalReviews + ' Reviews</span>' +
-      '<span class="text-sm" style="color:var(--color-text-muted);">\u2514 ' + averages.anonymousCount + ' Anonym</span>' +
+      '<span class="text-sm" style="color:var(--color-text-muted);">' + averages.totalReviews + ' ' + I18n.t('inbox.reviews') + '</span>' +
+      '<span class="text-sm" style="color:var(--color-text-muted);">\u2514 ' + averages.anonymousCount + ' ' + I18n.t('inbox.anonymous') + '</span>' +
       '</div></div>' +
       '<div class="grid grid-cols-2 gap-3 mb-3">' + driversHtml + '</div>' +
-      '<p class="averages-warning" data-i18n="inbox.warning">\u26A0 Durchschnittswerte sind ein Richtwert und kein abschliessendes Urteil.</p>';
+      '<p class="averages-warning">' + I18n.t('inbox.warning') + '</p>';
   }
 
   /* ═══════════════════════════════════════════════════════

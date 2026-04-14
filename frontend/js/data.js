@@ -4,6 +4,10 @@
  * Gleiche Struktur wie spätere Backend-API-Responses
  */
 
+//TODO set drivers not in data.js find an other way
+
+//TODO date in inboxfeed should be calculated with when it got postet and not directly from the api
+
 var MockData = (function () {
 
   /* ═══════════════════════════════════════════════════════
