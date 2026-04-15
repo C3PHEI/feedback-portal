@@ -1,6 +1,7 @@
 using Microsoft.Identity.Web;
 using Microsoft.EntityFrameworkCore;
 using feedbackhub;
+using feedbackhub.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
