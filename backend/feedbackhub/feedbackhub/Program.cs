@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
   app.MapScalarApiReference(options =>
   {
     options.Title = "Feedback Hub API";
-    options.Theme = ScalarTheme.DeepSpace;
+    options.Theme = ScalarTheme.Solarized;
   });
 }
 
