@@ -250,10 +250,10 @@ var I18n = (function () {
       'common.close':           'Schliessen',
 
       /* ─── Driver Labels ─────────────────────────────── */
-      'driver.impact':        'Impact / Results',
-      'driver.ownership':     'Ownership / Reliability',
-      'driver.collaboration': 'Collaboration / Social',
-      'driver.growth':        'Growth / Learning',
+      'driver.impact':        'Ergebnisse / Leistung',
+      'driver.ownership':     'Zuverlässigkeit / Verantwortung',
+      'driver.collaboration': 'Zusammenarbeit / Soziales',
+      'driver.growth':        'Entwicklung / Lernen',
 
       /* ─── Driver Tooltips (1–5 Sterne) ──────────────── */
       'driver.impact.1':        'Sehr geringe Wirkung — Ergebnisse werden kaum geliefert; Arbeit oft unvollständig oder unter den Erwartungen.',

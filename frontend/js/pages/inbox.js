@@ -9,8 +9,6 @@
      Helper
      ═══════════════════════════════════════════════════════ */
 
-  //TODO Drivers noch binden in i18n
-
   function driverShortLabel(key) {
     return I18n.t('driver.' + key).split(' / ')[0];
   }
@@ -54,7 +52,7 @@
       }
       return '<div style="display:flex;align-items:center;justify-content:space-between;' +
         'padding:9px 0;border-bottom:1px solid var(--color-border);">' +
-        '<span style="font-size:13px;color:var(--color-text-muted);font-family:\'DM Sans\',sans-serif;">' + d.name + '</span>' +
+        '<span style="font-size:13px;color:var(--color-text-muted);font-family:\'DM Sans\',sans-serif;">' + I18n.t('driver.' + d.name) + '</span>' +
         '<div style="display:flex;align-items:center;gap:6px;">' + val + '</div>' +
         '</div>';
     }).join('');
@@ -95,7 +93,7 @@
   function renderAverages(averages) {
     var driversHtml = averages.drivers.map(function (d) {
       return '<div class="avg-card">' +
-        '<span class="avg-label">' + d.name + '</span>' +
+        '<span class="avg-label">' + I18n.t('driver.' + d.name) + '</span>' +
         '<div class="avg-stars">' +
         '<span class="star-display">' + Render.stars(d.stars) + '</span>' +
         '<span class="avg-num">' + d.value + '</span>' +

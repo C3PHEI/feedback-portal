@@ -202,7 +202,7 @@
             '<span class="dept-driver-row-score">' + d.avg.toFixed(1) + '</span>'
             : '<span class="dept-driver-row-score na">N/A</span>';
           return '<div class="dept-driver-row">' +
-            '<span class="dept-driver-row-name">' + d.name + '</span>' +
+            '<span class="dept-driver-row-name">' + I18n.t('driver.' + d.name) + '</span>' +
             right +
             '</div>';
         }).join('');

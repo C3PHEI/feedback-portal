@@ -58,10 +58,10 @@ var MockData = (function () {
     totalReviews: 5,
     anonymousCount: 1,
     drivers: [
-      { name: 'Impact / Results',        value: 4.2, stars: 4 },
-      { name: 'Ownership / Reliability',  value: 3.8, stars: 4 },
-      { name: 'Collaboration / Social',   value: 4.6, stars: 5 },
-      { name: 'Growth / Learning',        value: 4.0, stars: 4 }
+      { name: 'impact',        value: 4.2, stars: 4 },
+      { name: 'ownership',     value: 3.8, stars: 4 },
+      { name: 'collaboration', value: 4.6, stars: 5 },
+      { name: 'growth',        value: 4.0, stars: 4 }
     ]
   };
 
@@ -74,10 +74,10 @@ var MockData = (function () {
       date: 'heute',
       unread: true,
       drivers: [
-        { name: 'Impact / Results',        rating: 5, na: false },
-        { name: 'Ownership / Reliability', rating: 4, na: false },
-        { name: 'Collaboration / Social',  rating: 5, na: false },
-        { name: 'Growth / Learning',       rating: null, na: true }
+        { name: 'impact',        rating: 5, na: false },
+        { name: 'ownership',     rating: 4, na: false },
+        { name: 'collaboration', rating: 5, na: false },
+        { name: 'growth',        rating: null, na: true }
       ],
       strengths: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Ihre Praesentationen waren klar strukturiert und ueberzeugend vorgetragen.',
       improvements: 'Könnte in grösseren Meetings etwas mehr Raum für andere Meinungen lassen. Manchmal werden Entscheidungen etwas zu schnell getroffen ohne alle Perspektiven einzuholen.'
@@ -91,10 +91,10 @@ var MockData = (function () {
       unread: true,
       link: null,
       drivers: [
-        { name: 'Impact / Results',        rating: 4, na: false },
-        { name: 'Ownership / Reliability', rating: 5, na: false },
-        { name: 'Collaboration / Social',  rating: null, na: true },
-        { name: 'Growth / Learning',       rating: 4, na: false }
+        { name: 'impact',        rating: 4, na: false },
+        { name: 'ownership',     rating: 5, na: false },
+        { name: 'collaboration', rating: null, na: true },
+        { name: 'growth',        rating: 4, na: false }
       ],
       strengths: 'Selbständiges Arbeiten hat sich stark verbessert. Zuverlässig und immer gut vorbereitet.',
       improvements: 'Könnte noch etwas mehr auf andere zugehen bei Fragen. Proaktiver Austausch würde dem Team helfen.'
@@ -108,10 +108,10 @@ var MockData = (function () {
       unread: true,
       link: null,
       drivers: [
-        { name: 'Impact / Results',        rating: null, na: true },
-        { name: 'Ownership / Reliability', rating: 4, na: false },
-        { name: 'Collaboration / Social',  rating: 5, na: false },
-        { name: 'Growth / Learning',       rating: 5, na: false }
+        { name: 'impact',        rating: null, na: true },
+        { name: 'ownership',     rating: 4, na: false },
+        { name: 'collaboration', rating: 5, na: false },
+        { name: 'growth',        rating: 5, na: false }
       ],
       strengths: 'Immer hilfsbereit und offen für neue Ansätze. Macht die Zusammenarbeit wirklich angenehm.',
       improvements: 'Mehr Fokus auf Impact-getriebene Resultate wäre wünschenswert.'
@@ -133,10 +133,10 @@ var MockData = (function () {
       locked: false,
       avatarStyle: null,
       drivers: [
-        { name: 'Impact / Results',       rating: 4, na: false },
-        { name: 'Ownership / Reliability', rating: 5, na: false },
-        { name: 'Collaboration / Social',  rating: null, na: true },
-        { name: 'Growth / Learning',       rating: 3, na: false }
+        { name: 'impact',        rating: 4, na: false },
+        { name: 'ownership',     rating: 5, na: false },
+        { name: 'collaboration', rating: null, na: true },
+        { name: 'growth',        rating: 3, na: false }
       ],
       strengths: 'Sehr gute Kommunikation im letzten Projekt. Hat immer proaktiv informiert und war gut erreichbar. Ihre Präsentationen waren klar strukturiert und ueberzeugend vorgetragen.',
       improvements: 'Könnte in grösseren Meetings etwas mehr Raum für andere Meinungen lassen. Manchmal werden Entscheidungen etwas zu schnell getroffen ohne alle Perspektiven einzuholen.'
@@ -151,10 +151,10 @@ var MockData = (function () {
       locked: true,
       avatarStyle: 'background: rgba(255, 107, 0, 0.12); color: var(--color-orange);',
       drivers: [
-        { name: 'Impact / Results',       rating: 5, na: false },
-        { name: 'Ownership / Reliability', rating: 4, na: false },
-        { name: 'Collaboration / Social',  rating: 4, na: false },
-        { name: 'Growth / Learning',       rating: null, na: true }
+        { name: 'impact',        rating: 5, na: false },
+        { name: 'ownership',     rating: 4, na: false },
+        { name: 'collaboration', rating: 4, na: false },
+        { name: 'growth',        rating: null, na: true }
       ],
       strengths: 'Zuverlässige Lieferung aller Arbeitspakete, immer pünktlich und in guter Qualität. Seine Code-Reviews sind besonders wertvoll für das Team.',
       improvements: 'Dokumentation könnte ausführlicher sein. Manchmal sind Zusammenhänge im Code nicht sofort nachvollziehbar für neue Teammitglieder.'
@@ -169,10 +169,10 @@ var MockData = (function () {
       locked: true,
       avatarStyle: 'background: rgba(255, 255, 255, 0.04); color: var(--color-text-faint);',
       drivers: [
-        { name: 'Impact / Results',       rating: 3, na: false },
-        { name: 'Ownership / Reliability', rating: 4, na: false },
-        { name: 'Collaboration / Social',  rating: null, na: true },
-        { name: 'Growth / Learning',       rating: null, na: true }
+        { name: 'impact',        rating: 3, na: false },
+        { name: 'ownership',     rating: 4, na: false },
+        { name: 'collaboration', rating: null, na: true },
+        { name: 'growth',        rating: null, na: true }
       ],
       strengths: 'Bringt immer neue Ideen ein und ist bereit, Verantwortung zu übernehmen. Ihre Arbeitsweise ist strukturiert und vorausschauend geplant.',
       improvements: 'Zeitmanagement bei parallelen Projekten könnte verbessert werden. Prioritäten sind manchmal nicht klar kommuniziert.'
@@ -187,10 +187,10 @@ var MockData = (function () {
       locked: true,
       avatarStyle: 'background: rgba(34, 197, 94, 0.12); color: var(--color-success);',
       drivers: [
-        { name: 'Impact / Results',       rating: 5, na: false },
-        { name: 'Ownership / Reliability', rating: 5, na: false },
-        { name: 'Collaboration / Social',  rating: 4, na: false },
-        { name: 'Growth / Learning',       rating: 4, na: false }
+        { name: 'impact',        rating: 5, na: false },
+        { name: 'ownership',     rating: 5, na: false },
+        { name: 'collaboration', rating: 4, na: false },
+        { name: 'growth',        rating: 4, na: false }
       ],
       strengths: 'Hervorragender Teamplayer mit einem sehr guten technischen Verständnis. Löst komplexe Probleme selbständig und bringt das Team auf ein höheres Niveau.',
       improvements: 'Könnte seine Erkenntnisse noch besser mit dem Rest des Teams teilen. Wissenstransfer wäre ein wertvolles Ziel für die kommenden Monate.'
@@ -242,10 +242,10 @@ var MockData = (function () {
   };
 
   var adminDriverAverages = [
-    { name: 'Impact / Results',       value: 3.8, pct: 76 },
-    { name: 'Ownership / Reliability', value: 4.2, pct: 84 },
-    { name: 'Collaboration / Social',  value: 3.5, pct: 70 },
-    { name: 'Growth / Learning',       value: 3.2, pct: 64 }
+    { name: 'impact',        value: 3.8, pct: 76 },
+    { name: 'ownership',     value: 4.2, pct: 84 },
+    { name: 'collaboration', value: 3.5, pct: 70 },
+    { name: 'growth',        value: 3.2, pct: 64 }
   ];
 
   var adminDepartments = [
@@ -348,10 +348,10 @@ var MockData = (function () {
           fromInitials: 'AK',
           date: '08.04.2026',
           drivers: [
-            { name: 'Impact / Results',        rating: 4, na: false },
-            { name: 'Ownership / Reliability', rating: 5, na: false },
-            { name: 'Collaboration / Social',  rating: 3, na: false },
-            { name: 'Growth / Learning',       rating: null, na: true }
+            { name: 'impact',        rating: 4, na: false },
+            { name: 'ownership',     rating: 5, na: false },
+            { name: 'collaboration', rating: 3, na: false },
+            { name: 'growth',        rating: null, na: true }
           ],
           strengths: 'Markus liefert konstant gute Ergebnisse und übernimmt zuverlässig Verantwortung für seine Aufgaben. Seine technische Kompetenz ist beeindruckend und er findet oft effiziente Lösungen.',
           improvements: 'Könnte in Team-Meetings aktiver kommunizieren und seine Ideen früher einbringen. Manchmal arbeitet er zu isoliert, statt früh Feedback von Kollegen einzuholen.'
@@ -363,10 +363,10 @@ var MockData = (function () {
           fromInitials: null,
           date: '21.03.2026',
           drivers: [
-            { name: 'Impact / Results',        rating: 3, na: false },
-            { name: 'Ownership / Reliability', rating: 4, na: false },
-            { name: 'Collaboration / Social',  rating: null, na: true },
-            { name: 'Growth / Learning',       rating: 4, na: false }
+            { name: 'impact',        rating: 3, na: false },
+            { name: 'ownership',     rating: 4, na: false },
+            { name: 'collaboration', rating: null, na: true },
+            { name: 'growth',        rating: 4, na: false }
           ],
           strengths: 'Zeigt eine hohe Lernbereitschaft und entwickelt sich kontinuierlich weiter. Nimmt Feedback gut an und setzt es konsequent um.',
           improvements: 'Die Arbeitsgeschwindigkeit könnte bei komplexeren Aufgaben noch etwas gesteigert werden. Priorisierung zwischen mehreren Projekten fällt manchmal schwer.'
@@ -378,10 +378,10 @@ var MockData = (function () {
           fromInitials: 'TR',
           date: '05.03.2026',
           drivers: [
-            { name: 'Impact / Results',        rating: 5, na: false },
-            { name: 'Ownership / Reliability', rating: 4, na: false },
-            { name: 'Collaboration / Social',  rating: 4, na: false },
-            { name: 'Growth / Learning',       rating: 3, na: false }
+            { name: 'impact',        rating: 5, na: false },
+            { name: 'ownership',     rating: 4, na: false },
+            { name: 'collaboration', rating: 4, na: false },
+            { name: 'growth',        rating: 3, na: false }
           ],
           strengths: 'Exzellente Problemlösungsfähigkeiten. Hat beim letzten Sprint die kritischsten Bugs identifiziert und eigenstaendig geloest. Sehr zuverlaessig bei Deadlines.',
           improvements: 'Könnte mehr Initiative zeigen, Wissen mit Junior-Kollegen zu teilen. Dokumentation der eigenen Arbeit ist manchmal lückenhaft.'
@@ -402,10 +402,10 @@ var MockData = (function () {
           fromInitials: null,
           date: '10.04.2026',
           drivers: [
-            { name: 'Impact / Results',        rating: 2, na: false },
-            { name: 'Ownership / Reliability', rating: 3, na: false },
-            { name: 'Collaboration / Social',  rating: 2, na: false },
-            { name: 'Growth / Learning',       rating: null, na: true }
+            { name: 'impact',        rating: 2, na: false },
+            { name: 'ownership',     rating: 3, na: false },
+            { name: 'collaboration', rating: 2, na: false },
+            { name: 'growth',        rating: null, na: true }
           ],
           strengths: 'Jana ist immer freundlich und offen im Umgang mit dem Team. Sie bringt eine positive Energie in den Arbeitsalltag.',
           improvements: 'Die Qualität der Arbeitsergebnisse muss sich deutlich verbessern. Aufgaben werden oft unvollständig abgegeben und erfordern umfangreiche Nacharbeit durch Kollegen.'
@@ -417,10 +417,10 @@ var MockData = (function () {
           fromInitials: 'MH',
           date: '28.02.2026',
           drivers: [
-            { name: 'Impact / Results',        rating: 3, na: false },
-            { name: 'Ownership / Reliability', rating: 3, na: false },
-            { name: 'Collaboration / Social',  rating: 4, na: false },
-            { name: 'Growth / Learning',       rating: 3, na: false }
+            { name: 'impact',        rating: 3, na: false },
+            { name: 'ownership',     rating: 3, na: false },
+            { name: 'collaboration', rating: 4, na: false },
+            { name: 'growth',        rating: 3, na: false }
           ],
           strengths: 'Gute Teamplayerin, die sich aktiv in Diskussionen einbringt. Hat sich in den letzten Monaten bei der Zusammenarbeit deutlich verbessert.',
           improvements: 'Sollte mehr Eigeninitiative bei der Lösung von Problemen zeigen, anstatt sofort nach Hilfe zu fragen. Zeitmanagement könnte strukturierter sein.'
@@ -441,10 +441,10 @@ var MockData = (function () {
           fromInitials: 'JS',
           date: '01.04.2026',
           drivers: [
-            { name: 'Impact / Results',        rating: 5, na: false },
-            { name: 'Ownership / Reliability', rating: 5, na: false },
-            { name: 'Collaboration / Social',  rating: 4, na: false },
-            { name: 'Growth / Learning',       rating: 5, na: false }
+            { name: 'impact',        rating: 5, na: false },
+            { name: 'ownership',     rating: 5, na: false },
+            { name: 'collaboration', rating: 4, na: false },
+            { name: 'growth',        rating: 5, na: false }
           ],
           strengths: 'Max ist ein absoluter Leistungsträger. Seine Arbeit ist immer von hoechster Qualität, und er übernimmt proaktiv Verantwortung für schwierige Aufgaben. Inspiriert das Team mit seinem Einsatz.',
           improvements: 'Kännte manchmal etwas geduldiger mit weniger erfahrenen Kollegen sein. Bei Codereviews wäre ein etwas konstruktiverer Ton hilfreich.'
