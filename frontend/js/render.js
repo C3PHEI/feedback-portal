@@ -207,4 +207,31 @@ var Render = (function () {
     editIconSvg:         editIconSvg
   };
 
+  /* ═══════════════════════════════════════════════════════
+   Drivers / Ratings helper
+   ═══════════════════════════════════════════════════════ */
+
+  /**
+   * Gibt das übersetzte Label für einen Driver-Key zurück.
+   * @param {string} key  – z.B. 'impact'
+   */
+  function driverLabel(key) {
+    return I18n.t('driver.' + key);
+  }
+
+  /**
+   * Gibt die 5 Tooltip-Texte für einen Driver zurück.
+   * @param {string} key  – z.B. 'impact'
+   * @returns {string[]}
+   */
+  function driverTooltips(key) {
+    return [
+      I18n.t('driver.' + key + '.1'),
+      I18n.t('driver.' + key + '.2'),
+      I18n.t('driver.' + key + '.3'),
+      I18n.t('driver.' + key + '.4'),
+      I18n.t('driver.' + key + '.5')
+    ];
+  }
+
 })();

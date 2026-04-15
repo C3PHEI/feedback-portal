@@ -5,12 +5,7 @@
 
 (function () {
 
-  var DRIVER_KEYS = [
-    'Impact / Results',
-    'Ownership / Reliability',
-    'Collaboration / Social',
-    'Growth / Learning'
-  ];
+  var DRIVER_KEYS = ['impact', 'ownership', 'collaboration', 'growth'];
 
   /* ═══════════════════════════════════════════════════════
      Helpers
@@ -85,7 +80,7 @@
       var isLow      = total > 0 && total <= 2;
 
       var miniDrivers = driverAvgs.map(function (d) {
-        var shortName = d.name.split('/')[0].trim();
+        var shortName = I18n.t('driver.' + d.name).split('/')[0].trim();
         var scoreHtml = d.avg !== null
           ? '<span class="dept-mini-driver-score">' + d.avg.toFixed(1) + '</span>'
           : '<span class="dept-mini-driver-score na">N/A</span>';
@@ -243,7 +238,7 @@
 
           /* ── Driver Chips ── */
           var chips = fb.drivers.map(function (d) {
-            var shortName = d.name.split('/')[0].trim();
+            var shortName = I18n.t('driver.' + d.name).split('/')[0].trim();
             var chipClass = 'dept-history-driver-chip' + (d.na ? ' na-chip' : '');
             var score     = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '★</span>';
             return '<span class="' + chipClass + '">' + shortName + ' ' + score + '</span>';

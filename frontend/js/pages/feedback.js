@@ -37,14 +37,14 @@
       for (var i = 5; i >= 1; i--) {
         var id = d.prefix + i;
         starsHtml += '<input type="radio" name="' + d.key + '" id="' + id + '" value="' + i + '"/>' +
-          '<label for="' + id + '" data-tooltip="' + d.tooltips[i - 1] + '">★</label>';
+          '<label for="' + id + '" data-tooltip="' + I18n.t('driver.' + d.key + '.' + i) + '">★</label>';
       }
 
       return '<div class="cat-card" id="driver-' + d.key + '">' +
         '<div class="flex items-center justify-between mb-1">' +
         '<div class="flex items-center gap-3">' +
         '<div class="num-badge">' + d.number + '</div>' +
-        '<span class="text-white text-sm font-medium">' + d.label + '</span>' +
+        '<span class="text-white text-sm font-medium">' + I18n.t('driver.' + d.key) + '</span>' +
         '</div>' +
         '<div class="flex items-center gap-2">' +
         '<button type="button" class="na-btn" id="na-' + d.key + '" title="N/A - Nicht beurteilbar">N/A</button>' +

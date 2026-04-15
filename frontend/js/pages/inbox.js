@@ -11,14 +11,8 @@
 
   //TODO Drivers noch binden in i18n
 
-  function driverShortLabel(name) {
-    var map = {
-      'Impact / Results':        'Impact',
-      'Ownership / Reliability': 'Ownership',
-      'Collaboration / Social':  'Collab',
-      'Growth / Learning':       'Growth'
-    };
-    return map[name] || name;
+  function driverShortLabel(key) {
+    return I18n.t('driver.' + key).split(' / ')[0];
   }
 
   /* ═══════════════════════════════════════════════════════

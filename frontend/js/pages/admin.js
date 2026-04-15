@@ -45,7 +45,7 @@
     var drivers = FeedbackAPI.getAdminDriverAverages();
     el.innerHTML = drivers.map(function (d) {
       return '<div class="dash-driver-row">' +
-        '<span class="dash-driver-name">' + d.name + '</span>' +
+        '<span class="dash-driver-name">' + I18n.t('driver.' + d.name) + '</span>' +
         '<div class="dash-driver-bar-track"><div class="dash-driver-bar-fill" style="width:' + d.pct + '%;" data-val="' + d.value + '"></div></div>' +
         '<span class="dash-driver-val">' + d.value + '</span></div>';
     }).join('');

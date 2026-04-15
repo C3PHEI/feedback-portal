@@ -22,7 +22,7 @@
           val = '<span class="history-driver-stars">' + Render.stars(d.rating) + '</span>';
         }
         return '<div class="history-driver">' +
-          '<span class="history-driver-name">' + d.name + '</span>' +
+          '<span class="history-driver-name">' + I18n.t('driver.' + d.name) + '</span>' +
           val + '</div>';
       }).join('\n') +
       '</div>';

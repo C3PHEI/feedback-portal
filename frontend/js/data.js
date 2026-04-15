@@ -202,58 +202,10 @@ var MockData = (function () {
      ═══════════════════════════════════════════════════════ */
 
   var driverDefinitions = [
-    {
-      key: 'impact',
-      number: '01',
-      label: 'Impact / Results',
-      prefix: 'imp',
-      tooltips: [
-        'Very low impact — Struggles to deliver outcomes; work often incomplete or not meeting expectations.',
-        'Inconsistent results — Puts in effort but outcomes are uneven; requires frequent correction or rework.',
-        'Reliable with guidance — Delivers expected results when scope is clear and guidance is available.',
-        'Strong impact — Consistently delivers high-quality outcomes independently; meets goals reliably.',
-        'Exceptional impact — Drives significant outcomes, anticipates obstacles, and delivers high-impact results even in complex situations.'
-      ]
-    },
-    {
-      key: 'ownership',
-      number: '02',
-      label: 'Ownership / Reliability',
-      prefix: 'own',
-      tooltips: [
-        'Low ownership — Avoids responsibility; tasks often slip without follow-up or accountability.',
-        'Partial ownership — Takes responsibility when prompted; follow-through is inconsistent.',
-        'Dependable with oversight — Owns assigned tasks and follows through with occasional check-ins.',
-        'Strong ownership — Proactively takes responsibility, follows through end-to-end, and manages priorities well.',
-        'Full accountability — Acts as a true owner: anticipates needs, removes blockers, and ensures outcomes without supervision.'
-      ]
-    },
-    {
-      key: 'collaboration',
-      number: '03',
-      label: 'Collaboration / Social',
-      prefix: 'col',
-      tooltips: [
-        'Difficult to work with — Communication is unclear or unconstructive; collaboration is limited or strained.',
-        'Basic collaboration — Engages with others but may be inconsistent, unclear, or occasionally hard to work with.',
-        'Cooperative and clear — Communicates clearly, works well with others, and maintains professional interactions.',
-        'Strong collaborator — Actively contributes to team success; communicates effectively and is reliable and pleasant to work with.',
-        'Elevates others — Strengthens team dynamics, fosters trust, communicates exceptionally well, and improves collaboration across the group.'
-      ]
-    },
-    {
-      key: 'growth',
-      number: '04',
-      label: 'Growth / Learning',
-      prefix: 'gro',
-      tooltips: [
-        'Resistant to growth — Struggles to accept feedback; shows little effort to improve.',
-        'Limited growth — Open to feedback but applies it inconsistently; progress is slow.',
-        'Steady development — Accepts feedback and shows clear, incremental improvement over time.',
-        'Proactive growth — Actively seeks feedback, learns quickly, and applies improvements effectively.',
-        'Accelerated growth — Continuously improves, seeks challenges, and rapidly expands skills beyond current role expectations.'
-      ]
-    }
+    { key: 'impact',        number: '01', i18nKey: 'driver.impact',        prefix: 'imp' },
+    { key: 'ownership',     number: '02', i18nKey: 'driver.ownership',     prefix: 'own' },
+    { key: 'collaboration', number: '03', i18nKey: 'driver.collaboration', prefix: 'col' },
+    { key: 'growth',        number: '04', i18nKey: 'driver.growth',        prefix: 'gro' }
   ];
 
 
