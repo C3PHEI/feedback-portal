@@ -1,33 +1,15 @@
-﻿using feedbackhub;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class DbTestController : ControllerBase
+public class FeedbackController : ControllerBase
 {
-  private readonly AppDbContext _db;
-
-  public DbTestController(AppDbContext db)
+  // Den eingeloggten User auslesen — IMMER "oid" verwenden, nicht "sub"!
+  private string? GetCurrentUserId()
   {
-    _db = db;
-  }
-
-  [HttpGet("ping")]
-  public async Task<IActionResult> Ping()
-  {
-    try
-    {
-      var canConnect = await _db.Database.CanConnectAsync();
-      if (canConnect)
-        return Ok(new { status = "ok", message = "Datenbankverbindung erfolgreich!" });
-      else
-        return StatusCode(500, new { status = "error", message = "Verbindung fehlgeschlagen." });
-    }
-    catch (Exception ex)
-    {
-      return StatusCode(500, new { status = "error", message = ex.Message });
-    }
+    return User.FindFirstValue("http://schemas.microsoft.com/identity/claims/objectidentifier");
   }
 }
