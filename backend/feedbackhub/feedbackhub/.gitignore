@@ -1,0 +1,27 @@
+﻿# ── Secrets & Config ─────────────────────────────────────
+appsettings.json
+appsettings.*.json
+!appsettings.template.json
+
+# ── Build Output ──────────────────────────────────────────
+bin/
+obj/
+
+# ── User-specific ─────────────────────────────────────────
+*.user
+*.suo
+.vs/
+
+# ── Rider / JetBrains ─────────────────────────────────────
+.idea/
+
+# ── dotnet user-secrets ───────────────────────────────────
+secrets.json
+
+# ── Logs ──────────────────────────────────────────────────
+*.log
+logs/
+
+# ── OS ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
