@@ -3,6 +3,9 @@
  * Feedback Hub — Admin-Seite dynamisch rendern
  */
 
+//TODO not everything in the admin panel is switching language like widgets and hover in feedback activity or visibility
+//Feedback moderation (Gemeldet/In Prüfung/Erledigt) noch in deutsch
+
 (function () {
 
   /* ═══════════════════════════════════════════════════════

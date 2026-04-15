@@ -3,6 +3,9 @@
  * Feedback Hub — Abteilungsleiter: Team-Feedback-Verlauf
  */
 
+//TODO: Update the popup when you click on a person of the department
+//To small and bad visibility
+
 (function () {
 
   var DRIVER_KEYS = ['impact', 'ownership', 'collaboration', 'growth'];
