@@ -44,12 +44,11 @@ artifacts/
 
 # Publish
 publish/
-**/Properties/launchSettings.json
 
-# Secrets & Configs
-appsettings.Development.json
-appsettings.Local.json
-appsettings.Secrets.json
+# Secrets & Configs — launchSettings wird NICHT ignoriert (wird gebraucht)
+appsettings.json
+appsettings.*.json
+!appsettings.template.json
 *.pfx
 *.key
 secrets.json
