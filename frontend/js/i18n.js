@@ -207,6 +207,7 @@ var I18n = (function () {
       'admin.deactivate_detail_3':       '3. Legal Hold — Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Löschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.',
       'admin.deactivate_detail_4':       '4. Reaktivierung — <span class="hl-green">Jederzeit möglich.</span> Der Retention-Countdown wird zurückgesetzt.',
       'admin.deactivate_detail_5':       '5. AD-Sync — Status wird beim nächsten Sync <span class="hl-orange">automatisch aktualisiert</span>, falls der Benutzer in Active Directory wieder aktiv ist.',
+      'admin.deactivate_warning':        '&#9888;&#65039; Stelle sicher, dass <span class="hl-danger">keine laufenden HR-Verfahren</span> oder rechtlichen Dispute bestehen. Falls ja, setze zuerst den <span class="hl-badge">Legal Hold</span> Tag auf die betroffenen Feedbacks.',
       'admin.deactivate_confirm_btn':    '🚫 Deaktivieren',
 
       /* ─── admin.html — Report Modal ──────────────────── */
@@ -238,12 +239,6 @@ var I18n = (function () {
       'admin.toast_resolved':            'Meldung erledigt',
       'admin.toast_dismissed':           'Meldung abgelehnt',
 
-      /* ─── Drivers (hardcoded in JS) ───────────────────── */
-      'driver.impact':          'Impact & Results',
-      'driver.ownership':       'Ownership & Reliability',
-      'driver.collaboration':   'Collaboration & Social',
-      'driver.growth':          'Growth & Learning',
-
       /* ─── Allgemein ───────────────────────────────────── */
       'common.na':              'N/A',
       'common.anonymous':       'Anonym',
@@ -253,6 +248,37 @@ var I18n = (function () {
       'common.save':            'Speichern',
       'common.cancel':          'Abbrechen',
       'common.close':           'Schliessen',
+
+      /* ─── Driver Labels ─────────────────────────────── */
+      'driver.impact':        'Impact / Results',
+      'driver.ownership':     'Ownership / Reliability',
+      'driver.collaboration': 'Collaboration / Social',
+      'driver.growth':        'Growth / Learning',
+
+      /* ─── Driver Tooltips (1–5 Sterne) ──────────────── */
+      'driver.impact.1':        'Sehr geringe Wirkung — Ergebnisse werden kaum geliefert; Arbeit oft unvollständig oder unter den Erwartungen.',
+      'driver.impact.2':        'Inkonsistente Ergebnisse — Setzt sich ein, aber Resultate sind ungleichmässig; häufige Korrekturen nötig.',
+      'driver.impact.3':        'Zuverlässig mit Anleitung — Liefert erwartete Ergebnisse bei klarem Umfang und Unterstützung.',
+      'driver.impact.4':        'Starke Wirkung — Liefert konstant hochwertige Ergebnisse eigenständig; erreicht Ziele zuverlässig.',
+      'driver.impact.5':        'Aussergewöhnliche Wirkung — Treibt bedeutende Ergebnisse, antizipiert Hindernisse und liefert auch in komplexen Situationen.',
+
+      'driver.ownership.1':     'Geringe Eigenverantwortung — Vermeidet Verantwortung; Aufgaben geraten ohne Nachverfolgung ins Stocken.',
+      'driver.ownership.2':     'Teilweise Eigenverantwortung — Übernimmt Verantwortung wenn angestossen; Nachverfolgung inkonsistent.',
+      'driver.ownership.3':     'Verlässlich mit Begleitung — Übernimmt zugewiesene Aufgaben und verfolgt sie mit gelegentlichen Check-ins.',
+      'driver.ownership.4':     'Starke Eigenverantwortung — Übernimmt proaktiv Verantwortung, verfolgt alles end-to-end und priorisiert gut.',
+      'driver.ownership.5':     'Volle Verantwortung — Handelt als wahrer Owner: antizipiert Bedürfnisse, räumt Blocker aus dem Weg, sichert Ergebnisse ohne Aufsicht.',
+
+      'driver.collaboration.1': 'Schwierig in der Zusammenarbeit — Kommunikation unklar oder unkonstruktiv; Zusammenarbeit eingeschränkt.',
+      'driver.collaboration.2': 'Grundlegende Zusammenarbeit — Arbeitet mit anderen, aber manchmal inkonsistent oder schwer greifbar.',
+      'driver.collaboration.3': 'Kooperativ und klar — Kommuniziert klar, arbeitet gut mit anderen und pflegt professionelle Interaktionen.',
+      'driver.collaboration.4': 'Starker Teamplayer — Trägt aktiv zum Teamerfolg bei; kommuniziert effektiv und ist angenehm in der Zusammenarbeit.',
+      'driver.collaboration.5': 'Hebt andere an — Stärkt Teamdynamik, fördert Vertrauen, kommuniziert herausragend und verbessert die Zusammenarbeit in der Gruppe.',
+
+      'driver.growth.1':        'Widerstand gegen Entwicklung — Hat Mühe, Feedback anzunehmen; wenig Einsatz zur Verbesserung.',
+      'driver.growth.2':        'Begrenzte Entwicklung — Offen für Feedback, aber setzt es inkonsistent um; Fortschritt ist langsam.',
+      'driver.growth.3':        'Stetige Entwicklung — Nimmt Feedback an und zeigt erkennbaren Fortschritt über die Zeit.',
+      'driver.growth.4':        'Starkes Wachstum — Sucht aktiv Feedback, wendet es konsequent an und entwickelt sich sichtbar weiter.',
+      'driver.growth.5':        'Aussergewöhnliche Entwicklung — Löst komplexe Probleme eigenständig und bringt das Team auf ein höheres Niveau.',
     },
 
     en: {
@@ -441,10 +467,11 @@ var I18n = (function () {
       'admin.deactivate_feedbacks':      'Feedback sent / received',
       'admin.deactivate_what_happens':   'What happens when deactivated?',
       'admin.deactivate_detail_1':       '1. Access — Login is <span class="hl-danger">blocked</span> — no sending or receiving feedback possible.',
-      'admin.deactivate_detail_2':       '2. Data Retention — Existing feedback is retained for <span class="hl-orange">12 months</span> after deactivation, then <span class="hl-orange">deleted or anonymised</span>.',
+      'admin.deactivate_detail_2':       '2. Data Retention — Existing feedback is retained for <span class="hl-orange">12 months</span> after deactivation, then <span class="hl-orange">deleted or anonymized</span>.',
       'admin.deactivate_detail_3':       '3. Legal Hold — Feedback tagged <span class="hl-badge">Legal Hold</span> is <span class="hl-orange">exempt</span> from automatic deletion until the tag is manually removed.',
       'admin.deactivate_detail_4':       '4. Reactivation — <span class="hl-green">Possible at any time.</span> The retention countdown resets.',
       'admin.deactivate_detail_5':       '5. AD-Sync — Status is <span class="hl-orange">automatically updated</span> on the next sync if the user is active again in Active Directory.',
+      'admin.deactivate_warning':        '&#9888;&#65039; Make sure there are <span class="hl-danger">no ongoing HR proceedings</span> or legal disputes. If so, first apply the <span class="hl-badge">Legal Hold</span> tag to the affected feedback entries.',
       'admin.deactivate_confirm_btn':    '🚫 Deactivate',
 
       /* ─── admin.html — Report Modal ──────────────────── */
@@ -476,12 +503,6 @@ var I18n = (function () {
       'admin.toast_resolved':            'Report resolved',
       'admin.toast_dismissed':           'Report dismissed',
 
-      /* ─── Drivers ─────────────────────────────────────── */
-      'driver.impact':          'Impact & Results',
-      'driver.ownership':       'Ownership & Reliability',
-      'driver.collaboration':   'Collaboration & Social',
-      'driver.growth':          'Growth & Learning',
-
       /* ─── Allgemein ───────────────────────────────────── */
       'common.na':              'N/A',
       'common.anonymous':       'Anonymous',
@@ -491,6 +512,37 @@ var I18n = (function () {
       'common.save':            'Save',
       'common.cancel':          'Cancel',
       'common.close':           'Close',
+
+      /* ─── Driver Labels ─────────────────────────────── */
+      'driver.impact':        'Impact / Results',
+      'driver.ownership':     'Ownership / Reliability',
+      'driver.collaboration': 'Collaboration / Social',
+      'driver.growth':        'Growth / Learning',
+
+      /* ─── Driver Tooltips (1–5 Sterne) ──────────────── */
+      'driver.impact.1':        'Very low impact — Struggles to deliver outcomes; work often incomplete or not meeting expectations.',
+      'driver.impact.2':        'Inconsistent results — Puts in effort but outcomes are uneven; requires frequent correction or rework.',
+      'driver.impact.3':        'Reliable with guidance — Delivers expected results when scope is clear and guidance is available.',
+      'driver.impact.4':        'Strong impact — Consistently delivers high-quality outcomes independently; meets goals reliably.',
+      'driver.impact.5':        'Exceptional impact — Drives significant outcomes, anticipates obstacles, and delivers high-impact results even in complex situations.',
+
+      'driver.ownership.1':     'Low ownership — Avoids responsibility; tasks often slip without follow-up or accountability.',
+      'driver.ownership.2':     'Partial ownership — Takes responsibility when prompted; follow-through is inconsistent.',
+      'driver.ownership.3':     'Dependable with oversight — Owns assigned tasks and follows through with occasional check-ins.',
+      'driver.ownership.4':     'Strong ownership — Proactively takes responsibility, follows through end-to-end, and manages priorities well.',
+      'driver.ownership.5':     'Full accountability — Acts as a true owner: anticipates needs, removes blockers, and ensures outcomes without supervision.',
+
+      'driver.collaboration.1': 'Difficult to work with — Communication is unclear or unconstructive; collaboration is limited or strained.',
+      'driver.collaboration.2': 'Basic collaboration — Engages with others but may be inconsistent, unclear, or occasionally hard to work with.',
+      'driver.collaboration.3': 'Cooperative and clear — Communicates clearly, works well with others, and maintains professional interactions.',
+      'driver.collaboration.4': 'Strong collaborator — Actively contributes to team success; communicates effectively and is reliable and pleasant to work with.',
+      'driver.collaboration.5': 'Elevates others — Strengthens team dynamics, fosters trust, communicates exceptionally well, and improves collaboration across the group.',
+
+      'driver.growth.1':        'Resistant to growth — Struggles to accept feedback; shows little effort to improve.',
+      'driver.growth.2':        'Limited growth — Open to feedback but applies it inconsistently; progress is slow.',
+      'driver.growth.3':        'Steady development — Accepts feedback and shows recognizable progress over time.',
+      'driver.growth.4':        'Strong growth — Actively seeks feedback, applies it consistently, and develops visibly.',
+      'driver.growth.5':        'Exceptional development — Solves complex problems independently and elevates the team to a higher level.',
     }
   };
 
