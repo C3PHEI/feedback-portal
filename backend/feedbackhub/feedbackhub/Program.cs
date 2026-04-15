@@ -6,7 +6,7 @@ using feedbackhub.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Auth ─────────────────────────────────────────────────
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+// builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
 
 // ── CORS (für Frontend) ───────────────────────────────────
 builder.Services.AddCors(options =>
@@ -28,8 +28,8 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 app.UseCors("FrontendPolicy");
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
