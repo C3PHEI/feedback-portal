@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
 {
   options.AddPolicy("FrontendPolicy", policy =>
   {
-    policy.WithOrigins("http://localhost:5500")  // dein Frontend
+    policy.WithOrigins("http://localhost:5500")
       .AllowAnyHeader()
       .AllowAnyMethod();
   });
