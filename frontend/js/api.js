@@ -6,6 +6,18 @@
 
 var FeedbackAPI = (function () {
 
+  async function apiFetch(path, options = {}) {
+    const token = await getApiToken();
+    return fetch(`http://localhost:5185${path}`, {
+      ...options,
+      headers: {
+        ...(options.headers || {}),
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+  }
+
   function getCurrentUser() {
     return MockData.currentUser;
   }
