@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using feedbackhub.Data;
 using Scalar.AspNetCore;
 
-//Loads automatically development appsettings
 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
 var builder = WebApplication.CreateBuilder(args);
+
+// ── Auth (Entra ID / JWT) ────────────────────────────────
+builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
 
 // ── CORS ─────────────────────────────────────────────────
 builder.Services.AddCors(options =>
@@ -23,16 +25,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
-
-// ── OpenAPI ──────────────────────────────────────────────
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// ── Scalar ─────────────────────────────
 if (app.Environment.IsDevelopment())
 {
-  app.MapOpenApi();            // generiert /openapi/v1.json
+  app.MapOpenApi();
   app.MapScalarApiReference(options =>
   {
     options.Title = "Feedback Hub API";
@@ -41,8 +40,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("FrontendPolicy");
-// app.UseAuthentication();
-// app.UseAuthorization();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.Run();
