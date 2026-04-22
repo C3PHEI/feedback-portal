@@ -20,6 +20,7 @@ public class Department
   public DateTime CreatedAt { get; set; }
 
   // Navigation
+  [ForeignKey("ManagerUserId")]
   public User? Manager { get; set; }
   public ICollection<User> Users { get; set; } = [];
 }
