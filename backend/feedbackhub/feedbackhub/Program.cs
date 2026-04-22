@@ -1,6 +1,7 @@
 using Microsoft.Identity.Web;
 using Microsoft.EntityFrameworkCore;
 using feedbackhub.Data;
+using feedbackhub.Services;
 using Scalar.AspNetCore;
 
 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
@@ -23,6 +24,9 @@ builder.Services.AddCors(options =>
 // ── DB ───────────────────────────────────────────────────
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ── Services ─────────────────────────────────────────────
+builder.Services.AddScoped<FeedbackService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
