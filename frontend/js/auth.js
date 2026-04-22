@@ -2,6 +2,8 @@
  * auth.js — MSAL Login Gate
  * Muss VOR allen anderen Scripts geladen werden.
  */
+import * as msal from "@azure/msal-browser";
+
 const msalConfig = {
   auth: {
     clientId: "d0795c1d-3049-4ed5-b613-48df870a10c6",
