@@ -42,3 +42,6 @@ async function getApiToken() {
 }
 
 ensureLogin();
+
+// um JWT zum testen in der Konsole auszulesen
+window.__getToken = getApiToken;
