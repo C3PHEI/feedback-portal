@@ -28,6 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // ── Services ─────────────────────────────────────────────
 builder.Services.AddScoped<FeedbackService>();
 builder.Services.AddScoped<DepartmentService>();
+builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers();

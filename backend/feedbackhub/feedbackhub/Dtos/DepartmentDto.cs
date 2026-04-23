@@ -1,4 +1,4 @@
-﻿namespace feedbackhub.DTOs;
+﻿namespace feedbackhub.Dtos;
 
 // GET /api/departments
 public record DepartmentDto(
@@ -37,7 +37,7 @@ public record TeamMemberFeedbackDto(
   Guid Id,
   SubmitterDto? Submitter,         // null wenn anonym
   bool IsAnonymous,
-  DateTime SubmittedDate,          // Entity hat DateTime, Frontend formatiert nur Datum
+  DateOnly SubmittedDate,          // Entity hat DateTime, Frontend formatiert nur Datum         // Entity hat DateTime, Frontend formatiert nur Datum
   DateTime? SubmittedAt,           // NUR wenn NICHT anonym
   string? Strengths,
   string? AreasToImprove,
