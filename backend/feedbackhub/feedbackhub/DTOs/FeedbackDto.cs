@@ -1,4 +1,4 @@
-﻿namespace feedbackhub.DTOs;
+﻿namespace feedbackhub.Dtos;
 
 // ── Shared Result Pattern ─────────────────────────────────────────────────────
 

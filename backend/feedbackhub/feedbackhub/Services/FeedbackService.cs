@@ -1,5 +1,5 @@
 ﻿using feedbackhub.Data;
-using feedbackhub.DTOs;
+using feedbackhub.Dtos;
 using feedbackhub.Models;
 using Microsoft.EntityFrameworkCore;
 
