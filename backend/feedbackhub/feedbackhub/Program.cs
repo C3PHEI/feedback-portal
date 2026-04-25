@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
   options.AddPolicy("FrontendPolicy", policy =>
   {
-    policy.WithOrigins("http://localhost:5050")
+    policy.WithOrigins("http://localhost:5000")
       .AllowAnyHeader()
       .AllowAnyMethod();
   });
@@ -39,7 +39,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.Urls.Add("http://localhost:3000");
+app.Urls.Add("http://localhost:5185");
 
 if (app.Environment.IsDevelopment())
 {
