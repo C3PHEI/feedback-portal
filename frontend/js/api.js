@@ -7,7 +7,7 @@
 var FeedbackAPI = (function () {
 
   async function apiFetch(path, options = {}) {
-    const token = await getApiToken();
+    const token = await window.getApiToken();
     return fetch(`http://localhost:5185${path}`, {
       ...options,
       headers: {

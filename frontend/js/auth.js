@@ -41,7 +41,10 @@ async function getApiToken() {
   }
 }
 
-ensureLogin();
+// Global verfügbar machen für api.js (kein ES-Modul)
+window.getApiToken = getApiToken;
 
 // um JWT zum testen in der Konsole auszulesen
 window.__getToken = getApiToken;
+
+ensureLogin();
