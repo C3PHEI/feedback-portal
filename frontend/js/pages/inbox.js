@@ -180,21 +180,64 @@
      ═══════════════════════════════════════════════════════ */
 
   async function init() {
+    // ── Bootstrap (lädt currentUser) ────────────────────────────
     try {
       await FeedbackAPI.bootstrap();
     } catch (e) {
       console.error('Bootstrap fehlgeschlagen:', e);
-      document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
-        '<h1>Fehler beim Laden</h1>' +
-        '<p>Status: ' + (e.status || 'unbekannt') + ' / ' + (e.errorCode || 'unknown') + '</p>' +
-        '<p>Bitte Seite neu laden oder erneut anmelden.</p>' +
-        '</div>';
+      showFatalError(e);
       return;
     }
 
+    // ── Navbar (synchron, nutzt gecachten currentUser) ──────────
     var navEl = document.getElementById('navbar-container');
     if (navEl) navEl.innerHTML = Render.navbar('inbox');
-    // ... Rest unverändert
+
+    // ── Profile Dropdown sofort initialisieren ──────────────────
+    Render.initProfileDropdown();
+
+    // ── Loading-Hinweise ────────────────────────────────────────
+    var avgEl   = document.getElementById('averages-container');
+    var cardsEl = document.getElementById('inbox-cards-container');
+    if (avgEl)   avgEl.innerHTML   = '<p style="color:var(--color-text-muted);padding:20px;text-align:center;">Lade ...</p>';
+    if (cardsEl) cardsEl.innerHTML = '<p style="color:var(--color-text-muted);padding:20px;text-align:center;">Lade Feedbacks ...</p>';
+
+    // ── Daten parallel laden ────────────────────────────────────
+    try {
+      var results = await Promise.all([
+        FeedbackAPI.getInboxAverages(),
+        FeedbackAPI.getInboxFeedbacks()
+      ]);
+      var averages  = results[0];
+      var feedbacks = results[1];
+
+      if (avgEl) avgEl.innerHTML = renderAverages(averages);
+
+      if (cardsEl) {
+        if (feedbacks.length === 0) {
+          cardsEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
+            'Du hast noch keine Feedbacks erhalten.</p>';
+        } else {
+          cardsEl.innerHTML = feedbacks.map(renderFeedbackCard).join('\n');
+          bindCardClicks();
+        }
+      }
+    } catch (e) {
+      console.error('Inbox-Daten konnten nicht geladen werden:', e);
+      if (cardsEl) {
+        cardsEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;">' +
+          'Fehler beim Laden der Feedbacks (' + (e.errorCode || 'unknown') + '). ' +
+          'Bitte Seite neu laden.</p>';
+      }
+    }
+  }
+
+  function showFatalError(e) {
+    document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
+      '<h1>Fehler beim Laden</h1>' +
+      '<p>Status: ' + (e.status || 'unbekannt') + ' / ' + (e.errorCode || 'unknown') + '</p>' +
+      '<p>Bitte Seite neu laden oder erneut anmelden.</p>' +
+      '</div>';
   }
 
   document.addEventListener('DOMContentLoaded', init);
