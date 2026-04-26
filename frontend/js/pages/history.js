@@ -333,21 +333,64 @@
      ═══════════════════════════════════════════════════════ */
 
   async function init() {
+    // ── Bootstrap ───────────────────────────────────────────────
     try {
       await FeedbackAPI.bootstrap();
     } catch (e) {
       console.error('Bootstrap fehlgeschlagen:', e);
-      document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
-        '<h1>Fehler beim Laden</h1>' +
-        '<p>Status: ' + (e.status || 'unbekannt') + ' / ' + (e.errorCode || 'unknown') + '</p>' +
-        '<p>Bitte Seite neu laden oder erneut anmelden.</p>' +
-        '</div>';
+      showFatalError(e);
       return;
     }
 
+    // ── Navbar ──────────────────────────────────────────────────
     var navEl = document.getElementById('navbar-container');
-    if (navEl) navEl.innerHTML = Render.navbar('inbox');
-    // ... Rest unverändert
+    if (navEl) navEl.innerHTML = Render.navbar('history');
+
+    Render.initProfileDropdown();
+
+    // ── Loading-State ───────────────────────────────────────────
+    var cardsEl = document.getElementById('history-cards-container');
+    var countEl = document.getElementById('history-count');
+    if (cardsEl) {
+      cardsEl.innerHTML = '<p style="color:var(--color-text-muted);padding:20px;text-align:center;">' +
+        'Lade Feedbacks ...</p>';
+    }
+
+    // ── Daten laden ─────────────────────────────────────────────
+    try {
+      var feedbacks = await FeedbackAPI.getHistoryFeedbacks();
+
+      if (countEl) {
+        countEl.textContent = feedbacks.length + ' ' + I18n.t('history.count');
+      }
+
+      if (cardsEl) {
+        if (feedbacks.length === 0) {
+          cardsEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
+            'Du hast noch keine Feedbacks gesendet.</p>';
+        } else {
+          cardsEl.innerHTML = feedbacks.map(renderCard).join('\n');
+          initHistoryTimers();
+          initHistoryEditButtons();
+        }
+      }
+    } catch (e) {
+      console.error('History konnte nicht geladen werden:', e);
+      if (cardsEl) {
+        cardsEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;">' +
+          'Fehler beim Laden (' + (e.errorCode || 'unknown') + '). Bitte Seite neu laden.</p>';
+      }
+    }
+  }
+
+  function showFatalError(e) {
+    console.error('Fatal Bootstrap Error:', e);
+    document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
+      '<h1>Fehler beim Laden</h1>' +
+      '<p><strong>Status:</strong> ' + (e.status != null ? e.status : 'unbekannt') + '</p>' +
+      '<p><strong>Code:</strong> ' + (e.errorCode || e.name || 'unknown') + '</p>' +
+      '<p><strong>Message:</strong> ' + (e.message || '-') + '</p>' +
+      '</div>';
   }
 
   document.addEventListener('DOMContentLoaded', init);

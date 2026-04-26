@@ -1,6 +1,6 @@
 /**
  * api.js
- * Feedback Hub — Abstraktionsschicht zwischen Frontend und Backend
+ * Feedback Hub — Abstraktionsschicht zwischen Frontend und Backend.
  * Backend-DTOs werden hier auf das vom Frontend erwartete Format gemappt.
  */
 
@@ -97,6 +97,7 @@ var FeedbackAPI = (function () {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
+  // Inbox-Format: "heute" / "gestern" / "Mo, 22.04." / "22.04.2026"
   function formatDate(isoDate) {
     if (!isoDate) return '';
 
@@ -124,6 +125,33 @@ var FeedbackAPI = (function () {
     var mm2 = ('0' + (d.getMonth() + 1)).slice(-2);
     var yy  = d.getFullYear();
     return dd2 + '.' + mm2 + '.' + yy;
+  }
+
+  // History-Format: "Heute, 14:33" / "Gestern, 09:12" / "22.04.2026, 14:33"
+  function formatDateLabel(isoTimestamp) {
+    if (!isoTimestamp) return '';
+
+    var d = new Date(isoTimestamp);
+    if (isNaN(d.getTime())) return '';
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var feedbackDay = new Date(d);
+    feedbackDay.setHours(0, 0, 0, 0);
+
+    var diffDays = Math.round((today - feedbackDay) / (1000 * 60 * 60 * 24));
+
+    var hh   = ('0' + d.getHours()).slice(-2);
+    var min  = ('0' + d.getMinutes()).slice(-2);
+    var time = hh + ':' + min;
+
+    if (diffDays === 0) return 'Heute, ' + time;
+    if (diffDays === 1) return 'Gestern, ' + time;
+
+    var dd = ('0' + d.getDate()).slice(-2);
+    var mo = ('0' + (d.getMonth() + 1)).slice(-2);
+    var yy = d.getFullYear();
+    return dd + '.' + mo + '.' + yy + ', ' + time;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -160,7 +188,7 @@ var FeedbackAPI = (function () {
   }
 
   /* ═══════════════════════════════════════════════════════
-     Inbox
+     Inbox (Schritt 5)
      ═══════════════════════════════════════════════════════ */
 
   async function getInboxFeedbacks() {
@@ -233,13 +261,40 @@ var FeedbackAPI = (function () {
   }
 
   /* ═══════════════════════════════════════════════════════
+     History (Schritt 6)
+     ═══════════════════════════════════════════════════════ */
+
+  async function getHistoryFeedbacks() {
+    var dtos = await apiGet('/api/feedback/history');
+    return dtos.map(mapHistoryFeedback);
+  }
+
+  function mapHistoryFeedback(dto) {
+    return {
+      id:           dto.id,
+      to: {
+        name:     dto.recipientName,
+        initials: buildInitials(dto.recipientName)
+      },
+      submittedAt:  dto.submittedAt,                       // ISO-String für Live-Timer
+      dateLabel:    formatDateLabel(dto.submittedAt),
+      visibility:   dto.isAnonymous ? 'anonymous' : 'named',
+      edited:       dto.isEdited,
+      locked:       dto.isLocked,
+      avatarStyle:  null,
+      drivers:      dto.ratings.map(mapRating),
+      strengths:    dto.strengths || '',
+      improvements: dto.areasToImprove || ''
+    };
+  }
+
+  /* ═══════════════════════════════════════════════════════
      Mock-Funktionen (noch nicht angebunden)
      Werden in den nächsten Schritten umgestellt.
      ═══════════════════════════════════════════════════════ */
 
   function getRecipients()           { return MockData.recipients; }
   function getUsers()                { return MockData.users; }
-  function getHistoryFeedbacks()     { return MockData.historyFeedbacks; }
   function getDriverDefinitions()    { return MockData.driverDefinitions; }
   function getAdminStats()           { return MockData.adminStats; }
   function getAdminKpis()            { return MockData.adminKpis; }
