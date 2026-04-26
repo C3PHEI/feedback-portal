@@ -240,7 +240,7 @@ var FeedbackAPI = (function () {
 
   function mapRating(r) {
     return {
-      name:   r.driverName,
+      name:   normalizeDriverName(r.driverName),
       rating: r.isNa ? null : r.score,
       na:     r.isNa
     };
@@ -252,7 +252,7 @@ var FeedbackAPI = (function () {
       anonymousCount: dto.anonymousCount,
       drivers: dto.driverAverages.map(function (d) {
         return {
-          name:  d.driverName,
+          name:  normalizeDriverName(d.driverName),
           value: d.average != null ? d.average : 0,
           stars: d.average != null ? Math.round(d.average) : 0
         };
@@ -286,6 +286,13 @@ var FeedbackAPI = (function () {
       strengths:    dto.strengths || '',
       improvements: dto.areasToImprove || ''
     };
+  }
+
+  // Backend-DriverName → i18n-Key-Stem
+  function normalizeDriverName(backendName) {
+    if (!backendName) return '';
+    var first = backendName.split('/')[0].trim().toLowerCase();
+    return first;   // "Impact/Results" → "impact"
   }
 
   /* ═══════════════════════════════════════════════════════
