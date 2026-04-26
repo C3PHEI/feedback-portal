@@ -1,119 +1,103 @@
 /**
  * api.js
- * Feedback Hub — Abstraktionsschicht
- * Später: fetch() gegen echte API-Endpoints ersetzen
+ * Feedback Hub — Abstraktionsschicht zwischen Frontend und Backend
+ * Backend-DTOs werden hier auf das vom Frontend erwartete Format gemappt.
  */
 
 var FeedbackAPI = (function () {
 
-  async function apiFetch(path, options = {}) {
-    const token = await window.getApiToken();
-    return fetch(`http://localhost:5185${path}`, {
-      ...options,
-      headers: {
-        ...(options.headers || {}),
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-  }
+  var BASE_URL = 'http://localhost:5185';
 
-  function getCurrentUser() {
-    if (!_currentUserCache) {
-      console.error('FeedbackAPI.bootstrap() muss vor getCurrentUser() aufgerufen werden');
+  /* ═══════════════════════════════════════════════════════
+     API Error Class
+     ═══════════════════════════════════════════════════════ */
+
+  function ApiError(status, errorCode, message) {
+    this.name      = 'ApiError';
+    this.status    = status;       // 0 = Netzwerk, 401, 403, 404, 422, 500 ...
+    this.errorCode = errorCode;    // Backend-Code z.B. "coc_not_confirmed"
+    this.message   = message || errorCode || 'API request failed';
+  }
+  ApiError.prototype = Object.create(Error.prototype);
+
+  /* ═══════════════════════════════════════════════════════
+     Core Fetch Wrapper
+     ═══════════════════════════════════════════════════════ */
+
+  async function apiFetch(path, options) {
+    options = options || {};
+
+    // Token holen
+    var token;
+    try {
+      token = await window.getApiToken();
+    } catch (e) {
+      throw new ApiError(0, 'token_unavailable', 'Login erforderlich');
+    }
+
+    var headers = Object.assign({
+      'Authorization': 'Bearer ' + token,
+      'Content-Type':  'application/json'
+    }, options.headers || {});
+
+    var response;
+    try {
+      response = await fetch(BASE_URL + path, {
+        method:  options.method || 'GET',
+        headers: headers,
+        body:    options.body ? JSON.stringify(options.body) : undefined
+      });
+    } catch (e) {
+      throw new ApiError(0, 'network_error', 'Verbindung zum Server fehlgeschlagen');
+    }
+
+    // 401 → Token abgelaufen → MSAL Re-Login
+    if (response.status === 401) {
+      await window.getApiToken();
+      throw new ApiError(401, 'unauthorized', 'Session abgelaufen');
+    }
+
+    // 204 No Content → kein Body
+    if (response.status === 204) {
       return null;
     }
-    return _currentUserCache;
-  }
 
-  function getRecipients() {
-    return MockData.recipients;
-  }
-
-  function getUsers() {
-    return MockData.users;
-  }
-
-  /* ─── Inbox ─── */
-
-  async function getInboxFeedbacks() {
-    var dtos = await apiGet('/api/feedback/inbox');
-    return dtos.map(mapInboxFeedback);
-  }
-
-  async function getInboxAverages() {
-    var dto = await apiGet('/api/feedback/inbox/averages');
-    return mapInboxAverages(dto);
-  }
-
-  /* ─── Mappers (Backend-DTO → Frontend-Format) ─── */
-
-  function mapInboxFeedback(dto) {
-    // Stars: Durchschnitt der nicht-NA-Ratings, gerundet
-    var scoredRatings = dto.ratings.filter(function (r) { return !r.isNa && r.score != null; });
-    var avgStars = 0;
-    if (scoredRatings.length > 0) {
-      var sum = scoredRatings.reduce(function (acc, r) { return acc + r.score; }, 0);
-      avgStars = Math.round(sum / scoredRatings.length);
+    // Body parsen
+    var data = null;
+    var text = await response.text();
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        data = { error: 'invalid_response' };
+      }
     }
 
-    // Preview: erste ~120 Zeichen aus Strengths, sonst AreasToImprove
-    var previewSource = dto.strengths || dto.areasToImprove || '';
-    var preview = previewSource.length > 120
-      ? previewSource.substring(0, 120).trim() + '...'
-      : previewSource;
-
-    // From: anonym oder Submitter-Info
-    var from;
-    if (dto.isAnonymous) {
-      from = { name: 'Anonymes Feedback', initials: null, anonymous: true };
-    } else {
-      from = {
-        name:      dto.submitter.displayName,
-        initials:  buildInitials(dto.submitter.displayName),
-        anonymous: false
-      };
+    if (!response.ok) {
+      var errorCode = (data && data.error) || ('http_' + response.status);
+      throw new ApiError(response.status, errorCode, errorCode);
     }
 
-    return {
-      id:           dto.id,
-      from:         from,
-      stars:        avgStars,
-      preview:      preview,
-      date:         formatDate(dto.submittedDate),
-      unread:       false,                  // Notifications-Feature ist Post-IPA
-      drivers:      dto.ratings.map(mapRating),
-      strengths:    dto.strengths || '',
-      improvements: dto.areasToImprove || ''
-    };
+    return data;
   }
 
-  function mapRating(r) {
-    return {
-      name:   r.driverName,    // "impact" | "ownership" | "collaboration" | "growth"
-      rating: r.isNa ? null : r.score,
-      na:     r.isNa
-    };
-  }
+  function apiGet(path)         { return apiFetch(path); }
+  function apiPost(path, body)  { return apiFetch(path, { method: 'POST',  body: body }); }
+  function apiPatch(path, body) { return apiFetch(path, { method: 'PATCH', body: body }); }
+  function apiPut(path, body)   { return apiFetch(path, { method: 'PUT',   body: body }); }
 
-  function mapInboxAverages(dto) {
-    return {
-      totalReviews:   dto.totalReviews,
-      anonymousCount: dto.anonymousCount,
-      drivers: dto.driverAverages.map(function (d) {
-        return {
-          name:  d.driverName,
-          value: d.average != null ? d.average : 0,
-          stars: d.average != null ? Math.round(d.average) : 0
-        };
-      })
-    };
-  }
+  /* ═══════════════════════════════════════════════════════
+     Helpers
+     ═══════════════════════════════════════════════════════ */
 
-  /* ─── Date Formatter ─── */
+  function buildInitials(displayName) {
+    if (!displayName) return '';
+    var parts = displayName.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
 
   function formatDate(isoDate) {
-    // isoDate kommt als "2026-04-22" (DateOnly) oder "2026-04-22T..." (DateTime)
     if (!isoDate) return '';
 
     var d = new Date(isoDate);
@@ -136,79 +120,23 @@ var FeedbackAPI = (function () {
       return weekdays[d.getDay()] + ', ' + dd + '.' + mm + '.';
     }
 
-    // Älter als 7 Tage: volles Datum
-    var dd = ('0' + d.getDate()).slice(-2);
-    var mm = ('0' + (d.getMonth() + 1)).slice(-2);
-    var yy = d.getFullYear();
-    return dd + '.' + mm + '.' + yy;
+    var dd2 = ('0' + d.getDate()).slice(-2);
+    var mm2 = ('0' + (d.getMonth() + 1)).slice(-2);
+    var yy  = d.getFullYear();
+    return dd2 + '.' + mm2 + '.' + yy;
   }
 
-  /* ─── History ─── */
-
-  function getHistoryFeedbacks() {
-    return MockData.historyFeedbacks;
-  }
-
-  /* ─── Feedback Form ─── */
-
-  function getDriverDefinitions() {
-    return MockData.driverDefinitions;
-  }
-
-  /* ─── Admin ─── */
-
-  function getAdminStats() {
-    return MockData.adminStats;
-  }
-
-  function getAdminKpis() {
-    return MockData.adminKpis;
-  }
-
-  function getAdminChartActivity() {
-    return MockData.adminChartActivity;
-  }
-
-  function getAdminChartVisibility() {
-    return MockData.adminChartVisibility;
-  }
-
-  function getAdminDriverAverages() {
-    return MockData.adminDriverAverages;
-  }
-
-  function getAdminDepartments() {
-    return MockData.adminDepartments;
-  }
-
-  function getAdminSystemStatus() {
-    return MockData.adminSystemStatus;
-  }
-
-  function getModerationStats() {
-    return MockData.moderationStats;
-  }
-
-  function getModerationReports() {
-    return MockData.moderationReports;
-  }
-
-  function getDepartmentTeam() {
-    return MockData.departmentTeam;
-  }
-
-  /* ─── Current User Cache ─── */
+  /* ═══════════════════════════════════════════════════════
+     Bootstrap (Current User)
+     ═══════════════════════════════════════════════════════ */
 
   var _currentUserCache = null;
 
   async function bootstrap() {
-    // Schon geladen? Dann Cache zurückgeben (mehrfacher Aufruf unschädlich)
     if (_currentUserCache) return _currentUserCache;
 
     var dto = await apiGet('/api/me');
 
-    // Backend liefert PascalCase → auf Frontend-Format mappen
-    // Frontend erwartet: { id, name, initials, email, role, department }
     _currentUserCache = {
       id:                  dto.id,
       name:                dto.displayName,
@@ -223,12 +151,123 @@ var FeedbackAPI = (function () {
     return _currentUserCache;
   }
 
-  function buildInitials(displayName) {
-    if (!displayName) return '';
-    var parts = displayName.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  function getCurrentUser() {
+    if (!_currentUserCache) {
+      console.error('FeedbackAPI.bootstrap() muss vor getCurrentUser() aufgerufen werden');
+      return null;
+    }
+    return _currentUserCache;
   }
+
+  /* ═══════════════════════════════════════════════════════
+     Inbox
+     ═══════════════════════════════════════════════════════ */
+
+  async function getInboxFeedbacks() {
+    var dtos = await apiGet('/api/feedback/inbox');
+    return dtos.map(mapInboxFeedback);
+  }
+
+  async function getInboxAverages() {
+    var dto = await apiGet('/api/feedback/inbox/averages');
+    return mapInboxAverages(dto);
+  }
+
+  function mapInboxFeedback(dto) {
+    var scoredRatings = dto.ratings.filter(function (r) { return !r.isNa && r.score != null; });
+    var avgStars = 0;
+    if (scoredRatings.length > 0) {
+      var sum = scoredRatings.reduce(function (acc, r) { return acc + r.score; }, 0);
+      avgStars = Math.round(sum / scoredRatings.length);
+    }
+
+    var previewSource = dto.strengths || dto.areasToImprove || '';
+    var preview = previewSource.length > 120
+      ? previewSource.substring(0, 120).trim() + '...'
+      : previewSource;
+
+    var from;
+    if (dto.isAnonymous) {
+      from = { name: 'Anonymes Feedback', initials: null, anonymous: true };
+    } else {
+      from = {
+        name:      dto.submitter.displayName,
+        initials:  buildInitials(dto.submitter.displayName),
+        anonymous: false
+      };
+    }
+
+    return {
+      id:           dto.id,
+      from:         from,
+      stars:        avgStars,
+      preview:      preview,
+      date:         formatDate(dto.submittedDate),
+      unread:       false,
+      drivers:      dto.ratings.map(mapRating),
+      strengths:    dto.strengths || '',
+      improvements: dto.areasToImprove || ''
+    };
+  }
+
+  function mapRating(r) {
+    return {
+      name:   r.driverName,
+      rating: r.isNa ? null : r.score,
+      na:     r.isNa
+    };
+  }
+
+  function mapInboxAverages(dto) {
+    return {
+      totalReviews:   dto.totalReviews,
+      anonymousCount: dto.anonymousCount,
+      drivers: dto.driverAverages.map(function (d) {
+        return {
+          name:  d.driverName,
+          value: d.average != null ? d.average : 0,
+          stars: d.average != null ? Math.round(d.average) : 0
+        };
+      })
+    };
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Mock-Funktionen (noch nicht angebunden)
+     Werden in den nächsten Schritten umgestellt.
+     ═══════════════════════════════════════════════════════ */
+
+  function getRecipients()           { return MockData.recipients; }
+  function getUsers()                { return MockData.users; }
+  function getHistoryFeedbacks()     { return MockData.historyFeedbacks; }
+  function getDriverDefinitions()    { return MockData.driverDefinitions; }
+  function getAdminStats()           { return MockData.adminStats; }
+  function getAdminKpis()            { return MockData.adminKpis; }
+  function getAdminChartActivity()   { return MockData.adminChartActivity; }
+  function getAdminChartVisibility() { return MockData.adminChartVisibility; }
+  function getAdminDriverAverages()  { return MockData.adminDriverAverages; }
+  function getAdminDepartments()     { return MockData.adminDepartments; }
+  function getAdminSystemStatus()    { return MockData.adminSystemStatus; }
+  function getModerationStats()      { return MockData.moderationStats; }
+  function getModerationReports()    { return MockData.moderationReports; }
+  function getDepartmentTeam()       { return MockData.departmentTeam; }
+
+  /* ═══════════════════════════════════════════════════════
+     Debug-Helper (Post-IPA entfernen)
+     ═══════════════════════════════════════════════════════ */
+
+  window.__api = {
+    fetch:    apiFetch,
+    get:      apiGet,
+    post:     apiPost,
+    patch:    apiPatch,
+    put:      apiPut,
+    ApiError: ApiError
+  };
+
+  /* ═══════════════════════════════════════════════════════
+     Public API
+     ═══════════════════════════════════════════════════════ */
 
   return {
     bootstrap:               bootstrap,
