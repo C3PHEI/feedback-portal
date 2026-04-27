@@ -1,10 +1,12 @@
 /**
  * pages/department.js
  * Feedback Hub — Abteilungsleiter: Team-Feedback-Verlauf
+ *
+ * Lazy-Loading-Pattern: Member-Karten zeigen Aggregate aus Backend-DTO.
+ * Detaillierte Feedbacks werden erst beim Drawer-Open via API nachgeladen
+ * und im Member-Objekt gecached, damit ein zweites Öffnen keinen
+ * weiteren Request auslöst.
  */
-
-//TODO: Update the popup when you click on a person of the department
-//To small and bad visibility
 
 (function () {
 
@@ -75,53 +77,35 @@
     var html = '<div class="dept-members-grid">';
 
     team.forEach(function (member) {
-      var feedbacks  = member.feedbacks;
-      var total      = feedbacks.length;
-      var anonCount  = feedbacks.filter(function (f) { return f.anonymous; }).length;
-      var driverAvgs = computeDriverAverages(feedbacks);
-      var overall    = overallAvg(driverAvgs);
-      var isLow      = total > 0 && total <= 2;
+      var total   = member.feedbackCount || 0;
+      var overall = member.averageRating;        // bereits berechnet im Backend
+      var isLow   = total > 0 && total <= 2;
 
-      var miniDrivers = driverAvgs.map(function (d) {
-        var shortName = I18n.t('driver.' + d.name).split('/')[0].trim();
-        var scoreHtml = d.avg !== null
-          ? '<span class="dept-mini-driver-score">' + d.avg.toFixed(1) + '</span>'
-          : '<span class="dept-mini-driver-score na">N/A</span>';
-        return '<div class="dept-mini-driver">' +
-          '<span class="dept-mini-driver-name">' + shortName + '</span>' +
-          scoreHtml +
-          '</div>';
-      }).join('');
+      // Mini-Driver-Chips: nicht verfügbar auf Karte (Backend liefert nur Aggregate)
+      var miniDrivers = '';
 
-      var anonBadge = anonCount > 0
-        ? '<span class="dept-anon-badge">' +
-        '<img src="img/incognito.svg" alt="" class="dept-anon-badge-icon"/>' +
-        '<span>' + anonCount + ' ' + I18n.t('dept.anonymous') + '</span>' +
-        '</span>'
-        : '';
+      // Anon-Count: nicht verfügbar auf Karte ohne komplette Feedbacks
+      var anonBadge = '';
 
+      // Low-Hint: bei wenigen Feedbacks
       var lowHint = isLow
-        ? '<div class="dept-card-low-hint">' +
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
-        '<span>' + I18n.t('dept.few_ratings') + '</span>' +
-        '</div>'
+        ? '<div class="dept-low-hint">' + I18n.t('dept.few_reviews') + '</div>'
         : '';
 
       html += '<div class="dept-member-card" data-member-id="' + member.id + '">' +
-        '<div class="dept-member-top">' +
-        '<div class="avatar" style="width:40px;height:40px;font-size:13px;border-radius:10px;">' + member.initials + '</div>' +
+        '<div class="dept-member-header">' +
+        '<div class="avatar">' + member.initials + '</div>' +
         '<div class="dept-member-info">' +
         '<div class="dept-member-name">' + member.name + '</div>' +
-        '<div class="dept-member-dept">' + member.department + '</div>' +
+        '<div class="dept-member-role">' + (member.department || '') + '</div>' +
         '</div>' +
-        '<svg class="dept-member-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
         '</div>' +
-        '<div class="dept-member-score">' +
-        '<span class="dept-member-avg">' + (overall !== null ? overall.toFixed(1) : '-') + '</span>' +
+        '<div class="dept-member-stats">' +
+        '<span class="dept-member-avg">' + (overall !== null && overall !== undefined ? overall.toFixed(1) : '-') + '</span>' +
         '<span class="dept-review-count">' + total + ' Feedback' + (total !== 1 ? 's' : '') + '</span>' +
         anonBadge +
         '</div>' +
-        (total > 0 ? '<div class="dept-mini-drivers">' + miniDrivers + '</div>' : '') +
+        miniDrivers +
         lowHint +
         '</div>';
     });
@@ -129,6 +113,7 @@
     html += '</div>';
     el.innerHTML = html;
 
+    // Click-Handler für Karten → Drawer öffnen
     var cards = el.querySelectorAll('.dept-member-card');
     cards.forEach(function (card) {
       card.addEventListener('click', function () {
@@ -143,7 +128,42 @@
      Drawer
      ═══════════════════════════════════════════════════════ */
 
-  function openDrawer(member) {
+  async function openDrawer(member) {
+    // Drawer sofort öffnen mit Loading-State
+    document.getElementById('deptDrawer').classList.add('open');
+    document.getElementById('deptDrawerOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Header sofort befüllen (Daten haben wir schon aus der Karte)
+    var avatarEl = document.getElementById('drawer-avatar');
+    if (avatarEl) avatarEl.textContent = member.initials;
+    var nameEl = document.getElementById('drawer-name');
+    if (nameEl) nameEl.textContent = member.name;
+    var roleEl = document.getElementById('drawer-role');
+    if (roleEl) roleEl.textContent = member.department;
+
+    // Loading-Hinweis im History-Bereich
+    var historyEl = document.getElementById('drawer-history');
+    if (historyEl) {
+      historyEl.innerHTML =
+        '<p style="color:var(--color-text-muted);padding:20px;text-align:center;">Lade Feedbacks ...</p>';
+    }
+
+    // Lazy-Load Feedbacks (nur einmal pro Member, dann gecached)
+    if (member.feedbacks === null || member.feedbacks === undefined) {
+      try {
+        member.feedbacks = await FeedbackAPI.getTeamMemberFeedbacks(member.id);
+      } catch (e) {
+        console.error('Team-Member-Feedbacks konnten nicht geladen werden:', e);
+        if (historyEl) {
+          historyEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;">' +
+            'Fehler beim Laden (' + (e.errorCode || 'unknown') + '). Drawer schliessen und erneut versuchen.</p>';
+        }
+        return;
+      }
+    }
+
+    // ── Statistiken berechnen ──────────────────────────
     var feedbacks  = member.feedbacks;
     var total      = feedbacks.length;
     var anonCount  = feedbacks.filter(function (f) { return f.anonymous; }).length;
@@ -151,15 +171,7 @@
     var overall    = overallAvg(driverAvgs);
     var isLow      = total > 0 && total <= 2;
 
-    var avatarEl = document.getElementById('drawer-avatar');
-    if (avatarEl) avatarEl.textContent = member.initials;
-
-    var nameEl = document.getElementById('drawer-name');
-    if (nameEl) nameEl.textContent = member.name;
-
-    var roleEl = document.getElementById('drawer-role');
-    if (roleEl) roleEl.textContent = member.department;
-
+    // ── Stats-Pills ────────────────────────────────────
     var statsEl = document.getElementById('drawer-stats');
     if (statsEl) {
       statsEl.innerHTML =
@@ -177,6 +189,7 @@
         '</div>';
     }
 
+    // ── Low-Warning ────────────────────────────────────
     var lowEl = document.getElementById('drawer-low-warning');
     if (lowEl) {
       if (isLow) {
@@ -194,6 +207,7 @@
       }
     }
 
+    // ── Driver Averages ────────────────────────────────
     var driversEl = document.getElementById('drawer-drivers');
     if (driversEl) {
       if (total === 0) {
@@ -212,7 +226,7 @@
       }
     }
 
-    var historyEl = document.getElementById('drawer-history');
+    // ── Feedback-Verlauf ───────────────────────────────
     if (historyEl) {
       if (!feedbacks.length) {
         historyEl.innerHTML = '<div style="color:var(--color-text-ghost);font-size:13px;padding:12px 0;">' + I18n.t('dept.no_feedback') + '</div>';
@@ -247,7 +261,7 @@
             return '<span class="' + chipClass + '">' + shortName + ' ' + score + '</span>';
           }).join('');
 
-          /* ── Expandable Detail (Strengths + Improvements) ── */
+          /* ── Expandable Detail ── */
           var hasStrengths    = fb.strengths && fb.strengths !== '-';
           var hasImprovements = fb.improvements && fb.improvements !== '-';
           var hasDetail       = hasStrengths || hasImprovements;
@@ -324,10 +338,6 @@
         });
       }
     }
-
-    document.getElementById('deptDrawer').classList.add('open');
-    document.getElementById('deptDrawerOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
   }
 
   function closeDrawer() {
@@ -353,9 +363,42 @@
       return;
     }
 
+    // ── Navbar mit aktivem Tab "department" ─────────────
     var navEl = document.getElementById('navbar-container');
-    if (navEl) navEl.innerHTML = Render.navbar('inbox');
-    // ... Rest unverändert
+    if (navEl) navEl.innerHTML = Render.navbar('department');
+
+    Render.initProfileDropdown();
+
+    // ── Drawer-Close-Handler ────────────────────────────
+    var closeBtn = document.getElementById('deptDrawerClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+
+    var overlay = document.getElementById('deptDrawerOverlay');
+    if (overlay) overlay.addEventListener('click', closeDrawer);
+
+    // ── Loading-State ───────────────────────────────────
+    var membersEl = document.getElementById('dept-members-container');
+    if (membersEl) {
+      membersEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
+        'Lade Team ...</p>';
+    }
+
+    // ── Team laden ──────────────────────────────────────
+    try {
+      var team = await FeedbackAPI.getDepartmentTeam();
+      renderMemberCards(team);
+    } catch (e) {
+      console.error('Team konnte nicht geladen werden:', e);
+      if (membersEl) {
+        if (e.status === 403) {
+          membersEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
+            'Du hast keine Berechtigung, dieses Team einzusehen.</p>';
+        } else {
+          membersEl.innerHTML = '<p style="color:var(--color-danger);padding:40px;text-align:center;">' +
+            'Fehler beim Laden (' + (e.errorCode || 'unknown') + ').</p>';
+        }
+      }
+    }
   }
 
   document.addEventListener('DOMContentLoaded', init);

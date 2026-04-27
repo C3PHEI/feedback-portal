@@ -296,6 +296,63 @@ var FeedbackAPI = (function () {
   }
 
   /* ═══════════════════════════════════════════════════════
+   Department (Schritt 7)
+   ═══════════════════════════════════════════════════════ */
+
+  async function getDepartmentTeam() {
+    var dtos = await apiGet('/api/departments/my-team');
+    return dtos.map(mapTeamMember);
+  }
+
+  async function getDepartmentTeamAverages() {
+    var dto = await apiGet('/api/departments/my-team/averages');
+    return mapInboxAverages(dto);   // gleiche Struktur wie Inbox-Averages
+  }
+
+  async function getTeamMemberFeedbacks(userId) {
+    var dtos = await apiGet('/api/departments/my-team/' + userId + '/feedbacks');
+    return dtos.map(mapTeamMemberFeedback);
+  }
+
+  function mapTeamMember(dto) {
+    var currentUser = _currentUserCache;
+    return {
+      id:            dto.id,
+      name:          dto.displayName,
+      initials:      buildInitials(dto.displayName),
+      role:          dto.role,
+      department:    currentUser ? currentUser.department : null,
+      feedbackCount: dto.feedbackCount || 0,
+      averageRating: dto.averageRating != null ? dto.averageRating : null,
+      feedbacks:     null   // null = noch nicht geladen, [] wäre "geladen, leer"
+    };
+  }
+
+  function mapTeamMemberFeedback(dto) {
+    return {
+      id:           dto.id,
+      anonymous:    dto.isAnonymous,
+      fromName:     dto.isAnonymous ? null : dto.submitter.displayName,
+      fromInitials: dto.isAnonymous ? null : buildInitials(dto.submitter.displayName),
+      date:         formatDateShort(dto.submittedDate),
+      drivers:      dto.ratings.map(mapRating),
+      strengths:    dto.strengths || '',
+      improvements: dto.areasToImprove || ''
+    };
+  }
+
+// "08.04.2026" — schlicht, immer gleiche Form
+  function formatDateShort(isoDate) {
+    if (!isoDate) return '';
+    var d = new Date(isoDate);
+    if (isNaN(d.getTime())) return isoDate;
+    var dd = ('0' + d.getDate()).slice(-2);
+    var mm = ('0' + (d.getMonth() + 1)).slice(-2);
+    var yy = d.getFullYear();
+    return dd + '.' + mm + '.' + yy;
+  }
+
+  /* ═══════════════════════════════════════════════════════
      Mock-Funktionen (noch nicht angebunden)
      Werden in den nächsten Schritten umgestellt.
      ═══════════════════════════════════════════════════════ */
@@ -312,7 +369,6 @@ var FeedbackAPI = (function () {
   function getAdminSystemStatus()    { return MockData.adminSystemStatus; }
   function getModerationStats()      { return MockData.moderationStats; }
   function getModerationReports()    { return MockData.moderationReports; }
-  function getDepartmentTeam()       { return MockData.departmentTeam; }
 
   /* ═══════════════════════════════════════════════════════
      Debug-Helper (Post-IPA entfernen)
@@ -332,24 +388,26 @@ var FeedbackAPI = (function () {
      ═══════════════════════════════════════════════════════ */
 
   return {
-    bootstrap:               bootstrap,
-    getCurrentUser:          getCurrentUser,
-    getRecipients:           getRecipients,
-    getUsers:                getUsers,
-    getInboxAverages:        getInboxAverages,
-    getInboxFeedbacks:       getInboxFeedbacks,
-    getHistoryFeedbacks:     getHistoryFeedbacks,
-    getDriverDefinitions:    getDriverDefinitions,
-    getAdminStats:           getAdminStats,
-    getAdminKpis:            getAdminKpis,
-    getAdminChartActivity:   getAdminChartActivity,
-    getAdminChartVisibility: getAdminChartVisibility,
-    getAdminDriverAverages:  getAdminDriverAverages,
-    getAdminDepartments:     getAdminDepartments,
-    getAdminSystemStatus:    getAdminSystemStatus,
-    getModerationStats:      getModerationStats,
-    getModerationReports:    getModerationReports,
-    getDepartmentTeam:       getDepartmentTeam
+    bootstrap:                  bootstrap,
+    getCurrentUser:             getCurrentUser,
+    getRecipients:              getRecipients,
+    getUsers:                   getUsers,
+    getInboxAverages:           getInboxAverages,
+    getInboxFeedbacks:          getInboxFeedbacks,
+    getHistoryFeedbacks:        getHistoryFeedbacks,
+    getDriverDefinitions:       getDriverDefinitions,
+    getAdminStats:              getAdminStats,
+    getAdminKpis:               getAdminKpis,
+    getAdminChartActivity:      getAdminChartActivity,
+    getAdminChartVisibility:    getAdminChartVisibility,
+    getAdminDriverAverages:     getAdminDriverAverages,
+    getAdminDepartments:        getAdminDepartments,
+    getAdminSystemStatus:       getAdminSystemStatus,
+    getModerationStats:         getModerationStats,
+    getModerationReports:       getModerationReports,
+    getDepartmentTeam:          getDepartmentTeam,
+    getDepartmentTeamAverages:  getDepartmentTeamAverages,
+    getTeamMemberFeedbacks:     getTeamMemberFeedbacks
   };
 
 })();
