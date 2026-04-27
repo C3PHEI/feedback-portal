@@ -2,9 +2,6 @@
  * pages/admin.js
  * Feedback Hub — Admin-Seite dynamisch rendern
  *
- * Schritt 8: Dashboard-Tab via Backend-API.
- * Moderation-Tab und User-Tab laufen weiter mit Mock (Schritte 9 + 10).
- *
  * Pattern: Render-Funktionen sind synchron und nehmen Daten als Parameter.
  * Asynchrones Datenladen passiert in init() via Promise.all.
  */
