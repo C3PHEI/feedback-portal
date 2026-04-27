@@ -522,14 +522,123 @@ var FeedbackAPI = (function () {
   }
 
   /* ═══════════════════════════════════════════════════════
+   Moderation (Schritt 10)
+   ═══════════════════════════════════════════════════════ */
+
+  async function getModerationReports(filter) {
+    filter = filter || {};
+    var qs = [];
+    if (filter.status) qs.push('status=' + encodeURIComponent(filter.status));
+    if (filter.search) qs.push('search=' + encodeURIComponent(filter.search));
+    var path = '/api/admin/reports' + (qs.length ? '?' + qs.join('&') : '');
+
+    var dtos = await apiGet(path);
+    return dtos.map(mapReportListItem);
+  }
+
+  async function getModerationStats() {
+    var dto = await apiGet('/api/admin/reports/stats');
+    // Frontend-Format: Array von Stat-Cards mit {number, label, color}
+    return [
+      { number: dto.open,      label: 'Offen',     color: '#FF6B00' },
+      { number: dto.resolved,  label: 'Erledigt',  color: '#22c55e' },
+      { number: dto.dismissed, label: 'Verworfen', color: '#999' }
+    ];
+  }
+
+  async function getModerationReportDetail(reportId) {
+    // ⚠ Audit-relevant: jeder GET hier triggert auf Backend-Seite einen Log-Eintrag (Post-IPA)
+    var dto = await apiGet('/api/admin/reports/' + reportId);
+    return mapReportDetail(dto);
+  }
+
+  async function updateReportStatus(reportId, status) {
+    return await apiPatch('/api/admin/reports/' + reportId + '/status', { status: status });
+  }
+
+  async function applyReportAction(reportId, payload) {
+    // payload: { action, reason, hrIntervention, hrEscalation, notes }
+    return await apiPost('/api/admin/reports/' + reportId + '/action', payload);
+  }
+
+  /* ─── Mappers ─────────────────────────────────────── */
+
+  function mapReportListItem(dto) {
+    // statusClass: für CSS-Styling der Tabellen-Zeile
+    var statusClass = mapStatusClass(dto.status);
+    var statusLabel = mapStatusLabel(dto.status);
+
+    return {
+      id:                    dto.id,
+      feedbackId:            dto.feedbackId,
+      reporterDisplayName:   dto.reporterDisplayName,
+      recipientDisplayName:  dto.recipientDisplayName,
+      isAnonymousFeedback:   dto.isAnonymousFeedback,
+      createdAt:             dto.createdAt,
+      dateLabel:             formatDateShort(dto.createdAt),
+      status:                dto.status,
+      statusClass:           statusClass,
+      statusLabel:           statusLabel,
+      reason:                dto.reason || ''
+    };
+  }
+
+  function mapReportDetail(dto) {
+    var f = dto.feedback;
+
+    return {
+      id:                    dto.id,
+      feedbackId:            dto.feedbackId,
+      status:                dto.status,
+      statusClass:           mapStatusClass(dto.status),
+      statusLabel:           mapStatusLabel(dto.status),
+      reason:                dto.reason || '',
+      createdAt:             dto.createdAt,
+      resolvedAt:            dto.resolvedAt,
+      reporterId:            dto.reporterId,
+      reporterDisplayName:   dto.reporterDisplayName,
+      feedback: {
+        id:                  f.id,
+        isAnonymous:         f.isAnonymous,
+        isEdited:            f.isEdited,
+        isDeleted:           f.isDeleted,
+        submitterId:         f.submitter ? f.submitter.id : null,
+        submitterName:       f.submitter ? f.submitter.displayName : null,
+        submitterInitials:   f.submitter ? buildInitials(f.submitter.displayName) : null,
+        recipientId:         f.recipientId,
+        recipientName:       f.recipientDisplayName,
+        recipientInitials:   buildInitials(f.recipientDisplayName),
+        submittedDate:       f.submittedDate,
+        submittedAt:         f.submittedAt,
+        strengths:           f.strengths || '',
+        areasToImprove:      f.areasToImprove || '',
+        ratings:             (f.ratings || []).map(mapRating)
+      }
+    };
+  }
+
+  function mapStatusClass(status) {
+    // Backend: open / resolved / dismissed
+    if (status === 'open')      return 'flagged';   // bestehende CSS-Klasse rot
+    if (status === 'resolved')  return 'resolved';  // grün
+    if (status === 'dismissed') return 'pending';   // orange (oder eigene Klasse)
+    return 'pending';
+  }
+
+  function mapStatusLabel(status) {
+    if (status === 'open')      return 'Offen';
+    if (status === 'resolved')  return 'Erledigt';
+    if (status === 'dismissed') return 'Verworfen';
+    return status;
+  }
+
+  /* ═══════════════════════════════════════════════════════
      Mock-Funktionen (noch nicht angebunden)
      Werden in den nächsten Schritten umgestellt.
      ═══════════════════════════════════════════════════════ */
 
   function getRecipients()           { return MockData.recipients; }
   function getDriverDefinitions()    { return MockData.driverDefinitions; }
-  function getModerationStats()      { return MockData.moderationStats; }
-  function getModerationReports()    { return MockData.moderationReports; }
 
   /* ═══════════════════════════════════════════════════════
      Debug-Helper (Post-IPA entfernen)
@@ -575,6 +684,9 @@ var FeedbackAPI = (function () {
     updateUserManagerFlag:      updateUserManagerFlag,
     activateUser:               activateUser,
     deactivateUser:             deactivateUser,
+    getModerationReportDetail:  getModerationReportDetail,
+    updateReportStatus:         updateReportStatus,
+    applyReportAction:          applyReportAction
   };
 
 })();

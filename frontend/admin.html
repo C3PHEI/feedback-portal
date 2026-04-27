@@ -185,11 +185,11 @@
         <thead>
         <tr>
           <th data-i18n="admin.col_id">ID</th>
-          <th data-i18n="admin.col_from">Von</th>
-          <th data-i18n="admin.col_to">An</th>
+          <th data-i18n="admin.col_reporter">Gemeldet von</th>
+          <th data-i18n="admin.col_feedback_recipient">Empfänger des Feedbacks</th>
           <th data-i18n="admin.col_date">Datum</th>
           <th data-i18n="admin.col_type">Typ</th>
-          <th class="hide-mobile" data-i18n="admin.col_rating">Bewertung</th>
+          <th class="hide-mobile" data-i18n="admin.col_reason">Begründung</th>
           <th style="text-align:right;" data-i18n="admin.col_status">Status</th>
         </tr>
         </thead>
@@ -375,6 +375,89 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════════
+     Modal: Report-Aktion ausführen
+     ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="reportActionModal">
+  <div class="modal-card" style="max-width:560px;">
+    <div class="modal-header">
+      <h2 class="modal-title" data-i18n="admin.action_modal_title">Aktion auf Report</h2>
+      <button class="modal-close" id="closeActionModalBtn" type="button" aria-label="Schliessen">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="action-modal-context" id="actionModalContext"></p>
+
+      <div class="action-options">
+        <label class="action-option">
+          <input type="radio" name="reportAction" value="dismissed">
+          <div class="action-option-label">
+            <span class="action-name" data-i18n="admin.action_dismissed">Verwerfen</span>
+            <span class="action-desc" data-i18n="admin.action_dismissed_desc">Keine Verletzung des Code of Conduct festgestellt.</span>
+          </div>
+        </label>
+
+        <label class="action-option">
+          <input type="radio" name="reportAction" value="retained_with_note">
+          <div class="action-option-label">
+            <span class="action-name" data-i18n="admin.action_retained">Mit Hinweis behalten</span>
+            <span class="action-desc" data-i18n="admin.action_retained_desc">Grenzwertig, Feedback bleibt sichtbar mit Anmerkung.</span>
+          </div>
+        </label>
+
+        <label class="action-option">
+          <input type="radio" name="reportAction" value="redacted">
+          <div class="action-option-label">
+            <span class="action-name" data-i18n="admin.action_redacted">Teilweise zensieren</span>
+            <span class="action-desc" data-i18n="admin.action_redacted_desc">Problematische Passagen werden geschwärzt.</span>
+          </div>
+        </label>
+
+        <label class="action-option danger">
+          <input type="radio" name="reportAction" value="removed">
+          <div class="action-option-label">
+            <span class="action-name" data-i18n="admin.action_removed">Entfernen</span>
+            <span class="action-desc" data-i18n="admin.action_removed_desc">Aus Empfänger-Sicht entfernt, fließt nicht in Durchschnitt ein. Irreversibel.</span>
+          </div>
+        </label>
+      </div>
+
+      <label class="action-reason-label" data-i18n="admin.action_reason_label">Begründung (Pflicht, mindestens 10 Zeichen):</label>
+      <textarea id="actionReason" class="action-reason-input" rows="3" maxlength="500"
+                placeholder="Warum wird diese Aktion ausgeführt?"></textarea>
+
+      <div class="action-toggles">
+        <label class="action-toggle">
+          <input type="checkbox" id="actionHrIntervention">
+          <span data-i18n="admin.action_hr_intervention">HR-Intervention erforderlich</span>
+        </label>
+        <label class="action-toggle">
+          <input type="checkbox" id="actionHrEscalation">
+          <span data-i18n="admin.action_hr_escalation">An HR eskalieren</span>
+        </label>
+      </div>
+
+      <div class="action-warning" id="actionWarning" style="display:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span data-i18n="admin.action_warning_irreversible">Diese Aktion ist irreversibel.</span>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-admin" id="cancelActionBtn" type="button" data-i18n="common.cancel">Abbrechen</button>
+      <button class="btn-admin primary" id="confirmActionBtn" type="button" data-i18n="admin.action_confirm">Aktion ausführen</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
      Modal: Abteilung zuweisen
      ═══════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="deptModal">
@@ -422,7 +505,7 @@
     </div>
     <div class="deactivate-info-box mb-4" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_from">Von</div>
+        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_reporter">Gemeldet von</div>
         <div class="flex items-center gap-2">
           <div class="avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;" id="reportModalVonAvatar"></div>
           <span class="text-white text-sm" id="reportModalVon"></span>

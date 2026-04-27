@@ -2,24 +2,25 @@
  * pages/admin.js
  * Feedback Hub — Admin-Seite dynamisch rendern
  *
- * Schritt 8: Dashboard-Tab via Backend-API.
- * Schritt 9: User-Tab via Backend-API (Liste, Rolle, Department, Aktivieren/Deaktivieren).
- * Moderation-Tab läuft weiter mit Mock (Schritt 10).
+ * Schritt 8:  Dashboard-Tab via Backend-API.
+ * Schritt 9:  User-Tab via Backend-API (Liste + 4 Mutationen).
+ * Schritt 10: Moderation-Tab via Backend-API (Liste, Detail, Status, Action).
  *
  * Pattern: Render-Funktionen sind synchron und nehmen Daten als Parameter.
  * Asynchrones Datenladen passiert in init() via Promise.all.
- * User-Tabelle hält State in modul-internem `_userCache`, damit
- * optimistische Updates nach API-Aktionen ohne kompletten Reload möglich sind.
+ * State in modul-internen Caches (_userCache, _reportCache, _departmentCache),
+ * damit optimistische Updates ohne kompletten Reload möglich sind.
  */
 
 (function () {
 
-  // Modul-State für User-Tab (Schritt 9)
+  // Modul-State
   var _userCache       = [];
+  var _reportCache     = [];
   var _departmentCache = [];
 
   /* ═══════════════════════════════════════════════════════
-     Render: Stats Overview (Backend)
+     Dashboard-Render (Schritt 8)
      ═══════════════════════════════════════════════════════ */
 
   function renderStats(stats) {
@@ -89,65 +90,93 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render: Moderation (Mock — Schritt 10)
+     Moderation: Stats + Table (Schritt 10)
      ═══════════════════════════════════════════════════════ */
 
-  function renderModerationStats() {
+  function renderModerationStats(stats) {
     var el = document.getElementById('admin-mod-stats');
-    if (!el) return;
-    var stats = FeedbackAPI.getModerationStats();
+    if (!el || !stats) return;
     el.innerHTML = stats.map(function (s) {
       return '<div class="stat-card"><div class="stat-number" style="color:' + s.color + ';">' + s.number + '</div><div class="stat-label">' + s.label + '</div></div>';
     }).join('');
   }
 
-  function renderModerationTable() {
+  function renderModerationTable(reports) {
     var el = document.getElementById('feedbackTableBody1');
     if (!el) return;
-    var reports = FeedbackAPI.getModerationReports();
 
-    el.innerHTML = reports.map(function (r) {
-      var statusColors = { flagged: '#E52620', pending: '#FF6B00', resolved: '#22c55e' };
-      var statusColor = statusColors[r.statusClass] || '#999';
+    _reportCache = reports || [];
 
-      var vonAvatar = r.vonInitials === '?'
-        ? '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;background:#333;color:#666;">?</div>'
-        : '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + r.vonInitials + '</div>';
+    if (!_reportCache.length) {
+      el.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--color-text-ghost);padding:40px;">' +
+        'Keine Reports vorhanden.</td></tr>';
+      return;
+    }
 
-      var vonName = r.von === I18n.t('common.anonymous')
-        ? '<span style="color:#666;font-size:13px;">' + I18n.t('common.anonymous') + '</span>'
-        : '<span class="text-white text-sm">' + r.von + '</span>';
+    el.innerHTML = _reportCache.map(buildReportRow).join('\n');
+  }
 
-      var typBadge = r.typ === I18n.t('common.anonymous')
-        ? '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' + I18n.t('common.anonymous') + '</span>'
-        : '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
+  function buildReportRow(r) {
+    var statusColors = { flagged: '#E52620', pending: '#FF6B00', resolved: '#22c55e' };
+    var statusColor = statusColors[r.statusClass] || '#999';
 
-      var ratingColor = r.typ === I18n.t('common.anonymous') ? '#E52620' : '#FF6B00';
+    // Reporter-Avatar (immer sichtbar, ist nicht der anonyme Submitter)
+    var reporterInitials = buildReporterInitials(r.reporterDisplayName);
+    var reporterAvatar = '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + reporterInitials + '</div>';
 
-      return '<tr class="mod-report-row"' +
-        ' data-id="' + r.id + '"' +
-        ' data-von="' + r.von + '" data-von-initials="' + r.vonInitials + '"' +
-        ' data-an="' + r.an + '" data-an-initials="' + r.anInitials + '"' +
-        ' data-datum="' + r.datum + '" data-typ="' + r.typ + '" data-rating="' + r.rating + '"' +
-        ' data-status-label="' + r.statusLabel + '" data-status-class="' + r.statusClass + '"' +
-        ' data-reason="' + r.reason.replace(/"/g, '&quot;') + '"' +
-        ' data-strengths="' + r.strengths.replace(/"/g, '&quot;') + '"' +
-        ' data-improvements="' + r.improvements.replace(/"/g, '&quot;') + '"' +
-        ' data-drivers="' + r.drivers.replace(/"/g, '&quot;') + '"' +
-        ' style="cursor:pointer;">' +
-        '<td><span style="color:#666;font-size:12px;font-family:\'Bodoni MT\',sans-serif;">' + r.id + '</span></td>' +
-        '<td><div class="flex items-center gap-2">' + vonAvatar + vonName + '</div></td>' +
-        '<td><div class="flex items-center gap-2"><div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + r.anInitials + '</div><span class="text-white text-sm">' + r.an + '</span></div></td>' +
-        '<td><span style="color:#999;font-size:13px;">' + r.datum + '</span></td>' +
-        '<td>' + typBadge + '</td>' +
-        '<td class="hide-mobile"><span style="color:' + ratingColor + ';font-size:13px;">★ ' + r.rating + '</span></td>' +
-        '<td class="fb-status-cell"><span class="status-dot ' + r.statusClass + '"></span><span style="color:' + statusColor + ';font-size:12px;">' + r.statusLabel + '</span></td>' +
-        '</tr>';
-    }).join('\n');
+    // Recipient-Avatar
+    var recipientInitials = buildReporterInitials(r.recipientDisplayName);
+    var recipientAvatar = '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + recipientInitials + '</div>';
+
+    var typBadge = r.isAnonymousFeedback
+      ? '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' + I18n.t('common.anonymous') + '</span>'
+      : '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
+
+    // Kurze ID für Anzeige
+    var shortId = 'FB-' + r.feedbackId.substring(0, 8).toUpperCase();
+
+    return '<tr class="mod-report-row" data-report-id="' + r.id + '" style="cursor:pointer;">' +
+      '<td><span style="color:#666;font-size:12px;font-family:\'Bodoni MT\',sans-serif;">' + shortId + '</span></td>' +
+      '<td><div class="flex items-center gap-2">' + reporterAvatar +
+      '<span class="text-white text-sm">' + r.reporterDisplayName + '</span></div></td>' +
+      '<td><div class="flex items-center gap-2">' + recipientAvatar +
+      '<span class="text-white text-sm">' + r.recipientDisplayName + '</span></div></td>' +
+      '<td><span style="color:#999;font-size:13px;">' + r.dateLabel + '</span></td>' +
+      '<td>' + typBadge + '</td>' +
+      '<td class="hide-mobile"><span style="color:#999;font-size:12px;font-style:italic;">' +
+      truncate(r.reason, 40) + '</span></td>' +
+      '<td class="fb-status-cell"><span class="status-dot ' + r.statusClass + '"></span>' +
+      '<span style="color:' + statusColor + ';font-size:12px;">' + r.statusLabel + '</span></td>' +
+      '</tr>';
+  }
+
+  function buildReporterInitials(name) {
+    if (!name) return '?';
+    var parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  function truncate(str, max) {
+    if (!str) return '';
+    return str.length > max ? str.substring(0, max).trim() + '…' : str;
+  }
+
+  function refreshReportRow(updatedReport) {
+    var idx = _reportCache.findIndex(function (r) { return r.id === updatedReport.id; });
+    if (idx === -1) return;
+    _reportCache[idx] = updatedReport;
+
+    var oldRow = document.querySelector('tr[data-report-id="' + updatedReport.id + '"]');
+    if (!oldRow) return;
+    var temp = document.createElement('tbody');
+    temp.innerHTML = buildReportRow(updatedReport);
+    var newRow = temp.querySelector('tr');
+    oldRow.parentNode.replaceChild(newRow, oldRow);
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render: User Table (Backend — Schritt 9)
+     User-Table (Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
   function renderUserTable(users) {
@@ -173,7 +202,6 @@
         ? I18n.t('admin.role_manager')
         : I18n.t('admin.role_user');
 
-    // Manager-Marker für Department-Manager
     var managerSuffix = u.isDepartmentManager
       ? ' <span style="color:var(--color-orange);font-size:10px;margin-left:4px;" title="Abteilungsleiter">\u2605</span>'
       : '';
@@ -217,7 +245,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Charts
+     Charts (Schritt 8)
      ═══════════════════════════════════════════════════════ */
 
   function initDashboardCharts(activityData, visData) {
@@ -290,7 +318,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Tab Switching
+     Tab Switching + Helpers
      ═══════════════════════════════════════════════════════ */
 
   function initTabSwitching() {
@@ -307,10 +335,6 @@
     });
   }
 
-  /* ═══════════════════════════════════════════════════════
-     Helper: Backend-Errorcode → übersetzte Meldung
-     ═══════════════════════════════════════════════════════ */
-
   function translateError(e) {
     var key = 'error.' + (e.errorCode || 'generic');
     var translated = I18n.t(key);
@@ -321,7 +345,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     User-Aktionen via Event-Delegation
+     User-Aktionen via Event-Delegation (Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
   function bindUserTableActions() {
@@ -345,7 +369,23 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Modal: Rolle ändern
+     Moderation: Click-Handler auf Tabelle (Schritt 10)
+     ═══════════════════════════════════════════════════════ */
+
+  function bindReportTableActions() {
+    var tbody = document.getElementById('feedbackTableBody1');
+    if (!tbody) return;
+
+    tbody.addEventListener('click', function (e) {
+      var row = e.target.closest('.mod-report-row');
+      if (!row) return;
+      var reportId = row.dataset.reportId;
+      if (reportId) openReportModal(reportId);
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Modal: Rolle ändern (Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
   var _currentRoleUser = null;
@@ -408,7 +448,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Modal: Department zuweisen
+     Modal: Department zuweisen (Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
   var _currentDeptUser = null;
@@ -470,7 +510,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Aktivieren / Deaktivieren
+     Aktivieren / Deaktivieren (Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
   async function handleActivate(user) {
@@ -530,7 +570,272 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Event Bindings (Such, Filter, Modale)
+     Modal: Report-Detail (Schritt 10)
+     ═══════════════════════════════════════════════════════ */
+
+  var _currentReport = null;
+
+  async function openReportModal(reportId) {
+    var modal = document.getElementById('reportDetailModal');
+    if (!modal) return;
+
+    // Loading-State
+    var idEl = document.getElementById('reportModalId');
+    if (idEl) idEl.textContent = 'Lade…';
+
+    modal.classList.add('show');
+
+    try {
+      var report = await FeedbackAPI.getModerationReportDetail(reportId);
+      _currentReport = report;
+      fillReportModal(report);
+    } catch (e) {
+      console.error('Report-Detail konnte nicht geladen werden:', e);
+      Render.showToast(translateError(e));
+      modal.classList.remove('show');
+    }
+  }
+
+  function fillReportModal(report) {
+    var f = report.feedback;
+    var shortId = 'FB-' + f.id.substring(0, 8).toUpperCase();
+
+    if (document.getElementById('reportModalId')) {
+      document.getElementById('reportModalId').textContent = shortId;
+    }
+
+    // Reporter (immer sichtbar)
+    var reporterInitials = buildReporterInitials(report.reporterDisplayName);
+    var vonAvatar = document.getElementById('reportModalVonAvatar');
+    if (vonAvatar) {
+      vonAvatar.style.background = '';
+      vonAvatar.style.color = '';
+      vonAvatar.textContent = reporterInitials;
+    }
+    if (document.getElementById('reportModalVon')) {
+      document.getElementById('reportModalVon').textContent = report.reporterDisplayName;
+    }
+
+    // Recipient
+    if (document.getElementById('reportModalAnAvatar')) {
+      document.getElementById('reportModalAnAvatar').textContent = f.recipientInitials;
+    }
+    if (document.getElementById('reportModalAn')) {
+      document.getElementById('reportModalAn').textContent = f.recipientName;
+    }
+
+    // Datum
+    if (document.getElementById('reportModalDatum')) {
+      document.getElementById('reportModalDatum').textContent = FeedbackAPI.formatDateShort
+        ? FeedbackAPI.formatDateShort(f.submittedDate)
+        : f.submittedDate;
+    }
+
+    // Typ-Badge: bei anonym Hinweis dass Submitter im Mod-Kontext sichtbar ist
+    var typEl = document.getElementById('reportModalTyp');
+    if (typEl) {
+      if (f.isAnonymous) {
+        typEl.innerHTML = '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' +
+          I18n.t('common.anonymous') + '</span>';
+      } else {
+        typEl.innerHTML = '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
+      }
+    }
+
+    // Reason des Reports
+    if (document.getElementById('reportModalReason')) {
+      document.getElementById('reportModalReason').textContent = report.reason;
+    }
+
+    // Feedback-Inhalt
+    if (document.getElementById('reportModalStrengths')) {
+      document.getElementById('reportModalStrengths').textContent = f.strengths || '–';
+    }
+    if (document.getElementById('reportModalImprovements')) {
+      document.getElementById('reportModalImprovements').textContent = f.areasToImprove || '–';
+    }
+
+    // Driver-Ratings
+    var driversEl = document.getElementById('reportModalDrivers');
+    if (driversEl) {
+      driversEl.innerHTML = '';
+      f.ratings.forEach(function (r, idx, arr) {
+        var driverLabel = I18n.t('driver.' + r.name);
+        var val = r.na ? 'N/A' : (r.rating + ' \u2605');
+        var p = document.createElement('div');
+        p.style.cssText = 'display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #2e2e2e;font-size:13px;font-family:\'DM Sans\',sans-serif;';
+        p.innerHTML = '<span style="color:#666;">' + driverLabel + '</span>' +
+          '<span style="color:' + (r.na ? '#666' : '#FF6B00') + ';">' + val + '</span>';
+        if (idx === arr.length - 1) p.style.borderBottom = 'none';
+        driversEl.appendChild(p);
+      });
+    }
+
+    // Submitter-Hinweis bei anonymen Feedbacks (Audit-Visibility-Hinweis)
+    var hintEl = document.getElementById('reportSubmitterHint');
+    if (hintEl) {
+      if (f.isAnonymous && f.submitterName) {
+        hintEl.style.display = 'flex';
+        hintEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
+          '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' +
+          '<line x1="12" y1="9" x2="12" y2="13"/>' +
+          '<line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+          '<span>Absender im Moderationskontext: <strong>' + f.submitterName +
+          '</strong> — der Empfänger sieht das Feedback weiterhin als anonym.</span>';
+      } else {
+        hintEl.style.display = 'none';
+      }
+    }
+
+    // Action-Buttons je nach aktuellem Status enablen/disablen
+    updateReportActionButtons(report.status);
+  }
+
+  function updateReportActionButtons(status) {
+    var review  = document.getElementById('reportActionReview');
+    var resolve = document.getElementById('reportActionResolve');
+    var dismiss = document.getElementById('reportActionDismiss');
+
+    var isFinal = (status === 'resolved' || status === 'dismissed');
+
+    [review, resolve, dismiss].forEach(function (btn) {
+      if (!btn) return;
+      btn.disabled = isFinal;
+      btn.style.opacity = isFinal ? '0.5' : '';
+      btn.style.pointerEvents = isFinal ? 'none' : '';
+    });
+  }
+
+  function closeReportModal() {
+    var modal = document.getElementById('reportDetailModal');
+    if (modal) modal.classList.remove('show');
+    _currentReport = null;
+  }
+
+  async function setReportInReview() {
+    if (!_currentReport) return;
+    try {
+      // Backend kennt nur 'resolved' und 'dismissed' als Übergänge → 'review' = Sub-Status
+      // Das eigentliche "In Prüfung" ist im Frontend ein UX-Indikator. Wir nutzen
+      // den dedizierten Action-Workflow (POST /action) statt PATCH /status hier.
+      Render.showToast(I18n.t('admin.toast_status_set_review'));
+    } catch (e) {
+      console.error('setReportInReview failed:', e);
+      Render.showToast(translateError(e));
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Modal: Report-Action (Schritt 10) — POST /action
+     ═══════════════════════════════════════════════════════ */
+
+  function openActionModal() {
+    if (!_currentReport) return;
+    var modal = document.getElementById('reportActionModal');
+    if (!modal) return;
+
+    var f = _currentReport.feedback;
+    var shortId = 'FB-' + f.id.substring(0, 8).toUpperCase();
+
+    document.getElementById('actionModalContext').textContent =
+      'Report ' + shortId + ' \u2014 von ' + _currentReport.reporterDisplayName +
+      ' \u2192 an ' + f.recipientName;
+
+    // Reset
+    document.querySelectorAll('input[name="reportAction"]').forEach(function (r) { r.checked = false; });
+    document.getElementById('actionReason').value = '';
+    document.getElementById('actionHrIntervention').checked = false;
+    document.getElementById('actionHrEscalation').checked = false;
+    document.getElementById('actionWarning').style.display = 'none';
+
+    modal.classList.add('show');
+  }
+
+  function closeActionModal() {
+    var modal = document.getElementById('reportActionModal');
+    if (modal) modal.classList.remove('show');
+  }
+
+  function bindActionRadios() {
+    document.querySelectorAll('input[name="reportAction"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        var warning = document.getElementById('actionWarning');
+        if (radio.value === 'removed') {
+          warning.style.display = 'flex';
+        } else {
+          warning.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  async function confirmAction() {
+    if (!_currentReport) return;
+
+    var actionRadio = document.querySelector('input[name="reportAction"]:checked');
+    if (!actionRadio) {
+      Render.showToast(I18n.t('error.invalid_action'));
+      return;
+    }
+
+    var reason = document.getElementById('actionReason').value.trim();
+    if (reason.length < 10) {
+      Render.showToast(I18n.t('error.reason_too_short'));
+      return;
+    }
+
+    // Bei 'removed' eine zusätzliche Bestätigung verlangen
+    if (actionRadio.value === 'removed') {
+      var ok = window.confirm('Diese Aktion ist irreversibel. Wirklich entfernen?');
+      if (!ok) return;
+    }
+
+    var payload = {
+      action:         actionRadio.value,
+      reason:         reason,
+      hrIntervention: document.getElementById('actionHrIntervention').checked,
+      hrEscalation:   document.getElementById('actionHrEscalation').checked,
+      notes:          null
+    };
+
+    var btn = document.getElementById('confirmActionBtn');
+    btn.disabled = true;
+
+    try {
+      await FeedbackAPI.applyReportAction(_currentReport.id, payload);
+
+      // Status lokal aktualisieren basierend auf Action
+      var newStatus = (payload.action === 'dismissed') ? 'dismissed' : 'resolved';
+      var listItemIdx = _reportCache.findIndex(function (r) { return r.id === _currentReport.id; });
+      if (listItemIdx !== -1) {
+        var updated = _reportCache[listItemIdx];
+        updated.status      = newStatus;
+        updated.statusClass = (newStatus === 'resolved') ? 'resolved' : 'pending';
+        updated.statusLabel = (newStatus === 'resolved') ? 'Erledigt' : 'Verworfen';
+        refreshReportRow(updated);
+      }
+
+      // Stats neu laden (Counts haben sich verändert)
+      try {
+        var freshStats = await FeedbackAPI.getModerationStats();
+        renderModerationStats(freshStats);
+      } catch (statsErr) {
+        console.warn('Stats-Refresh fehlgeschlagen:', statsErr);
+      }
+
+      Render.showToast(I18n.t('admin.toast_action_executed'));
+      closeActionModal();
+      closeReportModal();
+    } catch (e) {
+      console.error('applyReportAction failed:', e);
+      Render.showToast(translateError(e));
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Event Bindings
      ═══════════════════════════════════════════════════════ */
 
   function bindEvents() {
@@ -545,13 +850,15 @@
       });
     }
 
-    /* Moderation Search */
+    /* Moderation Search (clientseitig auf gerenderter Tabelle) */
     var modSearch = document.getElementById('moderationSearch');
     if (modSearch) {
       modSearch.addEventListener('input', function () {
         var query = modSearch.value.toLowerCase();
-        var items = document.querySelectorAll('.feedback-preview');
-        items.forEach(function (item) { item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none'; });
+        var rows = document.querySelectorAll('.mod-report-row');
+        rows.forEach(function (row) {
+          row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+        });
       });
     }
 
@@ -581,26 +888,12 @@
         var rows = document.querySelectorAll('.mod-report-row');
         rows.forEach(function (row) {
           if (filter === 'all') { row.style.display = ''; return; }
-          var sc = row.dataset.statusClass;
-          if (filter === 'open')     row.style.display = (sc === 'flagged')  ? '' : 'none';
-          if (filter === 'review')   row.style.display = (sc === 'pending')  ? '' : 'none';
-          if (filter === 'resolved') row.style.display = (sc === 'resolved') ? '' : 'none';
+          var sc = row.querySelector('.fb-status-cell .status-dot');
+          if (!sc) return;
+          if (filter === 'open')     row.style.display = sc.classList.contains('flagged')  ? '' : 'none';
+          if (filter === 'review')   row.style.display = sc.classList.contains('pending')  ? '' : 'none';
+          if (filter === 'resolved') row.style.display = sc.classList.contains('resolved') ? '' : 'none';
         });
-      });
-    });
-
-    /* Expand/Collapse */
-    var expandBtns = document.querySelectorAll('.expand-btn');
-    expandBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var preview = btn.closest('.feedback-preview');
-        if (preview.classList.contains('expanded')) {
-          preview.classList.remove('expanded');
-          btn.textContent = I18n.t('admin.expand_more');
-        } else {
-          preview.classList.add('expanded');
-          btn.textContent = I18n.t('admin.expand_less');
-        }
       });
     });
 
@@ -608,89 +901,48 @@
     var reportDetailModal = document.getElementById('reportDetailModal');
     var closeReportModalBtn = document.getElementById('closeReportModalBtn');
 
-    function openReportModal(row) {
-      document.getElementById('reportModalId').textContent = row.dataset.id;
-
-      var vonAvatar = document.getElementById('reportModalVonAvatar');
-      var vonInitials = row.dataset.vonInitials;
-      if (vonInitials === '?') {
-        vonAvatar.style.background = '#333';
-        vonAvatar.style.color = '#666';
-      }
-      vonAvatar.textContent = vonInitials;
-      document.getElementById('reportModalVon').textContent = row.dataset.von === I18n.t('common.anonymous')
-        ? I18n.t('common.anonymous')
-        : row.dataset.von;
-
-      var anAvatar = document.getElementById('reportModalAnAvatar');
-      anAvatar.textContent = row.dataset.anInitials;
-      document.getElementById('reportModalAn').textContent = row.dataset.an;
-      document.getElementById('reportModalDatum').textContent = row.dataset.datum;
-
-      var typEl = document.getElementById('reportModalTyp');
-      if (row.dataset.typ === I18n.t('common.anonymous')) {
-        typEl.innerHTML = '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' + I18n.t('common.anonymous') + '</span>';
-      } else {
-        typEl.innerHTML = '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
-      }
-
-      document.getElementById('reportModalReason').textContent = row.dataset.reason;
-      document.getElementById('reportModalStrengths').textContent = row.dataset.strengths;
-      document.getElementById('reportModalImprovements').textContent = row.dataset.improvements;
-
-      var driversEl = document.getElementById('reportModalDrivers');
-      driversEl.innerHTML = '';
-      if (row.dataset.drivers) {
-        row.dataset.drivers.split('|').forEach(function (entry) {
-          var parts = entry.split(':');
-          var name = parts[0] ? parts[0].trim() : '';
-          var val = parts[1] ? parts[1].trim() : '';
-          var p = document.createElement('div');
-          p.style.cssText = 'display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #2e2e2e;font-size:13px;font-family:\'DM Sans\',sans-serif;';
-          p.innerHTML = '<span style="color:#666;">' + name + '</span><span style="color:#FF6B00;">' + val + '</span>';
-          driversEl.appendChild(p);
-        });
-        var last = driversEl.lastChild;
-        if (last) last.style.borderBottom = 'none';
-      }
-      reportDetailModal.classList.add('show');
-    }
-
-    function closeReportModal() {
-      if (reportDetailModal) reportDetailModal.classList.remove('show');
-    }
-
-    var modReportRows = document.querySelectorAll('.mod-report-row');
-    modReportRows.forEach(function (row) {
-      row.addEventListener('click', function () { openReportModal(row); });
+    if (closeReportModalBtn) closeReportModalBtn.addEventListener('click', closeReportModal);
+    if (reportDetailModal) reportDetailModal.addEventListener('click', function (e) {
+      if (e.target === reportDetailModal) closeReportModal();
     });
 
-    if (closeReportModalBtn) closeReportModalBtn.addEventListener('click', closeReportModal);
-    if (reportDetailModal) reportDetailModal.addEventListener('click', function (e) { if (e.target === reportDetailModal) closeReportModal(); });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         closeReportModal();
         closeRoleModal();
         closeDeptModal();
+        closeActionModal();
       }
     });
 
-    var reportActionReview = document.getElementById('reportActionReview');
+    /* Report-Status-Buttons → öffnen Action-Modal mit vorausgewählter Aktion */
+    var reportActionReview  = document.getElementById('reportActionReview');
     var reportActionResolve = document.getElementById('reportActionResolve');
     var reportActionDismiss = document.getElementById('reportActionDismiss');
 
-    if (reportActionReview) reportActionReview.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' - ' + I18n.t('admin.toast_review'));
-      closeReportModal();
-    });
-    if (reportActionResolve) reportActionResolve.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' - ' + I18n.t('admin.toast_resolved'));
-      closeReportModal();
-    });
+    if (reportActionReview)  reportActionReview.addEventListener('click', setReportInReview);
+    if (reportActionResolve) reportActionResolve.addEventListener('click', openActionModal);
     if (reportActionDismiss) reportActionDismiss.addEventListener('click', function () {
-      Render.showToast(document.getElementById('reportModalId').textContent + ' - ' + I18n.t('admin.toast_dismissed'));
-      closeReportModal();
+      // Direkt-Action: Dismiss
+      openActionModal();
+      var radio = document.querySelector('input[name="reportAction"][value="dismissed"]');
+      if (radio) radio.checked = true;
     });
+
+    /* Action Modal Bindings */
+    var actionModal      = document.getElementById('reportActionModal');
+    var closeActionBtn   = document.getElementById('closeActionModalBtn');
+    var cancelActionBtn  = document.getElementById('cancelActionBtn');
+    var confirmActionBtn = document.getElementById('confirmActionBtn');
+
+    if (closeActionBtn)   closeActionBtn.addEventListener('click', closeActionModal);
+    if (cancelActionBtn)  cancelActionBtn.addEventListener('click', closeActionModal);
+    if (confirmActionBtn) confirmActionBtn.addEventListener('click', confirmAction);
+    if (actionModal) actionModal.addEventListener('click', function (e) {
+      if (e.target === actionModal) closeActionModal();
+    });
+
+    bindActionRadios();
 
     /* Deactivate User Modal */
     var deactivateModal = document.getElementById('deactivateModal');
@@ -712,26 +964,26 @@
     }
 
     /* Role Modal */
-    var roleModal = document.getElementById('roleModal');
-    var closeRoleBtn = document.getElementById('closeRoleModalBtn');
-    var cancelRoleBtn = document.getElementById('cancelRoleBtn');
+    var roleModal      = document.getElementById('roleModal');
+    var closeRoleBtn   = document.getElementById('closeRoleModalBtn');
+    var cancelRoleBtn  = document.getElementById('cancelRoleBtn');
     var confirmRoleBtn = document.getElementById('confirmRoleBtn');
 
-    if (closeRoleBtn)  closeRoleBtn.addEventListener('click', closeRoleModal);
-    if (cancelRoleBtn) cancelRoleBtn.addEventListener('click', closeRoleModal);
+    if (closeRoleBtn)   closeRoleBtn.addEventListener('click', closeRoleModal);
+    if (cancelRoleBtn)  cancelRoleBtn.addEventListener('click', closeRoleModal);
     if (confirmRoleBtn) confirmRoleBtn.addEventListener('click', confirmRoleChange);
     if (roleModal) roleModal.addEventListener('click', function (e) {
       if (e.target === roleModal) closeRoleModal();
     });
 
     /* Department Modal */
-    var deptModal = document.getElementById('deptModal');
-    var closeDeptBtn = document.getElementById('closeDeptModalBtn');
-    var cancelDeptBtn = document.getElementById('cancelDeptBtn');
+    var deptModal      = document.getElementById('deptModal');
+    var closeDeptBtn   = document.getElementById('closeDeptModalBtn');
+    var cancelDeptBtn  = document.getElementById('cancelDeptBtn');
     var confirmDeptBtn = document.getElementById('confirmDeptBtn');
 
-    if (closeDeptBtn)  closeDeptBtn.addEventListener('click', closeDeptModal);
-    if (cancelDeptBtn) cancelDeptBtn.addEventListener('click', closeDeptModal);
+    if (closeDeptBtn)   closeDeptBtn.addEventListener('click', closeDeptModal);
+    if (cancelDeptBtn)  cancelDeptBtn.addEventListener('click', closeDeptModal);
     if (confirmDeptBtn) confirmDeptBtn.addEventListener('click', confirmDeptChange);
     if (deptModal) deptModal.addEventListener('click', function (e) {
       if (e.target === deptModal) closeDeptModal();
@@ -769,10 +1021,8 @@
     Render.initProfileDropdown();
     initTabSwitching();
 
-    // Mock-Render (Schritt 10)
+    // System-Status bleibt Mock (Post-IPA)
     renderSystemStatus(FeedbackAPI.getAdminSystemStatus());
-    renderModerationStats();
-    renderModerationTable();
 
     // Backend-Daten parallel
     try {
@@ -784,7 +1034,9 @@
         FeedbackAPI.getAdminDriverAverages(),
         FeedbackAPI.getAdminDepartments(),
         FeedbackAPI.getUsers(),
-        FeedbackAPI.getDepartments()
+        FeedbackAPI.getDepartments(),
+        FeedbackAPI.getModerationReports(),
+        FeedbackAPI.getModerationStats()
       ]);
 
       var stats        = results[0];
@@ -795,6 +1047,8 @@
       var depts        = results[5];
       var users        = results[6];
       _departmentCache = results[7];
+      var reports      = results[8];
+      var modStats     = results[9];
 
       renderStats(stats);
       renderKpis(kpis);
@@ -802,6 +1056,8 @@
       renderDepartments(depts);
       renderDonutLegend(visibility);
       renderUserTable(users);
+      renderModerationTable(reports);
+      renderModerationStats(modStats);
 
       initDashboardCharts(activity, visibility);
     } catch (e) {
@@ -816,6 +1072,7 @@
     // Event-Bindings ZULETZT
     bindEvents();
     bindUserTableActions();
+    bindReportTableActions();
   }
 
   document.addEventListener('DOMContentLoaded', init);
