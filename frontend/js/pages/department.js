@@ -78,34 +78,55 @@
 
     team.forEach(function (member) {
       var total   = member.feedbackCount || 0;
-      var overall = member.averageRating;        // bereits berechnet im Backend
+      var overall = member.averageRating;
       var isLow   = total > 0 && total <= 2;
 
-      // Mini-Driver-Chips: nicht verfügbar auf Karte (Backend liefert nur Aggregate)
-      var miniDrivers = '';
+      // Mini-Drivers: Backend liefert keine pro-Driver-Aggregate auf der Karte
+      // → Platzhalter pro Driver, echte Werte gibt's im Drawer
+      var miniDrivers = DRIVER_KEYS.map(function (k) {
+        var shortName = I18n.t('driver.' + k).split('/')[0].trim();
+        return '<div class="dept-mini-driver">' +
+          '</div>';
+      }).join('');
 
-      // Anon-Count: nicht verfügbar auf Karte ohne komplette Feedbacks
-      var anonBadge = '';
-
-      // Low-Hint: bei wenigen Feedbacks
+      // Low-Hint bei wenigen Feedbacks
       var lowHint = isLow
-        ? '<div class="dept-low-hint">' + I18n.t('dept.few_reviews') + '</div>'
+        ? '<div class="dept-card-low-hint">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
+        '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' +
+        '<line x1="12" y1="9" x2="12" y2="13"/>' +
+        '<line x1="12" y1="17" x2="12.01" y2="17"/>' +
+        '</svg>' +
+        '<span>' + I18n.t('dept.few_ratings') + '</span>' +
+        '</div>'
+        : '';
+
+      // Anon-Badge: nur wenn anonyme Feedbacks vorhanden
+      var anonCount = member.anonymousCount || 0;
+      var anonBadge = anonCount > 0
+        ? '<span class="dept-anon-badge">' +
+        '<img src="img/incognito.svg" alt="" class="dept-anon-badge-icon"/>' +
+        '<span>' + anonCount + ' ' + I18n.t('dept.anonymous') + '</span>' +
+        '</span>'
         : '';
 
       html += '<div class="dept-member-card" data-member-id="' + member.id + '">' +
-        '<div class="dept-member-header">' +
-        '<div class="avatar">' + member.initials + '</div>' +
+        '<div class="dept-member-top">' +
+        '<div class="avatar" style="width:40px;height:40px;font-size:13px;border-radius:10px;">' + member.initials + '</div>' +
         '<div class="dept-member-info">' +
         '<div class="dept-member-name">' + member.name + '</div>' +
-        '<div class="dept-member-role">' + (member.department || '') + '</div>' +
+        '<div class="dept-member-dept">' + (member.department || '') + '</div>' +
         '</div>' +
+        '<svg class="dept-member-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<polyline points="9 18 15 12 9 6"/>' +
+        '</svg>' +
         '</div>' +
-        '<div class="dept-member-stats">' +
-        '<span class="dept-member-avg">' + (overall !== null && overall !== undefined ? overall.toFixed(1) : '-') + '</span>' +
+        '<div class="dept-member-score">' +
+        //'<span class="dept-member-avg">' + (overall !== null && overall !== undefined ? overall.toFixed(1) : '-') + '</span>' +
         '<span class="dept-review-count">' + total + ' Feedback' + (total !== 1 ? 's' : '') + '</span>' +
         anonBadge +
         '</div>' +
-        miniDrivers +
+        (total > 0 ? '<div class="dept-mini-drivers">' + miniDrivers + '</div>' : '') +
         lowHint +
         '</div>';
     });

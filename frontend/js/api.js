@@ -306,7 +306,7 @@ var FeedbackAPI = (function () {
 
   async function getDepartmentTeamAverages() {
     var dto = await apiGet('/api/departments/my-team/averages');
-    return mapInboxAverages(dto);   // gleiche Struktur wie Inbox-Averages
+    return mapInboxAverages(dto);
   }
 
   async function getTeamMemberFeedbacks(userId) {
@@ -317,14 +317,15 @@ var FeedbackAPI = (function () {
   function mapTeamMember(dto) {
     var currentUser = _currentUserCache;
     return {
-      id:            dto.id,
-      name:          dto.displayName,
-      initials:      buildInitials(dto.displayName),
-      role:          dto.role,
-      department:    currentUser ? currentUser.department : null,
-      feedbackCount: dto.feedbackCount || 0,
-      averageRating: dto.averageRating != null ? dto.averageRating : null,
-      feedbacks:     null   // null = noch nicht geladen, [] wäre "geladen, leer"
+      id:             dto.id,
+      name:           dto.displayName,
+      initials:       buildInitials(dto.displayName),
+      role:           dto.role,
+      department:     currentUser ? currentUser.department : null,
+      feedbackCount:  dto.feedbackCount  || 0,
+      anonymousCount: dto.anonymousCount || 0,
+      averageRating:  dto.avgRating != null ? dto.avgRating : null,
+      feedbacks:      null
     };
   }
 
@@ -341,7 +342,6 @@ var FeedbackAPI = (function () {
     };
   }
 
-// "08.04.2026" — schlicht, immer gleiche Form
   function formatDateShort(isoDate) {
     if (!isoDate) return '';
     var d = new Date(isoDate);
