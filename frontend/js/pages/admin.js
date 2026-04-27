@@ -1,6 +1,12 @@
 /**
  * pages/admin.js
  * Feedback Hub — Admin-Seite dynamisch rendern
+ *
+ * Schritt 8: Dashboard-Tab via Backend-API.
+ * Moderation-Tab und User-Tab laufen weiter mit Mock (Schritte 9 + 10).
+ *
+ * Pattern: Render-Funktionen sind synchron und nehmen Daten als Parameter.
+ * Asynchrones Datenladen passiert in init() via Promise.all.
  */
 
 //TODO not everything in the admin panel is switching language like widgets and hover in feedback activity or visibility
@@ -9,26 +15,24 @@
 (function () {
 
   /* ═══════════════════════════════════════════════════════
-     Render Stats Overview
+     Render: Stats Overview (Backend)
      ═══════════════════════════════════════════════════════ */
 
-  function renderStats() {
+  function renderStats(stats) {
     var el = document.getElementById('admin-stats-container');
-    if (!el) return;
-    var stats = FeedbackAPI.getAdminStats();
+    if (!el || !stats) return;
     el.innerHTML =
       '<div class="stat-card"><div class="stat-number" style="color:#22c55e">' + stats.totalFeedbacks + '</div><div class="stat-label">' + I18n.t('admin.total_feedback') + '</div></div>' +
       '<div class="stat-card"><div class="stat-number highlight">' + stats.totalUsers + '</div><div class="stat-label">' + I18n.t('admin.total_users') + '</div></div>';
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render KPI Cards
+     Render: KPI Cards (Backend)
      ═══════════════════════════════════════════════════════ */
 
-  function renderKpis() {
+  function renderKpis(kpis) {
     var el = document.getElementById('admin-kpis-container');
-    if (!el) return;
-    var kpis = FeedbackAPI.getAdminKpis();
+    if (!el || !kpis) return;
     el.innerHTML = kpis.map(function (k) {
       var unit = k.unit ? '<span class="dash-kpi-unit">' + k.unit + '</span>' : '';
       return '<div class="dash-kpi-card">' +
@@ -39,13 +43,12 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render Driver Averages
+     Render: Driver Averages (Backend)
      ═══════════════════════════════════════════════════════ */
 
-  function renderDriverAverages() {
+  function renderDriverAverages(drivers) {
     var el = document.getElementById('admin-driver-averages');
-    if (!el) return;
-    var drivers = FeedbackAPI.getAdminDriverAverages();
+    if (!el || !drivers) return;
     el.innerHTML = drivers.map(function (d) {
       return '<div class="dash-driver-row">' +
         '<span class="dash-driver-name">' + I18n.t('driver.' + d.name) + '</span>' +
@@ -55,13 +58,12 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render Department Breakdown
+     Render: Department Breakdown (Backend)
      ═══════════════════════════════════════════════════════ */
 
-  function renderDepartments() {
+  function renderDepartments(depts) {
     var el = document.getElementById('admin-departments');
-    if (!el) return;
-    var depts = FeedbackAPI.getAdminDepartments();
+    if (!el || !depts) return;
     el.innerHTML = depts.map(function (d) {
       return '<div class="dash-dept-row">' +
         '<span class="dash-dept-name">' + d.name + '</span>' +
@@ -71,13 +73,27 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render System Status
+     Render: Donut Legend (Backend)
      ═══════════════════════════════════════════════════════ */
 
-  function renderSystemStatus() {
+  function renderDonutLegend(vis) {
+    var el = document.getElementById('admin-donut-legend');
+    if (!el || !vis) return;
+    var colors = ['#FF6B00', '#E52620'];
+    el.innerHTML = vis.labels.map(function (l, i) {
+      return '<div class="dash-donut-legend-item">' +
+        '<span class="dash-dot" style="background:' + colors[i] + ';"></span>' +
+        '<span>' + l + ' - ' + vis.data[i] + '</span></div>';
+    }).join('');
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Render: System Status (Mock — Post-IPA)
+     ═══════════════════════════════════════════════════════ */
+
+  function renderSystemStatus(items) {
     var el = document.getElementById('admin-system-status');
-    if (!el) return;
-    var items = FeedbackAPI.getAdminSystemStatus();
+    if (!el || !items) return;
     el.innerHTML = items.map(function (s) {
       var details = s.details.map(function (d) {
         return '<div class="dash-status-detail">' + d + '</div>';
@@ -89,23 +105,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render Donut Legend
-     ═══════════════════════════════════════════════════════ */
-
-  function renderDonutLegend() {
-    var el = document.getElementById('admin-donut-legend');
-    if (!el) return;
-    var vis = FeedbackAPI.getAdminChartVisibility();
-    var colors = ['#FF6B00', '#E52620'];
-    el.innerHTML = vis.labels.map(function (l, i) {
-      return '<div class="dash-donut-legend-item">' +
-        '<span class="dash-dot" style="background:' + colors[i] + ';"></span>' +
-        '<span>' + l + ' - ' + vis.data[i] + '</span></div>';
-    }).join('');
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     Render Moderation Stats
+     Render: Moderation Stats + Table (Mock — Schritt 10)
      ═══════════════════════════════════════════════════════ */
 
   function renderModerationStats() {
@@ -116,10 +116,6 @@
       return '<div class="stat-card"><div class="stat-number" style="color:' + s.color + ';">' + s.number + '</div><div class="stat-label">' + s.label + '</div></div>';
     }).join('');
   }
-
-  /* ═══════════════════════════════════════════════════════
-     Render Moderation Table
-     ═══════════════════════════════════════════════════════ */
 
   function renderModerationTable() {
     var el = document.getElementById('feedbackTableBody1');
@@ -167,7 +163,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render User Table
+     Render: User Table (Mock — Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
   function renderUserTable() {
@@ -207,10 +203,10 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Charts
+     Charts (Backend)
      ═══════════════════════════════════════════════════════ */
 
-  function initDashboardCharts() {
+  function initDashboardCharts(activityData, visData) {
     if (typeof Chart === 'undefined') return;
 
     Chart.defaults.color = '#777';
@@ -218,9 +214,8 @@
     Chart.defaults.font.family = "'DM Sans', sans-serif";
     Chart.defaults.font.size = 12;
 
-    var activityData = FeedbackAPI.getAdminChartActivity();
     var activityCanvas = document.getElementById('activityChart');
-    if (activityCanvas) {
+    if (activityCanvas && activityData) {
       new Chart(activityCanvas.getContext('2d'), {
         type: 'bar',
         data: {
@@ -252,9 +247,8 @@
       });
     }
 
-    var visData = FeedbackAPI.getAdminChartVisibility();
     var visCanvas = document.getElementById('visibilityChart');
-    if (visCanvas) {
+    if (visCanvas && visData) {
       new Chart(visCanvas.getContext('2d'), {
         type: 'doughnut',
         data: {
@@ -282,12 +276,10 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Event Bindings
+     Tab Switching (eigene Funktion, nicht in bindEvents)
      ═══════════════════════════════════════════════════════ */
 
-  function bindEvents() {
-
-    /* Tab Switching */
+  function initTabSwitching() {
     var tabBtns = document.querySelectorAll('.admin-tab');
     var tabContents = document.querySelectorAll('.tab-content');
     tabBtns.forEach(function (btn) {
@@ -299,6 +291,13 @@
         document.getElementById(target).classList.add('active');
       });
     });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Event Bindings (Search, Filter, Modals, Click-Handler)
+     ═══════════════════════════════════════════════════════ */
+
+  function bindEvents() {
 
     /* User Search */
     var userSearch = document.getElementById('userSearch');
@@ -499,6 +498,7 @@
      ═══════════════════════════════════════════════════════ */
 
   async function init() {
+    // ── Bootstrap ───────────────────────────────────────
     try {
       await FeedbackAPI.bootstrap();
     } catch (e) {
@@ -511,9 +511,64 @@
       return;
     }
 
+    // ── Berechtigung prüfen ─────────────────────────────
+    var me = FeedbackAPI.getCurrentUser();
+    if (!me || me.role !== 'admin') {
+      document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
+        '<h1>Keine Berechtigung</h1>' +
+        '<p>Diese Seite ist nur für Administratoren zugänglich.</p>' +
+        '</div>';
+      return;
+    }
+
+    // ── Navbar + UI-Setup ──────────────────────────────
     var navEl = document.getElementById('navbar-container');
-    if (navEl) navEl.innerHTML = Render.navbar('inbox');
-    // ... Rest unverändert
+    if (navEl) navEl.innerHTML = Render.navbar('admin');
+
+    Render.initProfileDropdown();
+    initTabSwitching();
+
+    // ── Synchron renderbar (Mock — Schritte 9 + 10) ────
+    renderSystemStatus(FeedbackAPI.getAdminSystemStatus());
+    renderModerationStats();
+    renderModerationTable();
+    renderUserTable();
+
+    // ── Dashboard-Daten parallel laden (Backend) ───────
+    try {
+      var results = await Promise.all([
+        FeedbackAPI.getAdminStats(),
+        FeedbackAPI.getAdminKpis(),
+        FeedbackAPI.getAdminChartActivity(),
+        FeedbackAPI.getAdminChartVisibility(),
+        FeedbackAPI.getAdminDriverAverages(),
+        FeedbackAPI.getAdminDepartments()
+      ]);
+
+      var stats      = results[0];
+      var kpis       = results[1];
+      var activity   = results[2];
+      var visibility = results[3];
+      var drivers    = results[4];
+      var depts      = results[5];
+
+      renderStats(stats);
+      renderKpis(kpis);
+      renderDriverAverages(drivers);
+      renderDepartments(depts);
+      renderDonutLegend(visibility);
+
+      // Charts brauchen DOM (Canvas), Daten + Chart.js verfügbar
+      initDashboardCharts(activity, visibility);
+    } catch (e) {
+      console.error('Dashboard-Daten konnten nicht geladen werden:', e);
+      var kpisEl = document.getElementById('admin-kpis-container');
+      if (kpisEl) {
+        kpisEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;grid-column:1/-1;">' +
+          'Fehler beim Laden (' + (e.errorCode || 'unknown') + '). Bitte Seite neu laden.</p>';
+      }
+    }
+    bindEvents();
   }
 
   document.addEventListener('DOMContentLoaded', init);

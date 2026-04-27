@@ -353,6 +353,124 @@ var FeedbackAPI = (function () {
   }
 
   /* ═══════════════════════════════════════════════════════
+   Admin Dashboard (Schritt 8)
+   ═══════════════════════════════════════════════════════ */
+
+// Cache: /api/admin/stats wird von getAdminStats() UND getAdminKpis() genutzt
+// → ein einziger Backend-Call pro Page-Load
+  var _adminStatsCache = null;
+
+  async function _fetchAdminStats() {
+    if (_adminStatsCache) return _adminStatsCache;
+    _adminStatsCache = await apiGet('/api/admin/stats');
+    return _adminStatsCache;
+  }
+
+  async function getAdminStats() {
+    var dto = await _fetchAdminStats();
+    return {
+      totalFeedbacks: dto.totalFeedbacks,
+      totalUsers:     dto.totalUsers
+    };
+  }
+
+  async function getAdminKpis() {
+    var dto = await _fetchAdminStats();
+
+    return [
+      {
+        number:    String(dto.totalFeedbacks),
+        label:     'Feedbacks gesamt',
+        trend:     '',
+        trendType: 'neutral'
+      },
+      {
+        number:    String(dto.anonymousRatePct),
+        unit:      '%',
+        label:     'Anonyme Quote',
+        trend:     dto.anonymousCount + ' von ' + dto.totalFeedbacks,
+        trendType: 'neutral'
+      },
+      {
+        number:    dto.avgRating != null ? dto.avgRating.toFixed(1) : '–',
+        label:     '\u00D8 Bewertung',     // Ø Bewertung
+        trend:     '',
+        trendType: 'neutral'
+      },
+      {
+        number:    String(dto.editedCount),
+        label:     'Bearbeitet',
+        trend:     dto.editedRatePct + '% aller Feedbacks',
+        trendType: 'neutral'
+      }
+    ];
+  }
+
+  async function getAdminChartActivity() {
+    var dto = await apiGet('/api/admin/charts/activity');
+
+    return {
+      labels: dto.labels.map(formatMonthLabel),
+      datasets: [
+        { label: 'Öffentlich', data: dto.publicCounts },
+        { label: 'Anonym',     data: dto.anonymousCounts }
+      ]
+    };
+  }
+
+  async function getAdminChartVisibility() {
+    var dto = await apiGet('/api/admin/charts/visibility');
+
+    return {
+      labels: ['Öffentlich', 'Anonym'],
+      data:   [dto.publicCount, dto.anonymousCount]
+    };
+  }
+
+  async function getAdminDriverAverages() {
+    var dtos = await apiGet('/api/admin/driver-averages');
+
+    return dtos.map(function (d) {
+      return {
+        name:  normalizeDriverName(d.driverName),
+        value: d.average != null ? d.average : 0,
+        pct:   d.pct
+      };
+    });
+  }
+
+  async function getAdminDepartments() {
+    var dtos = await apiGet('/api/admin/departments/stats');
+
+    return dtos.map(function (d) {
+      return {
+        name:  d.departmentName,
+        count: d.feedbackCount,
+        pct:   d.pct
+      };
+    });
+  }
+
+// System-Status-Endpoint ist Post-IPA → Mock bleibt
+  function getAdminSystemStatus() {
+    return MockData.adminSystemStatus;
+  }
+
+  /* ─── Helper: Monatslabel-Formatierung ─────────────────────
+     "2025-11" → "Nov" (i18n-fähig)
+     ────────────────────────────────────────────────────────── */
+  function formatMonthLabel(yearMonth) {
+    if (!yearMonth) return '';
+    var parts = yearMonth.split('-');
+    if (parts.length !== 2) return yearMonth;
+
+    var monthNum = parseInt(parts[1], 10);
+    var months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+    return months[monthNum - 1] || yearMonth;
+  }
+
+  /* ═══════════════════════════════════════════════════════
      Mock-Funktionen (noch nicht angebunden)
      Werden in den nächsten Schritten umgestellt.
      ═══════════════════════════════════════════════════════ */
@@ -360,13 +478,6 @@ var FeedbackAPI = (function () {
   function getRecipients()           { return MockData.recipients; }
   function getUsers()                { return MockData.users; }
   function getDriverDefinitions()    { return MockData.driverDefinitions; }
-  function getAdminStats()           { return MockData.adminStats; }
-  function getAdminKpis()            { return MockData.adminKpis; }
-  function getAdminChartActivity()   { return MockData.adminChartActivity; }
-  function getAdminChartVisibility() { return MockData.adminChartVisibility; }
-  function getAdminDriverAverages()  { return MockData.adminDriverAverages; }
-  function getAdminDepartments()     { return MockData.adminDepartments; }
-  function getAdminSystemStatus()    { return MockData.adminSystemStatus; }
   function getModerationStats()      { return MockData.moderationStats; }
   function getModerationReports()    { return MockData.moderationReports; }
 
