@@ -314,6 +314,102 @@
 <!-- Toast -->
 <div id="toast"></div>
 
+<!-- ═══════════════════════════════════════════════════════
+     Modal: Rolle ändern
+     ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="roleModal">
+  <div class="modal-card" style="max-width:480px;">
+    <div class="modal-header">
+      <h2 class="modal-title" data-i18n="admin.role_modal_title">Rolle ändern</h2>
+      <button class="modal-close" id="closeRoleModalBtn" type="button" aria-label="Schliessen">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="role-modal-user">
+        <div class="avatar" id="roleUserAvatar" style="width:40px;height:40px;font-size:13px;border-radius:10px;"></div>
+        <div>
+          <div class="role-modal-user-name" id="roleUserName"></div>
+          <div class="role-modal-user-email" id="roleUserEmail"></div>
+        </div>
+      </div>
+
+      <div class="role-options">
+        <label class="role-option">
+          <input type="radio" name="userRole" value="user">
+          <div class="role-option-label">
+            <span class="role-badge user" data-i18n="admin.role_user">Benutzer</span>
+            <span class="role-option-desc" data-i18n="admin.role_user_desc">Kann Feedback geben und empfangen</span>
+          </div>
+        </label>
+        <label class="role-option">
+          <input type="radio" name="userRole" value="manager">
+          <div class="role-option-label">
+            <span class="role-badge manager" data-i18n="admin.role_manager">Manager</span>
+            <span class="role-option-desc" data-i18n="admin.role_manager_desc">Sieht aggregiertes Feedback des Teams</span>
+          </div>
+        </label>
+        <label class="role-option">
+          <input type="radio" name="userRole" value="admin">
+          <div class="role-option-label">
+            <span class="role-badge admin" data-i18n="admin.role_badge">Admin</span>
+            <span class="role-option-desc" data-i18n="admin.role_admin_desc">Volle Verwaltungsrechte und Moderation</span>
+          </div>
+        </label>
+      </div>
+
+      <label class="role-manager-toggle">
+        <input type="checkbox" id="roleManagerFlag">
+        <span data-i18n="admin.role_dept_manager_toggle">Als Abteilungsleiter markieren</span>
+      </label>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-admin" id="cancelRoleBtn" type="button" data-i18n="common.cancel">Abbrechen</button>
+      <button class="btn-admin primary" id="confirmRoleBtn" type="button" data-i18n="common.save">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     Modal: Abteilung zuweisen
+     ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="deptModal">
+  <div class="modal-card" style="max-width:480px;">
+    <div class="modal-header">
+      <h2 class="modal-title" data-i18n="admin.dept_modal_title">Abteilung zuweisen</h2>
+      <button class="modal-close" id="closeDeptModalBtn" type="button" aria-label="Schliessen">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="role-modal-user">
+        <div class="avatar" id="deptUserAvatar" style="width:40px;height:40px;font-size:13px;border-radius:10px;"></div>
+        <div>
+          <div class="role-modal-user-name" id="deptUserName"></div>
+          <div class="role-modal-user-email" id="deptUserEmail"></div>
+        </div>
+      </div>
+
+      <label class="dept-select-label" data-i18n="admin.dept_select_label">Abteilung wählen:</label>
+      <select id="deptSelect" class="admin-search" style="padding:12px 16px;">
+        <!-- Wird dynamisch gefüllt -->
+      </select>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-admin" id="cancelDeptBtn" type="button" data-i18n="common.cancel">Abbrechen</button>
+      <button class="btn-admin primary" id="confirmDeptBtn" type="button" data-i18n="common.save">Speichern</button>
+    </div>
+  </div>
+</div>
+
 <!-- Report Detail Modal -->
 <div class="modal-overlay" id="reportDetailModal">
   <div class="modal-box" style="max-width:560px;max-height:90vh;overflow-y:auto;">

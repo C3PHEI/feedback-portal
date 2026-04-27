@@ -471,12 +471,62 @@ var FeedbackAPI = (function () {
   }
 
   /* ═══════════════════════════════════════════════════════
+   User Management (Schritt 9)
+   ═══════════════════════════════════════════════════════ */
+
+  async function getUsers() {
+    var dtos = await apiGet('/api/admin/users');
+    return dtos.map(mapAdminUser);
+  }
+
+  async function getDepartments() {
+    return await apiGet('/api/departments');
+    // → [{id, name}]
+  }
+
+  async function updateUserRole(userId, role) {
+    return await apiPatch('/api/admin/users/' + userId + '/role', { role: role });
+  }
+
+  async function updateUserDepartment(userId, departmentId) {
+    return await apiPatch('/api/admin/users/' + userId + '/department', { departmentId: departmentId });
+  }
+
+  async function updateUserManagerFlag(userId, isDepartmentManager) {
+    return await apiPatch('/api/admin/users/' + userId + '/manager-flag', { isDepartmentManager: isDepartmentManager });
+  }
+
+  async function activateUser(userId) {
+    return await apiPost('/api/admin/users/' + userId + '/activate');
+  }
+
+  async function deactivateUser(userId) {
+    return await apiPost('/api/admin/users/' + userId + '/deactivate');
+  }
+
+  function mapAdminUser(dto) {
+    return {
+      id:                  dto.id,
+      name:                dto.displayName,
+      initials:            buildInitials(dto.displayName),
+      email:               dto.email,
+      role:                dto.role,
+      departmentId:        dto.departmentId,
+      department:          dto.departmentName || '–',
+      isDepartmentManager: dto.isDepartmentManager,
+      feedbackGiven:       dto.feedbackGiven    || 0,
+      feedbackReceived:    dto.feedbackReceived || 0,
+      active:              dto.isActive,
+      deactivatedAt:       dto.deactivatedAt
+    };
+  }
+
+  /* ═══════════════════════════════════════════════════════
      Mock-Funktionen (noch nicht angebunden)
      Werden in den nächsten Schritten umgestellt.
      ═══════════════════════════════════════════════════════ */
 
   function getRecipients()           { return MockData.recipients; }
-  function getUsers()                { return MockData.users; }
   function getDriverDefinitions()    { return MockData.driverDefinitions; }
   function getModerationStats()      { return MockData.moderationStats; }
   function getModerationReports()    { return MockData.moderationReports; }
@@ -518,7 +568,13 @@ var FeedbackAPI = (function () {
     getModerationReports:       getModerationReports,
     getDepartmentTeam:          getDepartmentTeam,
     getDepartmentTeamAverages:  getDepartmentTeamAverages,
-    getTeamMemberFeedbacks:     getTeamMemberFeedbacks
+    getTeamMemberFeedbacks:     getTeamMemberFeedbacks,
+    getDepartments:             getDepartments,
+    updateUserRole:             updateUserRole,
+    updateUserDepartment:       updateUserDepartment,
+    updateUserManagerFlag:      updateUserManagerFlag,
+    activateUser:               activateUser,
+    deactivateUser:             deactivateUser,
   };
 
 })();

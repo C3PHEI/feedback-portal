@@ -2,14 +2,21 @@
  * pages/admin.js
  * Feedback Hub — Admin-Seite dynamisch rendern
  *
+ * Schritt 8: Dashboard-Tab via Backend-API.
+ * Schritt 9: User-Tab via Backend-API (Liste, Rolle, Department, Aktivieren/Deaktivieren).
+ * Moderation-Tab läuft weiter mit Mock (Schritt 10).
+ *
  * Pattern: Render-Funktionen sind synchron und nehmen Daten als Parameter.
  * Asynchrones Datenladen passiert in init() via Promise.all.
+ * User-Tabelle hält State in modul-internem `_userCache`, damit
+ * optimistische Updates nach API-Aktionen ohne kompletten Reload möglich sind.
  */
 
-//TODO not everything in the admin panel is switching language like widgets and hover in feedback activity or visibility
-//Feedback moderation (Gemeldet/In Prüfung/Erledigt) noch in deutsch
-
 (function () {
+
+  // Modul-State für User-Tab (Schritt 9)
+  var _userCache       = [];
+  var _departmentCache = [];
 
   /* ═══════════════════════════════════════════════════════
      Render: Stats Overview (Backend)
@@ -23,10 +30,6 @@
       '<div class="stat-card"><div class="stat-number highlight">' + stats.totalUsers + '</div><div class="stat-label">' + I18n.t('admin.total_users') + '</div></div>';
   }
 
-  /* ═══════════════════════════════════════════════════════
-     Render: KPI Cards (Backend)
-     ═══════════════════════════════════════════════════════ */
-
   function renderKpis(kpis) {
     var el = document.getElementById('admin-kpis-container');
     if (!el || !kpis) return;
@@ -39,10 +42,6 @@
     }).join('');
   }
 
-  /* ═══════════════════════════════════════════════════════
-     Render: Driver Averages (Backend)
-     ═══════════════════════════════════════════════════════ */
-
   function renderDriverAverages(drivers) {
     var el = document.getElementById('admin-driver-averages');
     if (!el || !drivers) return;
@@ -53,10 +52,6 @@
         '<span class="dash-driver-val">' + d.value + '</span></div>';
     }).join('');
   }
-
-  /* ═══════════════════════════════════════════════════════
-     Render: Department Breakdown (Backend)
-     ═══════════════════════════════════════════════════════ */
 
   function renderDepartments(depts) {
     var el = document.getElementById('admin-departments');
@@ -69,10 +64,6 @@
     }).join('');
   }
 
-  /* ═══════════════════════════════════════════════════════
-     Render: Donut Legend (Backend)
-     ═══════════════════════════════════════════════════════ */
-
   function renderDonutLegend(vis) {
     var el = document.getElementById('admin-donut-legend');
     if (!el || !vis) return;
@@ -83,10 +74,6 @@
         '<span>' + l + ' - ' + vis.data[i] + '</span></div>';
     }).join('');
   }
-
-  /* ═══════════════════════════════════════════════════════
-     Render: System Status (Mock — Post-IPA)
-     ═══════════════════════════════════════════════════════ */
 
   function renderSystemStatus(items) {
     var el = document.getElementById('admin-system-status');
@@ -102,7 +89,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render: Moderation Stats + Table (Mock — Schritt 10)
+     Render: Moderation (Mock — Schritt 10)
      ═══════════════════════════════════════════════════════ */
 
   function renderModerationStats() {
@@ -160,47 +147,77 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Render: User Table (Mock — Schritt 9)
+     Render: User Table (Backend — Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
-  function renderUserTable() {
+  function renderUserTable(users) {
     var el = document.getElementById('userTableBody');
     if (!el) return;
-    var users = FeedbackAPI.getUsers();
 
-    el.innerHTML = users.map(function (u) {
-      var roleCls = u.role === 'admin' ? 'admin' : u.role === 'manager' ? 'manager' : 'user';
-      var roleLabel = u.role === 'admin'
-        ? I18n.t('admin.role_badge')
-        : u.role === 'manager'
-          ? I18n.t('admin.role_manager')
-          : I18n.t('admin.role_user');
-      var feedbackStr = u.feedbackReceived + ' / ' + u.feedbackGiven;
+    _userCache = users || [];
 
-      var actionBtn;
-      if (u.active) {
-        actionBtn = '<button class="btn-admin danger" type="button" data-i18n-title="admin.btn_deactivate" title="' + I18n.t('admin.btn_deactivate') + '">\uD83D\uDEAB</button>';
-      } else {
-        actionBtn = '<button class="btn-admin" type="button" data-i18n-title="admin.btn_activate" title="' + I18n.t('admin.btn_activate') + '" style="color:#22c55e;border-color:#22c55e33;">\u2705</button>';
-      }
+    if (!_userCache.length) {
+      el.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--color-text-ghost);padding:40px;">' +
+        'Keine Benutzer gefunden.</td></tr>';
+      return;
+    }
 
-      return '<tr>' +
-        '<td><div class="flex items-center gap-3">' +
-        '<div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">' + u.initials + '</div>' +
-        '<div><div class="text-white text-sm font-medium">' + u.name + '</div>' +
-        '<div class="text-xs" style="color:#666;">' + u.email + '</div></div></div></td>' +
-        '<td><span style="color:#999;font-size:13px;">' + u.department + '</span></td>' +
-        '<td><span class="role-badge ' + roleCls + '">' + roleLabel + '</span></td>' +
-        '<td class="hide-mobile"><span style="color:#999;font-size:13px;">' + feedbackStr + '</span></td>' +
-        '<td style="text-align:right;"><div class="flex gap-2 justify-end">' +
-        actionBtn +
-        '<button class="btn-admin" type="button" data-i18n-title="admin.btn_legal_hold" title="' + I18n.t('admin.btn_legal_hold') + '">\uD83D\uDD12</button>' +
-        '</div></td></tr>';
-    }).join('\n');
+    el.innerHTML = _userCache.map(buildUserRow).join('\n');
+  }
+
+  function buildUserRow(u) {
+    var roleCls = u.role === 'admin' ? 'admin' : u.role === 'manager' ? 'manager' : 'user';
+    var roleLabel = u.role === 'admin'
+      ? I18n.t('admin.role_badge')
+      : u.role === 'manager'
+        ? I18n.t('admin.role_manager')
+        : I18n.t('admin.role_user');
+
+    // Manager-Marker für Department-Manager
+    var managerSuffix = u.isDepartmentManager
+      ? ' <span style="color:var(--color-orange);font-size:10px;margin-left:4px;" title="Abteilungsleiter">\u2605</span>'
+      : '';
+
+    var feedbackStr = u.feedbackReceived + ' / ' + u.feedbackGiven;
+    var inactiveCls = !u.active ? ' style="opacity:0.55;"' : '';
+
+    var activateBtn;
+    if (u.active) {
+      activateBtn = '<button class="btn-admin danger user-action-btn" data-action="deactivate" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_deactivate') + '">\uD83D\uDEAB</button>';
+    } else {
+      activateBtn = '<button class="btn-admin user-action-btn" data-action="activate" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_activate') + '" style="color:#22c55e;border-color:#22c55e33;">\u2705</button>';
+    }
+
+    return '<tr' + inactiveCls + ' data-user-id="' + u.id + '">' +
+      '<td><div class="flex items-center gap-3">' +
+      '<div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">' + u.initials + '</div>' +
+      '<div><div class="text-white text-sm font-medium">' + u.name + '</div>' +
+      '<div class="text-xs" style="color:#666;">' + u.email + '</div></div></div></td>' +
+      '<td><span style="color:#999;font-size:13px;">' + u.department + '</span></td>' +
+      '<td><span class="role-badge ' + roleCls + '">' + roleLabel + '</span>' + managerSuffix + '</td>' +
+      '<td class="hide-mobile"><span style="color:#999;font-size:13px;">' + feedbackStr + '</span></td>' +
+      '<td style="text-align:right;"><div class="flex gap-2 justify-end">' +
+      '<button class="btn-admin user-action-btn" data-action="role" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_role') + '">\uD83D\uDC64</button>' +
+      '<button class="btn-admin user-action-btn" data-action="dept" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_dept') + '">\uD83C\uDFE2</button>' +
+      activateBtn +
+      '</div></td></tr>';
+  }
+
+  function refreshUserRow(updatedUser) {
+    var idx = _userCache.findIndex(function (u) { return u.id === updatedUser.id; });
+    if (idx === -1) return;
+    _userCache[idx] = updatedUser;
+
+    var oldRow = document.querySelector('tr[data-user-id="' + updatedUser.id + '"]');
+    if (!oldRow) return;
+    var temp = document.createElement('tbody');
+    temp.innerHTML = buildUserRow(updatedUser);
+    var newRow = temp.querySelector('tr');
+    oldRow.parentNode.replaceChild(newRow, oldRow);
   }
 
   /* ═══════════════════════════════════════════════════════
-     Charts (Backend)
+     Charts
      ═══════════════════════════════════════════════════════ */
 
   function initDashboardCharts(activityData, visData) {
@@ -273,7 +290,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Tab Switching (eigene Funktion, nicht in bindEvents)
+     Tab Switching
      ═══════════════════════════════════════════════════════ */
 
   function initTabSwitching() {
@@ -291,7 +308,229 @@
   }
 
   /* ═══════════════════════════════════════════════════════
-     Event Bindings (Search, Filter, Modals, Click-Handler)
+     Helper: Backend-Errorcode → übersetzte Meldung
+     ═══════════════════════════════════════════════════════ */
+
+  function translateError(e) {
+    var key = 'error.' + (e.errorCode || 'generic');
+    var translated = I18n.t(key);
+    if (translated === key) {
+      return I18n.t('error.generic') + ' (' + (e.errorCode || 'unknown') + ')';
+    }
+    return translated;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     User-Aktionen via Event-Delegation
+     ═══════════════════════════════════════════════════════ */
+
+  function bindUserTableActions() {
+    var tbody = document.getElementById('userTableBody');
+    if (!tbody) return;
+
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('.user-action-btn');
+      if (!btn) return;
+
+      var action = btn.dataset.action;
+      var userId = btn.dataset.userId;
+      var user   = _userCache.find(function (u) { return u.id === userId; });
+      if (!user) return;
+
+      if (action === 'role')       openRoleModal(user);
+      if (action === 'dept')       openDeptModal(user);
+      if (action === 'activate')   handleActivate(user);
+      if (action === 'deactivate') openDeactivateModal(user);
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Modal: Rolle ändern
+     ═══════════════════════════════════════════════════════ */
+
+  var _currentRoleUser = null;
+
+  function openRoleModal(user) {
+    _currentRoleUser = user;
+    var modal = document.getElementById('roleModal');
+    if (!modal) return;
+
+    document.getElementById('roleUserAvatar').textContent = user.initials;
+    document.getElementById('roleUserName').textContent = user.name;
+    document.getElementById('roleUserEmail').textContent = user.email;
+
+    document.querySelectorAll('input[name="userRole"]').forEach(function (radio) {
+      radio.checked = (radio.value === user.role);
+    });
+
+    document.getElementById('roleManagerFlag').checked = !!user.isDepartmentManager;
+
+    modal.classList.add('show');
+  }
+
+  function closeRoleModal() {
+    var modal = document.getElementById('roleModal');
+    if (modal) modal.classList.remove('show');
+    _currentRoleUser = null;
+  }
+
+  async function confirmRoleChange() {
+    if (!_currentRoleUser) return;
+    var user = _currentRoleUser;
+
+    var newRole = document.querySelector('input[name="userRole"]:checked');
+    if (!newRole) return;
+    var roleValue   = newRole.value;
+    var managerFlag = document.getElementById('roleManagerFlag').checked;
+
+    var btn = document.getElementById('confirmRoleBtn');
+    btn.disabled = true;
+
+    try {
+      if (roleValue !== user.role) {
+        await FeedbackAPI.updateUserRole(user.id, roleValue);
+        user.role = roleValue;
+      }
+      if (managerFlag !== user.isDepartmentManager) {
+        await FeedbackAPI.updateUserManagerFlag(user.id, managerFlag);
+        user.isDepartmentManager = managerFlag;
+      }
+
+      refreshUserRow(user);
+      Render.showToast(user.name + ' \u2014 ' + I18n.t('admin.toast_role_updated'));
+      closeRoleModal();
+    } catch (e) {
+      console.error('updateUserRole failed:', e);
+      Render.showToast(translateError(e));
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Modal: Department zuweisen
+     ═══════════════════════════════════════════════════════ */
+
+  var _currentDeptUser = null;
+
+  function openDeptModal(user) {
+    _currentDeptUser = user;
+    var modal = document.getElementById('deptModal');
+    if (!modal) return;
+
+    document.getElementById('deptUserAvatar').textContent = user.initials;
+    document.getElementById('deptUserName').textContent = user.name;
+    document.getElementById('deptUserEmail').textContent = user.email;
+
+    var sel = document.getElementById('deptSelect');
+    sel.innerHTML = '<option value="">\u2014 keine Zuweisung \u2014</option>' +
+      _departmentCache.map(function (d) {
+        var selected = d.id === user.departmentId ? ' selected' : '';
+        return '<option value="' + d.id + '"' + selected + '>' + d.name + '</option>';
+      }).join('');
+
+    modal.classList.add('show');
+  }
+
+  function closeDeptModal() {
+    var modal = document.getElementById('deptModal');
+    if (modal) modal.classList.remove('show');
+    _currentDeptUser = null;
+  }
+
+  async function confirmDeptChange() {
+    if (!_currentDeptUser) return;
+    var user = _currentDeptUser;
+    var newDeptId = document.getElementById('deptSelect').value || null;
+
+    if (newDeptId === user.departmentId) {
+      closeDeptModal();
+      return;
+    }
+
+    var btn = document.getElementById('confirmDeptBtn');
+    btn.disabled = true;
+
+    try {
+      await FeedbackAPI.updateUserDepartment(user.id, newDeptId);
+
+      user.departmentId = newDeptId;
+      var dept = _departmentCache.find(function (d) { return d.id === newDeptId; });
+      user.department = dept ? dept.name : '\u2013';
+
+      refreshUserRow(user);
+      Render.showToast(user.name + ' \u2014 ' + I18n.t('admin.toast_dept_updated'));
+      closeDeptModal();
+    } catch (e) {
+      console.error('updateUserDepartment failed:', e);
+      Render.showToast(translateError(e));
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Aktivieren / Deaktivieren
+     ═══════════════════════════════════════════════════════ */
+
+  async function handleActivate(user) {
+    try {
+      await FeedbackAPI.activateUser(user.id);
+      user.active = true;
+      user.deactivatedAt = null;
+      refreshUserRow(user);
+      Render.showToast(user.name + ' \u2014 ' + I18n.t('admin.toast_activated'));
+    } catch (e) {
+      console.error('activateUser failed:', e);
+      Render.showToast(translateError(e));
+    }
+  }
+
+  var _currentDeactivateUser = null;
+
+  function openDeactivateModal(user) {
+    _currentDeactivateUser = user;
+    var modal = document.getElementById('deactivateModal');
+    if (!modal) return;
+
+    document.getElementById('deactivateAvatar').textContent = user.initials;
+    document.getElementById('deactivateName').textContent = user.name;
+    document.getElementById('deactivateEmail').textContent = user.email;
+    document.getElementById('deactivateRole').textContent =
+      user.role === 'admin'   ? I18n.t('admin.role_badge') :
+        user.role === 'manager' ? I18n.t('admin.role_manager') :
+          I18n.t('admin.role_user');
+    document.getElementById('deactivateDept').textContent = user.department;
+    document.getElementById('deactivateFeedbacks').textContent = user.feedbackReceived + ' / ' + user.feedbackGiven;
+
+    modal.classList.add('show');
+  }
+
+  async function confirmDeactivate() {
+    if (!_currentDeactivateUser) return;
+    var user = _currentDeactivateUser;
+    var modal = document.getElementById('deactivateModal');
+    var btn   = document.getElementById('confirmDeactivateBtn');
+    btn.disabled = true;
+
+    try {
+      await FeedbackAPI.deactivateUser(user.id);
+      user.active = false;
+      user.deactivatedAt = new Date().toISOString();
+      refreshUserRow(user);
+      Render.showToast(user.name + ' ' + I18n.t('admin.toast_deactivated'));
+      modal.classList.remove('show');
+      _currentDeactivateUser = null;
+    } catch (e) {
+      console.error('deactivateUser failed:', e);
+      Render.showToast(translateError(e));
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Event Bindings (Such, Filter, Modale)
      ═══════════════════════════════════════════════════════ */
 
   function bindEvents() {
@@ -325,11 +564,11 @@
         rows.forEach(function (row) {
           if (filter === 'all') { row.style.display = ''; return; }
           var badge = row.querySelector('.role-badge');
-          var statusDot = row.querySelector('.status-dot');
-          if (filter === 'inactive') { row.style.display = (statusDot && statusDot.classList.contains('inactive')) ? '' : 'none'; }
-          else if (filter === 'admin') { row.style.display = (badge && badge.classList.contains('admin')) ? '' : 'none'; }
+          var inactive = row.style.opacity === '0.55';
+          if (filter === 'inactive') { row.style.display = inactive ? '' : 'none'; }
+          else if (filter === 'admin')   { row.style.display = (badge && badge.classList.contains('admin'))   ? '' : 'none'; }
           else if (filter === 'manager') { row.style.display = (badge && badge.classList.contains('manager')) ? '' : 'none'; }
-          else if (filter === 'user') { row.style.display = (badge && badge.classList.contains('user')) ? '' : 'none'; }
+          else if (filter === 'user')    { row.style.display = (badge && badge.classList.contains('user'))    ? '' : 'none'; }
         });
       });
     });
@@ -418,7 +657,7 @@
     }
 
     function closeReportModal() {
-      reportDetailModal.classList.remove('show');
+      if (reportDetailModal) reportDetailModal.classList.remove('show');
     }
 
     var modReportRows = document.querySelectorAll('.mod-report-row');
@@ -428,7 +667,13 @@
 
     if (closeReportModalBtn) closeReportModalBtn.addEventListener('click', closeReportModal);
     if (reportDetailModal) reportDetailModal.addEventListener('click', function (e) { if (e.target === reportDetailModal) closeReportModal(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeReportModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeReportModal();
+        closeRoleModal();
+        closeDeptModal();
+      }
+    });
 
     var reportActionReview = document.getElementById('reportActionReview');
     var reportActionResolve = document.getElementById('reportActionResolve');
@@ -451,43 +696,46 @@
     var deactivateModal = document.getElementById('deactivateModal');
     var cancelDeactivateBtn = document.getElementById('cancelDeactivateBtn');
     var confirmDeactivateBtn = document.getElementById('confirmDeactivateBtn');
-    var currentDeactivateRow = null;
 
-    if (cancelDeactivateBtn) cancelDeactivateBtn.addEventListener('click', function () { deactivateModal.classList.remove('show'); });
-    if (deactivateModal) deactivateModal.addEventListener('click', function (e) { if (e.target === deactivateModal) deactivateModal.classList.remove('show'); });
+    if (cancelDeactivateBtn) cancelDeactivateBtn.addEventListener('click', function () {
+      deactivateModal.classList.remove('show');
+      _currentDeactivateUser = null;
+    });
+    if (deactivateModal) deactivateModal.addEventListener('click', function (e) {
+      if (e.target === deactivateModal) {
+        deactivateModal.classList.remove('show');
+        _currentDeactivateUser = null;
+      }
+    });
+    if (confirmDeactivateBtn) {
+      confirmDeactivateBtn.addEventListener('click', confirmDeactivate);
+    }
 
-    var deactivateBtns = document.querySelectorAll('.btn-admin.danger[title="' + I18n.t('admin.btn_deactivate') + '"]');
-    deactivateBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var row = btn.closest('tr');
-        currentDeactivateRow = row;
-        var name = row.querySelector('.text-white.text-sm.font-medium').textContent;
-        var email = row.querySelector('.text-xs').textContent;
-        var dept = row.querySelector('td:nth-child(2) span').textContent;
-        var roleBadge = row.querySelector('.role-badge');
-        var role = roleBadge ? roleBadge.textContent.trim() : '';
-        var feedbacks = row.querySelector('.hide-mobile span') ? row.querySelector('.hide-mobile span').textContent : '-';
-        var initials = row.querySelector('.avatar').textContent.trim();
+    /* Role Modal */
+    var roleModal = document.getElementById('roleModal');
+    var closeRoleBtn = document.getElementById('closeRoleModalBtn');
+    var cancelRoleBtn = document.getElementById('cancelRoleBtn');
+    var confirmRoleBtn = document.getElementById('confirmRoleBtn');
 
-        document.getElementById('deactivateAvatar').textContent = initials;
-        document.getElementById('deactivateName').textContent = name;
-        document.getElementById('deactivateEmail').textContent = email;
-        document.getElementById('deactivateRole').textContent = role;
-        document.getElementById('deactivateDept').textContent = dept;
-        document.getElementById('deactivateFeedbacks').textContent = feedbacks;
-        deactivateModal.classList.add('show');
-      });
+    if (closeRoleBtn)  closeRoleBtn.addEventListener('click', closeRoleModal);
+    if (cancelRoleBtn) cancelRoleBtn.addEventListener('click', closeRoleModal);
+    if (confirmRoleBtn) confirmRoleBtn.addEventListener('click', confirmRoleChange);
+    if (roleModal) roleModal.addEventListener('click', function (e) {
+      if (e.target === roleModal) closeRoleModal();
     });
 
-    if (confirmDeactivateBtn) {
-      confirmDeactivateBtn.addEventListener('click', function () {
-        if (currentDeactivateRow) {
-          Render.showToast(document.getElementById('deactivateName').textContent + ' ' + I18n.t('admin.toast_deactivated'));
-        }
-        deactivateModal.classList.remove('show');
-        currentDeactivateRow = null;
-      });
-    }
+    /* Department Modal */
+    var deptModal = document.getElementById('deptModal');
+    var closeDeptBtn = document.getElementById('closeDeptModalBtn');
+    var cancelDeptBtn = document.getElementById('cancelDeptBtn');
+    var confirmDeptBtn = document.getElementById('confirmDeptBtn');
+
+    if (closeDeptBtn)  closeDeptBtn.addEventListener('click', closeDeptModal);
+    if (cancelDeptBtn) cancelDeptBtn.addEventListener('click', closeDeptModal);
+    if (confirmDeptBtn) confirmDeptBtn.addEventListener('click', confirmDeptChange);
+    if (deptModal) deptModal.addEventListener('click', function (e) {
+      if (e.target === deptModal) closeDeptModal();
+    });
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -495,7 +743,6 @@
      ═══════════════════════════════════════════════════════ */
 
   async function init() {
-    // ── Bootstrap ───────────────────────────────────────
     try {
       await FeedbackAPI.bootstrap();
     } catch (e) {
@@ -503,12 +750,10 @@
       document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
         '<h1>Fehler beim Laden</h1>' +
         '<p>Status: ' + (e.status || 'unbekannt') + ' / ' + (e.errorCode || 'unknown') + '</p>' +
-        '<p>Bitte Seite neu laden oder erneut anmelden.</p>' +
         '</div>';
       return;
     }
 
-    // ── Berechtigung prüfen ─────────────────────────────
     var me = FeedbackAPI.getCurrentUser();
     if (!me || me.role !== 'admin') {
       document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
@@ -518,20 +763,18 @@
       return;
     }
 
-    // ── Navbar + UI-Setup ──────────────────────────────
     var navEl = document.getElementById('navbar-container');
     if (navEl) navEl.innerHTML = Render.navbar('admin');
 
     Render.initProfileDropdown();
     initTabSwitching();
 
-    // ── Synchron renderbar (Mock — Schritte 9 + 10) ────
+    // Mock-Render (Schritt 10)
     renderSystemStatus(FeedbackAPI.getAdminSystemStatus());
     renderModerationStats();
     renderModerationTable();
-    renderUserTable();
 
-    // ── Dashboard-Daten parallel laden (Backend) ───────
+    // Backend-Daten parallel
     try {
       var results = await Promise.all([
         FeedbackAPI.getAdminStats(),
@@ -539,33 +782,40 @@
         FeedbackAPI.getAdminChartActivity(),
         FeedbackAPI.getAdminChartVisibility(),
         FeedbackAPI.getAdminDriverAverages(),
-        FeedbackAPI.getAdminDepartments()
+        FeedbackAPI.getAdminDepartments(),
+        FeedbackAPI.getUsers(),
+        FeedbackAPI.getDepartments()
       ]);
 
-      var stats      = results[0];
-      var kpis       = results[1];
-      var activity   = results[2];
-      var visibility = results[3];
-      var drivers    = results[4];
-      var depts      = results[5];
+      var stats        = results[0];
+      var kpis         = results[1];
+      var activity     = results[2];
+      var visibility   = results[3];
+      var drivers      = results[4];
+      var depts        = results[5];
+      var users        = results[6];
+      _departmentCache = results[7];
 
       renderStats(stats);
       renderKpis(kpis);
       renderDriverAverages(drivers);
       renderDepartments(depts);
       renderDonutLegend(visibility);
+      renderUserTable(users);
 
-      // Charts brauchen DOM (Canvas), Daten + Chart.js verfügbar
       initDashboardCharts(activity, visibility);
     } catch (e) {
-      console.error('Dashboard-Daten konnten nicht geladen werden:', e);
+      console.error('Admin-Daten konnten nicht geladen werden:', e);
       var kpisEl = document.getElementById('admin-kpis-container');
       if (kpisEl) {
         kpisEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;grid-column:1/-1;">' +
           'Fehler beim Laden (' + (e.errorCode || 'unknown') + '). Bitte Seite neu laden.</p>';
       }
     }
+
+    // Event-Bindings ZULETZT
     bindEvents();
+    bindUserTableActions();
   }
 
   document.addEventListener('DOMContentLoaded', init);
