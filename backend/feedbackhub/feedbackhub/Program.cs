@@ -3,12 +3,45 @@ using Microsoft.EntityFrameworkCore;
 using feedbackhub.Data;
 using feedbackhub.Services;
 using Scalar.AspNetCore;
+using feedbackhub.TestAuth;
+using Microsoft.AspNetCore.Authentication;
 
 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
 var builder = WebApplication.CreateBuilder(args);
 
-// ── Auth (Entra ID / JWT) ────────────────────────────────
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+// ── Auth (Entra ID / JWT + optional Test-Auth fuer IPA) ────────────────────
+var testAuthEnabled =
+  builder.Environment.IsDevelopment() &&
+  builder.Configuration.GetValue<bool>("TestAuth:Enabled");
+
+if (testAuthEnabled)
+{
+  // Test-Auth ist Default-Schema, JWT bleibt als Fallback
+  builder.Services
+    .AddAuthentication(options =>
+    {
+      options.DefaultAuthenticateScheme = TestAuthHandler.SchemeName;
+      options.DefaultChallengeScheme    = TestAuthHandler.SchemeName;
+    })
+    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+      TestAuthHandler.SchemeName, _ => { })
+    .AddMicrosoftIdentityWebApi(builder.Configuration);
+
+  // Beim Start ein deutliches Logging — damit man im Konsolen-Output
+  // sofort sieht, dass Test-Auth aktiv ist (und in Prod NIE auftauchen darf)
+  Console.WriteLine("");
+  Console.WriteLine("⚠️  ════════════════════════════════════════════════");
+  Console.WriteLine("⚠️   TEST-AUTH AKTIV — NUR FUER IPA-TESTBETRIEB!");
+  Console.WriteLine("⚠️   Authentifizierung via X-Test-User Header");
+  Console.WriteLine("⚠️   Erlaubte Werte: max, adma");
+  Console.WriteLine("⚠️  ════════════════════════════════════════════════");
+  Console.WriteLine("");
+}
+else
+{
+  // Production-Pfad — wie bisher
+  builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+}
 
 // ── CORS ─────────────────────────────────────────────────
 builder.Services.AddCors(options =>
