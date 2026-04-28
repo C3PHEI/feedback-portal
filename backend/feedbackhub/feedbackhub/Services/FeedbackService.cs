@@ -240,7 +240,11 @@ public class FeedbackService
         if (f.SubmitterId != currentUserId)
             return new ServiceResult(false, "forbidden");
 
-        // 5-Minuten-Fenster [FEAT Feature 4]
+        // nur ein einziger Edit erlaubt
+        if (f.IsEdited)
+                return new ServiceResult(false, "already_edited");
+
+        // 5-Minuten-Fenster
         if ((DateTime.UtcNow - f.SubmittedAt).TotalMinutes > 5)
             return new ServiceResult(false, "edit_window_expired");
 

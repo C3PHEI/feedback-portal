@@ -93,22 +93,23 @@ public class FeedbackController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateFeedbackRequest req)
     {
-        var user = await ResolveCurrentUserAsync();
-        if (user == null) return Unauthorized();
+      var user = await ResolveCurrentUserAsync();
+      if (user == null) return Unauthorized();
 
-        var result = await _service.UpdateAsync(id, user.Id, req);
-        if (!result.Success)
+      var result = await _service.UpdateAsync(id, user.Id, req);
+      if (!result.Success)
+      {
+        return result.Error switch
         {
-            return result.Error switch
-            {
-                "not_found"           => NotFound(),
-                "forbidden"           => Forbid(),
-                "edit_window_expired" => BadRequest(new { error = result.Error }),
-                _                     => BadRequest(new { error = result.Error })
-            };
-        }
+          "not_found"           => NotFound(),
+          "forbidden"           => Forbid(),
+          "already_edited"      => Conflict(new { error = result.Error }),    // NEU
+          "edit_window_expired" => BadRequest(new { error = result.Error }),
+          _                     => BadRequest(new { error = result.Error })
+        };
+      }
 
-        return NoContent();
+      return NoContent();
     }
 
     // POST /api/feedback/{id}/report
