@@ -31,8 +31,21 @@ async function ensureLogin() {
   msalInstance.setActiveAccount(accounts[0]);
 }
 
+// ensureLogin() einmal starten und das Promise festhalten,
+// damit getApiToken() darauf warten kann (verhindert Race Condition).
+const loginReady = ensureLogin();
+
 async function getApiToken() {
+  // Erst warten, bis MSAL initialisiert und der Account gesetzt ist.
+  await loginReady;
+
   const account = msalInstance.getActiveAccount();
+  if (!account) {
+    // Kein Account vorhanden -> Login-Redirect anstossen.
+    await msalInstance.loginRedirect({ scopes: apiScopes });
+    return;
+  }
+
   try {
     const res = await msalInstance.acquireTokenSilent({ scopes: apiScopes, account });
     return res.accessToken;
@@ -46,5 +59,3 @@ window.getApiToken = getApiToken;
 
 // um JWT zum testen in der Konsole auszulesen
 window.__getToken = getApiToken;
-
-ensureLogin();
