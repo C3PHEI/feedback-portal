@@ -6,7 +6,8 @@
 
 var FeedbackAPI = (function () {
 
-  var BASE_URL = 'http://10.41.35.139:5185';
+  var BASE_URL = 'http://localhost:5185';
+  //var BASE_URL = 'http://10.41.35.139:5185';
 
   /* ═══════════════════════════════════════════════════════
      API Error Class

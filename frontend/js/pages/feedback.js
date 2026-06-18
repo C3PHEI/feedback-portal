@@ -1,12 +1,26 @@
 /**
  * pages/feedback.js
- * Feedback Hub — Feedback-Formular dynamisch rendern + Validierung
+ * Feedback Hub — Feedback-Formular dynamisch rendern + Validierung + Einreichung
  */
 
 (function () {
 
   var drivers = ['impact', 'ownership', 'collaboration', 'growth'];
   var naState = { impact: false, ownership: false, collaboration: false, growth: false };
+  var DRIVER_IDS = {
+    impact:        '2351a418-1438-4a29-b6b3-3948c184d663',
+    ownership:     'dafa9c71-f956-40f8-83fc-6c74986f5c87',
+    collaboration: '6d33489b-53b6-4d35-a879-5b7a880e55e6',
+    growth:        '90d9078b-3195-4f30-9b72-f9c3b9581980'
+  };
+
+  function getDriverId(driverKey) {
+    var id = DRIVER_IDS[driverKey];
+    if (!id || id === '00000000-0000-0000-0000-000000000000') {
+      throw new Error('Driver-GUID fehlt für "' + driverKey + '" — DRIVER_IDS in feedback.js befüllen.');
+    }
+    return id;
+  }
 
   /* ═══════════════════════════════════════════════════════
      Render Recipients Dropdown
@@ -216,6 +230,91 @@
   }
 
   /* ═══════════════════════════════════════════════════════
+     Payload bauen
+     ───────────────────────────────────────────────────────
+     Entspricht SubmitFeedbackRequest im Backend:
+       RecipientId, IsAnonymous, CocConfirmed,
+       Ratings: [{ DriverId, Score, IsNa }],
+       Strengths, AreasToImprove
+     ═══════════════════════════════════════════════════════ */
+
+  function buildPayload() {
+    var recipientEl = document.getElementById('recipientSelect');
+    var cocEl = document.getElementById('cocAccepted');
+    var strengthsEl = document.getElementById('strengths');
+    var improvementsEl = document.getElementById('improvements');
+    var vis = document.querySelector('input[name="visibility"]:checked');
+
+    var isAnonymous = !!(vis && vis.value === 'private');
+
+    var ratings = drivers.map(function (d) {
+      if (naState[d]) {
+        return { driverId: getDriverId(d), score: null, isNa: true };
+      }
+      var selected = document.querySelector('input[name="' + d + '"]:checked');
+      return {
+        driverId: getDriverId(d),
+        score:    selected ? parseInt(selected.value, 10) : null,
+        isNa:     false
+      };
+    });
+
+    // Leere Strings als null normalisieren (DB-Check-Constraint)
+    var strengths      = strengthsEl    && strengthsEl.value.trim()    !== '' ? strengthsEl.value    : null;
+    var areasToImprove = improvementsEl && improvementsEl.value.trim() !== '' ? improvementsEl.value : null;
+
+    return {
+      recipientId:    recipientEl.value,
+      isAnonymous:    isAnonymous,
+      cocConfirmed:   cocEl ? cocEl.checked : false,
+      ratings:        ratings,
+      strengths:      strengths,
+      areasToImprove: areasToImprove
+    };
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     Submit Handler
+     ═══════════════════════════════════════════════════════ */
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    var btn = document.getElementById('submitBtn');
+    if (btn && btn.disabled) return;      // Validierung nicht erfüllt
+    if (btn) btn.disabled = true;         // Doppel-Submit verhindern
+
+    var payload;
+    try {
+      payload = buildPayload();
+    } catch (err) {
+      console.error('Payload-Aufbau fehlgeschlagen:', err);
+      Render.showToast(I18n.t('feedback.toast_error') || 'Fehler beim Erstellen des Feedbacks.');
+      validateForm();                     // Button-Zustand neu setzen
+      return;
+    }
+
+    try {
+      await FeedbackAPI.submitFeedback(payload);
+      Render.showToast(I18n.t('feedback.toast_submitted'));
+      // Nach erfolgreichem Senden zur Inbox wechseln
+      window.location.href = 'index.html';
+    } catch (err) {
+      console.error('Feedback-Einreichung fehlgeschlagen:', err);
+
+      var msgKey = err && err.errorCode
+        ? 'feedback.error.' + err.errorCode
+        : null;
+      var msg = (msgKey && I18n.t(msgKey)) ||
+        (I18n.t('feedback.toast_error')) ||
+        'Feedback konnte nicht gesendet werden.';
+
+      Render.showToast(msg);
+      validateForm();                     // Button wieder freigeben, falls korrigierbar
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
      Bind Events
      ═══════════════════════════════════════════════════════ */
 
@@ -223,10 +322,7 @@
     // Form submit
     var feedbackForm = document.getElementById('feedbackForm');
     if (feedbackForm) {
-      feedbackForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        Render.showToast(I18n.t('feedback.toast_submitted'));
-      });
+      feedbackForm.addEventListener('submit', handleSubmit);
     }
 
     // Visibility
