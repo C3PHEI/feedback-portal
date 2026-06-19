@@ -42,6 +42,15 @@ var I18n = (function () {
       'inbox.detail_hint':    'Klicken zum Aufklappen',
       'inbox.unread_badge':   'Neu',
       'inbox.areas_improve':  'Verbesserungsbereiche',
+      'inbox.report_btn':     'Feedback melden',
+      'inbox.report_title':   'Feedback melden',
+      'inbox.report_desc':    'Bitte beschreibe, warum dieses Feedback gegen den Code of Conduct verstösst.',
+      'inbox.report_placeholder': 'Grund der Meldung ...',
+      'inbox.report_submit':  'Melden',
+      'inbox.report_cancel':  'Abbrechen',
+      'inbox.report_success': 'Feedback wurde gemeldet.',
+      'inbox.report_error':   'Meldung konnte nicht gesendet werden.',
+      'inbox.report_already': 'Du hast dieses Feedback bereits gemeldet.',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'Verlauf',
@@ -357,6 +366,15 @@ var I18n = (function () {
       'inbox.detail_hint':    'Click to expand',
       'inbox.unread_badge':   'New',
       'inbox.areas_improve':  'Areas to Improve',
+      'inbox.report_btn':     'Report feedback',
+      'inbox.report_title':   'Report feedback',
+      'inbox.report_desc':    'Please describe why this feedback violates the Code of Conduct.',
+      'inbox.report_placeholder': 'Reason for report ...',
+      'inbox.report_submit':  'Report',
+      'inbox.report_cancel':  'Cancel',
+      'inbox.report_success': 'Feedback has been reported.',
+      'inbox.report_error':   'Report could not be sent.',
+      'inbox.report_already': 'You have already reported this feedback.',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'History',

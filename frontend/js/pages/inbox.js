@@ -85,6 +85,14 @@
       '<p class="inbox-detail-text">' + (fb.improvements || '-') + '</p>' +
       '</div>' +
 
+      // Melden-Button
+      '<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--color-border);text-align:right;">' +
+      '<button class="report-btn" data-feedback-id="' + id + '" ' +
+      'style="background:none;border:1px solid var(--color-danger);color:var(--color-danger);' +
+      'padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;">' +
+      I18n.t('inbox.report_btn') + '</button>' +
+      '</div>' +
+
       '</div>';
   }
 
@@ -176,6 +184,66 @@
   }
 
   /* ═══════════════════════════════════════════════════════
+     Report Modal
+     ═══════════════════════════════════════════════════════ */
+
+  function bindReportButtons() {
+    document.querySelectorAll('.report-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openReportModal(btn.dataset.feedbackId);
+      });
+    });
+  }
+
+  function openReportModal(feedbackId) {
+    var existing = document.getElementById('report-modal');
+    if (existing) existing.remove();
+
+    var modal = document.createElement('div');
+    modal.id = 'report-modal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:flex;align-items:center;justify-content:center;';
+    modal.innerHTML =
+      '<div style="background:var(--color-bg-card);border-radius:12px;padding:24px;max-width:420px;width:90%;">' +
+      '<h3 style="margin:0 0 8px;color:var(--color-text);">' + I18n.t('inbox.report_title') + '</h3>' +
+      '<p style="font-size:13px;color:var(--color-text-muted);margin-bottom:16px;">' + I18n.t('inbox.report_desc') + '</p>' +
+      '<textarea id="report-reason" rows="4" placeholder="' + I18n.t('inbox.report_placeholder') + '" ' +
+      'style="width:100%;box-sizing:border-box;padding:10px;border-radius:8px;border:1px solid var(--color-border);' +
+      'background:var(--color-bg);color:var(--color-text);font-size:13px;resize:vertical;margin-bottom:16px;"></textarea>' +
+      '<div style="display:flex;gap:10px;justify-content:flex-end;">' +
+      '<button id="report-cancel" style="padding:8px 16px;border-radius:8px;border:1px solid var(--color-border);' +
+      'background:none;color:var(--color-text-muted);cursor:pointer;">' + I18n.t('inbox.report_cancel') + '</button>' +
+      '<button id="report-submit" style="padding:8px 16px;border-radius:8px;border:none;' +
+      'background:var(--color-danger);color:#fff;cursor:pointer;">' + I18n.t('inbox.report_submit') + '</button>' +
+      '</div></div>';
+
+    document.body.appendChild(modal);
+
+    document.getElementById('report-cancel').addEventListener('click', function () { modal.remove(); });
+    modal.addEventListener('click', function (e) { if (e.target === modal) modal.remove(); });
+
+    document.getElementById('report-submit').addEventListener('click', async function () {
+      var reason = document.getElementById('report-reason').value.trim();
+      if (!reason) return;
+
+      var submitBtn = document.getElementById('report-submit');
+      submitBtn.disabled = true;
+
+      try {
+        await FeedbackAPI.reportFeedback(feedbackId, reason);
+        Render.showToast(I18n.t('inbox.report_success'));
+        modal.remove();
+      } catch (err) {
+        var msg = (err && err.errorCode === 'already_reported')
+          ? I18n.t('inbox.report_already')
+          : I18n.t('inbox.report_error');
+        Render.showToast(msg);
+        submitBtn.disabled = false;
+      }
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════
      Init
      ═══════════════════════════════════════════════════════ */
 
@@ -220,6 +288,7 @@
         } else {
           cardsEl.innerHTML = feedbacks.map(renderFeedbackCard).join('\n');
           bindCardClicks();
+          bindReportButtons();
         }
       }
     } catch (e) {

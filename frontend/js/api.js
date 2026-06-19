@@ -638,8 +638,25 @@ var FeedbackAPI = (function () {
      Werden in den nächsten Schritten umgestellt.
      ═══════════════════════════════════════════════════════ */
 
-  function getRecipients()           { return MockData.recipients; }
+  async function getRecipients() {
+    var dtos = await apiGet('/api/users/recipients');
+    return dtos.map(function (u) {
+      return { value: u.id, label: u.displayName };
+    });
+  }
   function getDriverDefinitions()    { return MockData.driverDefinitions; }
+
+  async function submitFeedback(payload) {
+    return apiPost('/api/feedback', payload);
+  }
+
+  async function reportFeedback(feedbackId, reason) {
+    return apiPost('/api/feedback/' + feedbackId + '/report', { reason: reason });
+  }
+
+  async function canSubmitAnonymous(recipientId) {
+    return apiGet('/api/feedback/can-submit-anonymous/' + recipientId);
+  }
 
   /* ═══════════════════════════════════════════════════════
      Debug-Helper (Post-IPA entfernen)
@@ -687,7 +704,10 @@ var FeedbackAPI = (function () {
     deactivateUser:             deactivateUser,
     getModerationReportDetail:  getModerationReportDetail,
     updateReportStatus:         updateReportStatus,
-    applyReportAction:          applyReportAction
+    applyReportAction:          applyReportAction,
+    submitFeedback:             submitFeedback,
+    reportFeedback:             reportFeedback,
+    canSubmitAnonymous:         canSubmitAnonymous
   };
 
 })();

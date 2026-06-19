@@ -26,10 +26,10 @@
      Render Recipients Dropdown
      ═══════════════════════════════════════════════════════ */
 
-  function renderRecipients() {
+  async function renderRecipients() {
     var el = document.getElementById('recipientSelect');
     if (!el) return;
-    var recipients = FeedbackAPI.getRecipients();
+    var recipients = await FeedbackAPI.getRecipients();
     var html = '<option value="">' + I18n.t('feedback.recipient_placeholder') + '</option>';
     recipients.forEach(function (r) {
       html += '<option value="' + r.value + '">' + r.label + '</option>';
@@ -381,7 +381,13 @@
 
     var navEl = document.getElementById('navbar-container');
     if (navEl) navEl.innerHTML = Render.navbar('inbox');
-    // ... Rest unverändert
+
+    Render.initProfileDropdown();
+
+    await renderRecipients();
+    renderDrivers();
+    bindEvents();
+    validateForm();
   }
 
   document.addEventListener('DOMContentLoaded', init);
