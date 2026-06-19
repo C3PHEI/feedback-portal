@@ -25,21 +25,28 @@ var FeedbackAPI = (function () {
      Core Fetch Wrapper
      ═══════════════════════════════════════════════════════ */
 
+  var TEST_USER = null; // z.B. 'max' oder 'adma' für lokales Testen mit TestAuth
+
   async function apiFetch(path, options) {
     options = options || {};
 
-    // Token holen
-    var token;
-    try {
-      token = await window.getApiToken();
-    } catch (e) {
-      throw new ApiError(0, 'token_unavailable', 'Login erforderlich');
+    var headers = { 'Content-Type': 'application/json' };
+
+    if (TEST_USER) {
+      headers['X-Test-User'] = TEST_USER;
+    } else if (typeof window.getApiToken === 'function') {
+      var token;
+      try {
+        token = await window.getApiToken();
+      } catch (e) {
+        throw new ApiError(0, 'token_unavailable', 'Login erforderlich');
+      }
+      headers['Authorization'] = 'Bearer ' + token;
+    } else {
+      throw new ApiError(0, 'token_unavailable', 'Login erforderlich — weder MSAL noch TEST_USER konfiguriert');
     }
 
-    var headers = Object.assign({
-      'Authorization': 'Bearer ' + token,
-      'Content-Type':  'application/json'
-    }, options.headers || {});
+    Object.assign(headers, options.headers || {});
 
     var response;
     try {
@@ -241,6 +248,7 @@ var FeedbackAPI = (function () {
 
   function mapRating(r) {
     return {
+      driverId: r.driverId,
       name:   normalizeDriverName(r.driverName),
       rating: r.isNa ? null : r.score,
       na:     r.isNa
@@ -638,8 +646,29 @@ var FeedbackAPI = (function () {
      Werden in den nächsten Schritten umgestellt.
      ═══════════════════════════════════════════════════════ */
 
-  function getRecipients()           { return MockData.recipients; }
+  async function getRecipients() {
+    var dtos = await apiGet('/api/users/recipients');
+    return dtos.map(function (u) {
+      return { value: u.id, label: u.displayName };
+    });
+  }
   function getDriverDefinitions()    { return MockData.driverDefinitions; }
+
+  async function submitFeedback(payload) {
+    return apiPost('/api/feedback', payload);
+  }
+
+  async function reportFeedback(feedbackId, reason) {
+    return apiPost('/api/feedback/' + feedbackId + '/report', { reason: reason });
+  }
+
+  async function updateFeedback(feedbackId, payload) {
+    return apiPut('/api/feedback/' + feedbackId, payload);
+  }
+
+  async function canSubmitAnonymous(recipientId) {
+    return apiGet('/api/feedback/can-submit-anonymous/' + recipientId);
+  }
 
   /* ═══════════════════════════════════════════════════════
      Debug-Helper (Post-IPA entfernen)
@@ -687,7 +716,11 @@ var FeedbackAPI = (function () {
     deactivateUser:             deactivateUser,
     getModerationReportDetail:  getModerationReportDetail,
     updateReportStatus:         updateReportStatus,
-    applyReportAction:          applyReportAction
+    applyReportAction:          applyReportAction,
+    submitFeedback:             submitFeedback,
+    updateFeedback:             updateFeedback,
+    reportFeedback:             reportFeedback,
+    canSubmitAnonymous:         canSubmitAnonymous
   };
 
 })();

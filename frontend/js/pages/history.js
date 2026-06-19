@@ -47,7 +47,8 @@
      ═══════════════════════════════════════════════════════ */
 
   function renderCard(fb) {
-    var isEditable = fb.submittedAt === 'LIVE_TIMER';
+    var isEditable = !fb.locked && fb.submittedAt &&
+      (Date.now() - new Date(fb.submittedAt).getTime()) < HISTORY_EDIT_WINDOW_MS;
     var cardClass = 'history-card' + (isEditable ? ' editable' : '');
 
     // Avatar
@@ -136,7 +137,9 @@
         '</div></div>';
     }
 
-    return '<div class="' + cardClass + '" id="card-' + fb.id + '" data-submitted-at="' + fb.submittedAt + '">' +
+    var driverIdsJson = fb.drivers.map(function (d) { return d.driverId; }).join(',');
+
+    return '<div class="' + cardClass + '" id="card-' + fb.id + '" data-submitted-at="' + fb.submittedAt + '" data-driver-ids="' + driverIdsJson + '">' +
       '<div class="flex items-start justify-between gap-3 mb-4">' +
       '<div class="flex items-center gap-3">' + avatarHtml +
       '<div><span class="history-recipient">' + fb.to.name + '</span>' +
@@ -157,12 +160,12 @@
      ═══════════════════════════════════════════════════════ */
 
   function initHistoryTimers() {
-    var editableCards = document.querySelectorAll('.history-card[data-submitted-at="LIVE_TIMER"]');
+    var editableCards = document.querySelectorAll('.history-card.editable');
     if (editableCards.length === 0) return;
 
     editableCards.forEach(function (card) {
       var cardId = card.id.replace('card-', '');
-      var submittedAt = new Date(Date.now() - 30 * 1000);
+      var submittedAt = new Date(card.dataset.submittedAt);
 
       var tsEl = document.getElementById('timestamp-' + cardId);
       if (tsEl) {
@@ -283,47 +286,77 @@
     var saveBtns = document.querySelectorAll('[id^="saveEdit-"]');
     saveBtns.forEach(function (saveBtn) {
       var cardId = saveBtn.id.replace('saveEdit-', '');
-      saveBtn.addEventListener('click', function () {
-        // Texte speichern
-        var newStrengths = document.getElementById('editStrengths-' + cardId);
-        var newImprovements = document.getElementById('editImprovements-' + cardId);
-        var strengthsDisplay = document.getElementById('strengths-' + cardId);
-        var improvementsDisplay = document.getElementById('improvements-' + cardId);
-        if (newStrengths && strengthsDisplay) strengthsDisplay.textContent = newStrengths.value;
-        if (newImprovements && improvementsDisplay) improvementsDisplay.textContent = newImprovements.value;
+      saveBtn.addEventListener('click', async function () {
+        saveBtn.disabled = true;
 
-        // Driver-Ratings in der Karte aktualisieren
         var keys = ['impact', 'ownership', 'collaboration', 'growth'];
-        var driverEls = document.querySelectorAll('#card-' + cardId + ' .history-driver');
-        driverEls.forEach(function (driverEl, idx) {
-          var key = keys[idx];
-          var naBtn = document.getElementById('editNa-' + cardId + '-' + key);
-          var valEl = driverEl.querySelector('.history-driver-stars, .history-driver-na');
-          if (!valEl || !naBtn) return;
+        var card = document.getElementById('card-' + cardId);
+        var driverIds = card.dataset.driverIds.split(',');
 
-          if (naBtn.classList.contains('na-active')) {
-            valEl.className = 'history-driver-na';
-            valEl.textContent = 'N/A';
-          } else {
-            var selected = document.querySelector(
-              'input[name="editDriver-' + cardId + '-' + key + '"]:checked'
-            );
-            if (selected) {
-              valEl.className = 'history-driver-stars';
-              var filled = parseInt(selected.value);
-              var empty = 5 - filled;
-              valEl.innerHTML = '★'.repeat(filled) +
-                (empty > 0 ? '<span class="empty">' + '★'.repeat(empty) + '</span>' : '');
-            }
-          }
+        var ratings = keys.map(function (key, idx) {
+          var naBtn = document.getElementById('editNa-' + cardId + '-' + key);
+          var isNa = naBtn && naBtn.classList.contains('na-active');
+          var selected = document.querySelector('input[name="editDriver-' + cardId + '-' + key + '"]:checked');
+          return {
+            driverId: driverIds[idx],
+            score: isNa ? null : (selected ? parseInt(selected.value) : null),
+            isNa: isNa
+          };
         });
 
-        var overlay = document.getElementById('editOverlay-' + cardId);
-        var editBtn = document.getElementById('editBtn-' + cardId);
-        if (overlay) overlay.classList.remove('active');
-        if (editBtn && !editBtn.disabled) editBtn.style.display = '';
+        var newStrengths = document.getElementById('editStrengths-' + cardId);
+        var newImprovements = document.getElementById('editImprovements-' + cardId);
+        var payload = {
+          ratings: ratings,
+          strengths: newStrengths ? newStrengths.value || null : null,
+          areasToImprove: newImprovements ? newImprovements.value || null : null
+        };
 
-        Render.showToast(I18n.t('history.toast_saved'));
+        try {
+          await FeedbackAPI.updateFeedback(cardId, payload);
+
+          // DOM aktualisieren
+          var strengthsDisplay = document.getElementById('strengths-' + cardId);
+          var improvementsDisplay = document.getElementById('improvements-' + cardId);
+          if (newStrengths && strengthsDisplay) strengthsDisplay.textContent = newStrengths.value;
+          if (newImprovements && improvementsDisplay) improvementsDisplay.textContent = newImprovements.value;
+
+          var driverEls = document.querySelectorAll('#card-' + cardId + ' .history-driver');
+          driverEls.forEach(function (driverEl, idx) {
+            var key = keys[idx];
+            var naBtn = document.getElementById('editNa-' + cardId + '-' + key);
+            var valEl = driverEl.querySelector('.history-driver-stars, .history-driver-na');
+            if (!valEl || !naBtn) return;
+
+            if (naBtn.classList.contains('na-active')) {
+              valEl.className = 'history-driver-na';
+              valEl.textContent = 'N/A';
+            } else {
+              var selected = document.querySelector('input[name="editDriver-' + cardId + '-' + key + '"]:checked');
+              if (selected) {
+                valEl.className = 'history-driver-stars';
+                var filled = parseInt(selected.value);
+                var empty = 5 - filled;
+                valEl.innerHTML = '★'.repeat(filled) +
+                  (empty > 0 ? '<span class="empty">' + '★'.repeat(empty) + '</span>' : '');
+              }
+            }
+          });
+
+          var overlay = document.getElementById('editOverlay-' + cardId);
+          var editBtn = document.getElementById('editBtn-' + cardId);
+          if (overlay) overlay.classList.remove('active');
+          if (editBtn && !editBtn.disabled) editBtn.style.display = '';
+
+          Render.showToast(I18n.t('history.toast_saved'));
+        } catch (err) {
+          console.error('Feedback-Update fehlgeschlagen:', err);
+          var msg = (err && err.errorCode === 'edit_window_expired')
+            ? I18n.t('history.locked')
+            : I18n.t('history.toast_error') || 'Speichern fehlgeschlagen.';
+          Render.showToast(msg);
+        }
+        saveBtn.disabled = false;
       });
     });
   }
