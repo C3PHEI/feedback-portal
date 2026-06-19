@@ -25,21 +25,28 @@ var FeedbackAPI = (function () {
      Core Fetch Wrapper
      ═══════════════════════════════════════════════════════ */
 
+  var TEST_USER = null; // z.B. 'max' oder 'adma' für lokales Testen mit TestAuth
+
   async function apiFetch(path, options) {
     options = options || {};
 
-    // Token holen
-    var token;
-    try {
-      token = await window.getApiToken();
-    } catch (e) {
-      throw new ApiError(0, 'token_unavailable', 'Login erforderlich');
+    var headers = { 'Content-Type': 'application/json' };
+
+    if (TEST_USER) {
+      headers['X-Test-User'] = TEST_USER;
+    } else if (typeof window.getApiToken === 'function') {
+      var token;
+      try {
+        token = await window.getApiToken();
+      } catch (e) {
+        throw new ApiError(0, 'token_unavailable', 'Login erforderlich');
+      }
+      headers['Authorization'] = 'Bearer ' + token;
+    } else {
+      throw new ApiError(0, 'token_unavailable', 'Login erforderlich — weder MSAL noch TEST_USER konfiguriert');
     }
 
-    var headers = Object.assign({
-      'Authorization': 'Bearer ' + token,
-      'Content-Type':  'application/json'
-    }, options.headers || {});
+    Object.assign(headers, options.headers || {});
 
     var response;
     try {
