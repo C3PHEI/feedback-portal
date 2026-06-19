@@ -380,7 +380,7 @@
     }
 
     var navEl = document.getElementById('navbar-container');
-    if (navEl) navEl.innerHTML = Render.navbar('inbox');
+    if (navEl) navEl.innerHTML = Render.navbar('feedback');
 
     Render.initProfileDropdown();
 
