@@ -248,6 +248,7 @@ var FeedbackAPI = (function () {
 
   function mapRating(r) {
     return {
+      driverId: r.driverId,
       name:   normalizeDriverName(r.driverName),
       rating: r.isNa ? null : r.score,
       na:     r.isNa
@@ -661,6 +662,10 @@ var FeedbackAPI = (function () {
     return apiPost('/api/feedback/' + feedbackId + '/report', { reason: reason });
   }
 
+  async function updateFeedback(feedbackId, payload) {
+    return apiPut('/api/feedback/' + feedbackId, payload);
+  }
+
   async function canSubmitAnonymous(recipientId) {
     return apiGet('/api/feedback/can-submit-anonymous/' + recipientId);
   }
@@ -713,6 +718,7 @@ var FeedbackAPI = (function () {
     updateReportStatus:         updateReportStatus,
     applyReportAction:          applyReportAction,
     submitFeedback:             submitFeedback,
+    updateFeedback:             updateFeedback,
     reportFeedback:             reportFeedback,
     canSubmitAnonymous:         canSubmitAnonymous
   };
