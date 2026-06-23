@@ -240,7 +240,7 @@ var FeedbackAPI = (function () {
       preview:      preview,
       date:         formatDate(dto.submittedDate),
       unread:       false,
-      drivers:      dto.ratings.map(mapRating),
+      drivers:      sortDrivers(dto.ratings.map(mapRating)),
       strengths:    dto.strengths || '',
       improvements: dto.areasToImprove || ''
     };
@@ -259,13 +259,13 @@ var FeedbackAPI = (function () {
     return {
       totalReviews:   dto.totalReviews,
       anonymousCount: dto.anonymousCount,
-      drivers: dto.driverAverages.map(function (d) {
+      drivers: sortDrivers(dto.driverAverages.map(function (d) {
         return {
           name:  normalizeDriverName(d.driverName),
           value: d.average != null ? d.average : 0,
           stars: d.average != null ? Math.round(d.average) : 0
         };
-      })
+      }))
     };
   }
 
@@ -291,7 +291,7 @@ var FeedbackAPI = (function () {
       edited:       dto.isEdited,
       locked:       dto.isLocked,
       avatarStyle:  null,
-      drivers:      dto.ratings.map(mapRating),
+      drivers:      sortDrivers(dto.ratings.map(mapRating)),
       strengths:    dto.strengths || '',
       improvements: dto.areasToImprove || ''
     };
@@ -302,6 +302,18 @@ var FeedbackAPI = (function () {
     if (!backendName) return '';
     var first = backendName.split('/')[0].trim().toLowerCase();
     return first;   // "Impact/Results" → "impact"
+  }
+
+  var DRIVER_ORDER = ['impact', 'ownership', 'collaboration', 'growth'];
+
+  function sortDrivers(drivers) {
+    return drivers.slice().sort(function (a, b) {
+      var ai = DRIVER_ORDER.indexOf(a.name);
+      var bi = DRIVER_ORDER.indexOf(b.name);
+      if (ai === -1) ai = 999;
+      if (bi === -1) bi = 999;
+      return ai - bi;
+    });
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -345,7 +357,7 @@ var FeedbackAPI = (function () {
       fromName:     dto.isAnonymous ? null : dto.submitter.displayName,
       fromInitials: dto.isAnonymous ? null : buildInitials(dto.submitter.displayName),
       date:         formatDateShort(dto.submittedDate),
-      drivers:      dto.ratings.map(mapRating),
+      drivers:      sortDrivers(dto.ratings.map(mapRating)),
       strengths:    dto.strengths || '',
       improvements: dto.areasToImprove || ''
     };
@@ -389,27 +401,27 @@ var FeedbackAPI = (function () {
     return [
       {
         number:    String(dto.totalFeedbacks),
-        label:     'Feedbacks gesamt',
+        label:     I18n.t('admin.kpi_total_feedbacks'),
         trend:     '',
         trendType: 'neutral'
       },
       {
         number:    String(dto.anonymousRatePct),
         unit:      '%',
-        label:     'Anonyme Quote',
-        trend:     dto.anonymousCount + ' von ' + dto.totalFeedbacks,
+        label:     I18n.t('admin.kpi_anonymous_rate'),
+        trend:     dto.anonymousCount + ' / ' + dto.totalFeedbacks,
         trendType: 'neutral'
       },
       {
         number:    dto.avgRating != null ? dto.avgRating.toFixed(1) : '–',
-        label:     '\u00D8 Bewertung',     // Ø Bewertung
+        label:     I18n.t('admin.kpi_avg_rating'),     // Ø Bewertung
         trend:     '',
         trendType: 'neutral'
       },
       {
         number:    String(dto.editedCount),
-        label:     'Bearbeitet',
-        trend:     dto.editedRatePct + '% aller Feedbacks',
+        label:     I18n.t('admin.kpi_edited'),
+        trend:     dto.editedRatePct + '% ' + I18n.t('admin.kpi_of_all'),
         trendType: 'neutral'
       }
     ];
@@ -421,8 +433,8 @@ var FeedbackAPI = (function () {
     return {
       labels: dto.labels.map(formatMonthLabel),
       datasets: [
-        { label: 'Öffentlich', data: dto.publicCounts },
-        { label: 'Anonym',     data: dto.anonymousCounts }
+        { label: I18n.t('common.public'), data: dto.publicCounts },
+        { label: I18n.t('common.anonymous'), data: dto.anonymousCounts }
       ]
     };
   }
@@ -431,7 +443,7 @@ var FeedbackAPI = (function () {
     var dto = await apiGet('/api/admin/charts/visibility');
 
     return {
-      labels: ['Öffentlich', 'Anonym'],
+      labels: [I18n.t('common.public'), I18n.t('common.anonymous')],
       data:   [dto.publicCount, dto.anonymousCount]
     };
   }
@@ -439,13 +451,13 @@ var FeedbackAPI = (function () {
   async function getAdminDriverAverages() {
     var dtos = await apiGet('/api/admin/driver-averages');
 
-    return dtos.map(function (d) {
+    return sortDrivers(dtos.map(function (d) {
       return {
         name:  normalizeDriverName(d.driverName),
         value: d.average != null ? d.average : 0,
         pct:   d.pct
       };
-    });
+    }));
   }
 
   async function getAdminDepartments() {
@@ -549,9 +561,9 @@ var FeedbackAPI = (function () {
     var dto = await apiGet('/api/admin/reports/stats');
     // Frontend-Format: Array von Stat-Cards mit {number, label, color}
     return [
-      { number: dto.open,      label: 'Offen',     color: '#FF6B00' },
-      { number: dto.resolved,  label: 'Erledigt',  color: '#22c55e' },
-      { number: dto.dismissed, label: 'Verworfen', color: '#999' }
+      { number: dto.open,      label: I18n.t('admin.mod_stat_open'),     color: '#FF6B00' },
+      { number: dto.resolved,  label: I18n.t('admin.mod_stat_resolved'),  color: '#22c55e' },
+      { number: dto.dismissed, label: I18n.t('admin.mod_stat_dismissed'), color: '#999' }
     ];
   }
 
@@ -621,7 +633,7 @@ var FeedbackAPI = (function () {
         submittedAt:         f.submittedAt,
         strengths:           f.strengths || '',
         areasToImprove:      f.areasToImprove || '',
-        ratings:             (f.ratings || []).map(mapRating)
+        ratings:             sortDrivers((f.ratings || []).map(mapRating))
       }
     };
   }
@@ -635,9 +647,9 @@ var FeedbackAPI = (function () {
   }
 
   function mapStatusLabel(status) {
-    if (status === 'open')      return 'Offen';
-    if (status === 'resolved')  return 'Erledigt';
-    if (status === 'dismissed') return 'Verworfen';
+    if (status === 'open')      return I18n.t('admin.mod_stat_open');
+    if (status === 'resolved')  return I18n.t('admin.mod_stat_resolved');
+    if (status === 'dismissed') return I18n.t('admin.mod_stat_dismissed');
     return status;
   }
 

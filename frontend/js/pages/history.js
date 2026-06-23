@@ -263,9 +263,10 @@
     var naKeys = ['impact', 'ownership', 'collaboration', 'growth'];
     document.querySelectorAll('[id^="editNa-"]').forEach(function (naBtn) {
       naBtn.addEventListener('click', function () {
-        var parts = naBtn.id.replace('editNa-', '').split('-');
-        var cardId = parts[0];
-        var key = parts[1];
+        var rest = naBtn.id.replace('editNa-', '');
+        var lastDash = rest.lastIndexOf('-');
+        var cardId = rest.substring(0, lastDash);
+        var key = rest.substring(lastDash + 1);
         var starsEl = document.getElementById('editStars-' + cardId + '-' + key);
         var driverCard = document.getElementById('editDriver-' + cardId + '-' + key);
         var isNa = naBtn.classList.toggle('na-active');
@@ -291,6 +292,12 @@
 
         var keys = ['impact', 'ownership', 'collaboration', 'growth'];
         var card = document.getElementById('card-' + cardId);
+
+        if (card.dataset.edited === 'true') {
+          Render.showToast(I18n.t('history.toast_already_edited'));
+          saveBtn.disabled = false;
+          return;
+        }
         var driverIds = card.dataset.driverIds.split(',');
 
         var ratings = keys.map(function (key, idx) {
@@ -348,6 +355,7 @@
           if (overlay) overlay.classList.remove('active');
           if (editBtn && !editBtn.disabled) editBtn.style.display = '';
 
+          card.dataset.edited = 'true';
           Render.showToast(I18n.t('history.toast_saved'));
         } catch (err) {
           console.error('Feedback-Update fehlgeschlagen:', err);
