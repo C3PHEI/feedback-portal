@@ -196,7 +196,7 @@
         : I18n.t('admin.role_user');
 
     var managerSuffix = u.isDepartmentManager
-      ? ' <span class="role-badge" style="background:rgba(255,107,0,0.1);color:var(--color-orange);font-size:10px;padding:2px 8px;margin-left:6px;" title="' + I18n.t('dept.role_badge') + '">\ud83c\udfe2 ' + I18n.t('dept.role_badge') + '</span>'
+      ? '<div style="margin-top:2px;"><span class="role-badge" style="background:rgba(255,107,0,0.1);color:var(--color-orange);font-size:9px;padding:1px 6px;">\ud83c\udfe2 ' + I18n.t('dept.role_badge') + '</span></div>'
       : '';
 
     var feedbackStr = u.feedbackReceived + ' / ' + u.feedbackGiven;
@@ -210,14 +210,14 @@
     }
 
     return '<tr' + inactiveCls + ' data-user-id="' + u.id + '">' +
-      '<td><div class="flex items-center gap-3">' +
-      '<div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">' + u.initials + '</div>' +
-      '<div><div class="text-white text-sm font-medium">' + u.name + '</div>' +
-      '<div class="text-xs" style="color:#666;">' + u.email + '</div></div></div></td>' +
+      '<td><div class="flex items-center gap-2">' +
+      '<div class="avatar" style="width:30px;height:30px;font-size:10px;border-radius:8px;flex-shrink:0;">' + u.initials + '</div>' +
+      '<div style="min-width:0;"><div class="text-white text-sm font-medium" style="white-space:nowrap;">' + u.name + '</div>' +
+      '<div class="text-xs" style="color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;">' + u.email + '</div></div></div></td>' +
       '<td><span style="color:#999;font-size:13px;">' + u.department + '</span></td>' +
-      '<td><span class="role-badge ' + roleCls + '">' + roleLabel + '</span>' + managerSuffix + '</td>' +
+      '<td><div><span class="role-badge ' + roleCls + '">' + roleLabel + '</span>' + managerSuffix + '</div></td>' +
       '<td class="hide-mobile"><span style="color:#999;font-size:13px;">' + feedbackStr + '</span></td>' +
-      '<td style="text-align:right;"><div class="flex gap-2 justify-end">' +
+      '<td style="text-align:right;"><div class="flex gap-1 justify-end">' +
       '<button class="btn-admin user-action-btn" data-action="role" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_role') + '">\uD83D\uDC64</button>' +
       '<button class="btn-admin user-action-btn" data-action="dept" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_dept') + '">\uD83C\uDFE2</button>' +
       activateBtn +
