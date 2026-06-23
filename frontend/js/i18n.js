@@ -203,7 +203,7 @@ var I18n = (function () {
       'admin.col_user':                  'Benutzer',
       'admin.col_dept':                  'Abteilung',
       'admin.col_role':                  'Rolle',
-      'admin.col_feedback_col':          'Feedback (Erhalten/Bekommen)',
+      'admin.col_feedback_col':          'Feedback',
       'admin.col_actions':               'Aktionen',
 
       /* ─── admin.html — Deactivate Modal ──────────────── */
@@ -542,7 +542,7 @@ var I18n = (function () {
       'admin.col_user':                  'User',
       'admin.col_dept':                  'Department',
       'admin.col_role':                  'Role',
-      'admin.col_feedback_col':          'Feedback (Received/Sent)',
+      'admin.col_feedback_col':          'Feedback',
       'admin.col_actions':               'Actions',
 
       /* ─── admin.html — Deactivate Modal ──────────────── */

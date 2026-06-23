@@ -91,9 +91,8 @@
   text-transform: uppercase;
   color: var(--color-text-ghost);
   text-align: left;
-  padding: 10px 10px;
+  padding: 10px 8px;
   border-bottom: 1px solid var(--color-border);
-  white-space: nowrap;
 }
 .admin-table tbody tr {
   transition: background 0.15s;
@@ -102,7 +101,7 @@
   background: rgba(255, 255, 255, 0.02);
 }
 .admin-table tbody td {
-  padding: 12px 10px;
+  padding: 12px 8px;
   font-size: 13px;
   color: var(--color-text-secondary);
   border-bottom: 1px solid #1a1a1a;
@@ -196,6 +195,10 @@
   font-size: 13px;
   cursor: pointer;
   transition: all 0.15s;
+}
+.btn-admin.user-action-btn {
+  padding: 5px 10px;
+  font-size: 12px;
 }
 .btn-admin:hover {
   border-color: var(--color-orange);
