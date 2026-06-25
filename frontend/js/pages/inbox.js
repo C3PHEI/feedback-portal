@@ -234,6 +234,7 @@
         Render.showToast(I18n.t('inbox.report_success'));
         modal.remove();
       } catch (err) {
+        console.error('Report failed:', err);
         var msg = (err && err.errorCode === 'already_reported')
           ? I18n.t('inbox.report_already')
           : I18n.t('inbox.report_error');
