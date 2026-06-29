@@ -118,7 +118,7 @@ public class AdminModerationService
             ResolvedAt:           report.ResolvedAt,
             ReporterId:           report.ReporterUserId,
             ReporterDisplayName:  report.Reporter.DisplayName,
-            ActionTaken:          report.Action,
+            ActionTaken:          report.ActionTaken,
             AdminReason:          report.ActionReason,
             HrIntervention:       report.HrIntervention ?? false,
             HrEscalation:         report.HrEscalation ?? false,
@@ -184,7 +184,7 @@ public class AdminModerationService
         }
 
         report.ResolvedAt = now;
-        report.Action = req.Action;
+        report.ActionTaken = req.Action;
         report.ActionReason = req.Reason;
         report.HrIntervention = req.HrIntervention;
         report.HrEscalation = req.HrEscalation;
