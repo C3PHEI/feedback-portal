@@ -118,10 +118,10 @@ public class AdminModerationService
             ResolvedAt:           report.ResolvedAt,
             ReporterId:           report.ReporterUserId,
             ReporterDisplayName:  report.Reporter.DisplayName,
-            ActionTaken:          report.ActionTaken,
-            AdminReason:          report.AdminReason,
-            HrIntervention:       report.HrIntervention,
-            HrEscalation:         report.HrEscalation,
+            ActionTaken:          report.Action,
+            AdminReason:          report.ActionReason,
+            HrIntervention:       report.HrIntervention ?? false,
+            HrEscalation:         report.HrEscalation ?? false,
             Feedback:             feedbackDto
         );
     }
@@ -184,8 +184,8 @@ public class AdminModerationService
         }
 
         report.ResolvedAt = now;
-        report.ActionTaken = req.Action;
-        report.AdminReason = req.Reason;
+        report.Action = req.Action;
+        report.ActionReason = req.Reason;
         report.HrIntervention = req.HrIntervention;
         report.HrEscalation = req.HrEscalation;
 
