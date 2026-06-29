@@ -51,6 +51,10 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback wurde gemeldet.',
       'inbox.report_error':   'Meldung konnte nicht gesendet werden.',
       'inbox.report_already': 'Du hast dieses Feedback bereits gemeldet.',
+      'inbox.report_already_short': 'Bereits gemeldet',
+      'inbox.report_tab_report':  'Melden',
+      'inbox.report_tab_detail':  'Feedback ansehen',
+      'inbox.anonymous_sender':   'Anonymer Absender',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'Verlauf',
@@ -391,6 +395,10 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback has been reported.',
       'inbox.report_error':   'Report could not be sent.',
       'inbox.report_already': 'You have already reported this feedback.',
+      'inbox.report_already_short': 'Already reported',
+      'inbox.report_tab_report':  'Report',
+      'inbox.report_tab_detail':  'View feedback',
+      'inbox.anonymous_sender':   'Anonymous sender',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'History',

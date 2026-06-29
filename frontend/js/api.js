@@ -240,6 +240,7 @@ var FeedbackAPI = (function () {
       preview:      preview,
       date:         formatDate(dto.submittedDate),
       unread:       false,
+      reported:     !!dto.isReported,
       drivers:      sortDrivers(dto.ratings.map(mapRating)),
       strengths:    dto.strengths || '',
       improvements: dto.areasToImprove || ''
