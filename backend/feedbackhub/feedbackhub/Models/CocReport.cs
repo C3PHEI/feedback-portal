@@ -28,8 +28,8 @@ public class CocReport
   [Column("resolved_at")]
   public DateTime? ResolvedAt { get; set; }
 
-  [Column("action")]
-  public string? Action { get; set; }
+  [Column("action_taken")]
+  public string? ActionTaken { get; set; }
 
   [Column("action_reason")]
   public string? ActionReason { get; set; }
