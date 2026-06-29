@@ -129,7 +129,10 @@
 
     var shortId = 'FB-' + r.feedbackId.substring(0, 8).toUpperCase();
 
-    return '<tr class="mod-report-row" data-report-id="' + r.id + '" style="cursor:pointer;">' +
+    var isResolved = r.statusClass === 'resolved';
+    var rowStyle = isResolved ? 'cursor:default;opacity:0.6;' : 'cursor:pointer;';
+    return '<tr class="mod-report-row" data-report-id="' + r.id + '"' +
+      (isResolved ? ' data-resolved="true"' : '') + ' style="' + rowStyle + '">' +
       '<td><span style="color:#666;font-size:12px;font-family:\'Bodoni MT\',sans-serif;">' + shortId + '</span></td>' +
       '<td><div class="flex items-center gap-2">' + recipientAvatar +
       '<span class="text-white text-sm">' + r.recipientDisplayName + '</span></div></td>' +
@@ -371,7 +374,7 @@
 
     tbody.addEventListener('click', function (e) {
       var row = e.target.closest('.mod-report-row');
-      if (!row) return;
+      if (!row || row.dataset.resolved === 'true') return;
       var reportId = row.dataset.reportId;
       if (reportId) openReportModal(reportId);
     });
@@ -609,6 +612,57 @@
      Modal: Report-Action (Schritt 10) — POST /action
      ═══════════════════════════════════════════════════════ */
 
+  function buildActionFeedbackDetail(f) {
+    var fromHtml;
+    if (f.isAnonymous) {
+      fromHtml = '<div class="avatar anon-avatar" style="width:32px;height:32px;border-radius:8px;">' +
+        '<img class="anon-avatar-icon" alt="Anonym" src="img/incognito.svg" style="width:14px;height:14px;"/></div>' +
+        '<span style="color:var(--color-text-ghost);font-size:13px;">' + I18n.t('common.anonymous') + '</span>';
+    } else {
+      fromHtml = '<div class="avatar" style="width:32px;height:32px;font-size:10px;border-radius:8px;">' +
+        (f.submitterInitials || '?') + '</div>' +
+        '<span style="color:var(--color-text-primary);font-size:13px;font-weight:500;">' + (f.submitterName || '?') + '</span>';
+    }
+
+    var chipsHtml = f.ratings.map(function (d) {
+      var shortName = I18n.t('driver.' + d.name).split('/')[0].trim();
+      var chipClass = 'action-fb-driver-chip' + (d.na ? ' na-chip' : '');
+      var score = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '\u2605</span>';
+      return '<span class="' + chipClass + '">' + shortName + ' ' + score + '</span>';
+    }).join('');
+
+    var recipientHtml = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 12px;background:var(--color-card);border:1px solid var(--color-border);border-radius:8px;">' +
+      '<span style="font-size:12px;color:var(--color-text-ghost);">' + I18n.t('admin.fb_detail_to') + '</span>' +
+      '<div class="avatar" style="width:24px;height:24px;font-size:9px;border-radius:6px;">' + (f.recipientInitials || '?') + '</div>' +
+      '<span style="font-size:13px;color:var(--color-text-primary);">' + (f.recipientName || '?') + '</span>' +
+      '</div>';
+
+    var textHtml = '';
+    if (f.strengths) {
+      textHtml += '<div class="action-fb-text-block">' +
+        '<div class="action-fb-text-label">' +
+        '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>' +
+        I18n.t('inbox.strengths') +
+        '</div>' +
+        '<p class="action-fb-text-content">' + f.strengths + '</p>' +
+        '</div>';
+    }
+    if (f.areasToImprove) {
+      textHtml += '<div class="action-fb-text-block">' +
+        '<div class="action-fb-text-label">' +
+        '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-orange);display:inline-block;"></span>' +
+        I18n.t('inbox.improvements') +
+        '</div>' +
+        '<p class="action-fb-text-content">' + f.areasToImprove + '</p>' +
+        '</div>';
+    }
+
+    return '<div class="action-fb-from">' + fromHtml + '</div>' +
+      recipientHtml +
+      '<div class="action-fb-drivers">' + chipsHtml + '</div>' +
+      textHtml;
+  }
+
   function openActionModal() {
     if (!_currentReport) return;
     var modal = document.getElementById('reportActionModal');
@@ -621,12 +675,21 @@
       'Report ' + shortId + ' \u2014 von ' + _currentReport.reporterDisplayName +
       ' \u2192 an ' + f.recipientName;
 
-    // Reset
+    // Reset action form
     document.querySelectorAll('input[name="reportAction"]').forEach(function (r) { r.checked = false; });
     document.getElementById('actionReason').value = '';
     document.getElementById('actionHrIntervention').checked = false;
     document.getElementById('actionHrEscalation').checked = false;
     document.getElementById('actionWarning').style.display = 'none';
+
+    // Reset tabs to action tab
+    document.getElementById('actionTabAction').classList.add('active');
+    document.getElementById('actionTabFeedback').classList.remove('active');
+    document.getElementById('actionPanelAction').style.display = 'block';
+    document.getElementById('actionPanelFeedback').style.display = 'none';
+
+    // Populate feedback detail tab
+    document.getElementById('actionFeedbackDetail').innerHTML = buildActionFeedbackDetail(f);
 
     modal.classList.add('show');
   }
@@ -634,6 +697,27 @@
   function closeActionModal() {
     var modal = document.getElementById('reportActionModal');
     if (modal) modal.classList.remove('show');
+  }
+
+  function bindActionTabs() {
+    var tabAction = document.getElementById('actionTabAction');
+    var tabFeedback = document.getElementById('actionTabFeedback');
+    var panelAction = document.getElementById('actionPanelAction');
+    var panelFeedback = document.getElementById('actionPanelFeedback');
+    if (!tabAction || !tabFeedback) return;
+
+    tabAction.addEventListener('click', function () {
+      tabAction.classList.add('active');
+      tabFeedback.classList.remove('active');
+      panelAction.style.display = 'block';
+      panelFeedback.style.display = 'none';
+    });
+    tabFeedback.addEventListener('click', function () {
+      tabFeedback.classList.add('active');
+      tabAction.classList.remove('active');
+      panelFeedback.style.display = 'block';
+      panelAction.style.display = 'none';
+    });
   }
 
   function bindActionRadios() {
@@ -798,6 +882,7 @@
     });
 
     bindActionRadios();
+    bindActionTabs();
 
     /* Deactivate User Modal */
     var deactivateModal = document.getElementById('deactivateModal');

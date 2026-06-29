@@ -87,13 +87,10 @@
 
       // Melden-Button
       '<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--color-border);text-align:right;">' +
-      (fb.reported
-        ? '<span style="font-size:12px;color:var(--color-text-ghost);padding:6px 14px;">' +
-          I18n.t('inbox.report_already_short') + '</span>'
-        : '<button class="report-btn" data-feedback-id="' + id + '" ' +
-          'style="background:none;border:1px solid var(--color-danger);color:var(--color-danger);' +
-          'padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;">' +
-          I18n.t('inbox.report_btn') + '</button>') +
+      '<button class="report-btn" data-feedback-id="' + id + '" ' +
+      'style="background:none;border:1px solid var(--color-danger);color:var(--color-danger);' +
+      'padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;">' +
+      I18n.t('inbox.report_btn') + '</button>' +
       '</div>' +
 
       '</div>';
@@ -190,132 +187,41 @@
      Report Modal
      ═══════════════════════════════════════════════════════ */
 
-  var _feedbacksCache = [];
-
   function bindReportButtons() {
     document.querySelectorAll('.report-btn').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        var fb = _feedbacksCache.find(function (f) { return f.id === btn.dataset.feedbackId; });
-        if (fb) openReportModal(fb);
+        openReportModal(btn.dataset.feedbackId);
       });
     });
   }
 
-  function buildFeedbackDetailTab(fb) {
-    var driversHtml = fb.drivers.map(function (d) {
-      var shortName = I18n.t('driver.' + d.name).split('/')[0].trim();
-      var chipClass = 'dept-history-driver-chip' + (d.na ? ' na-chip' : '');
-      var score = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '★</span>';
-      return '<span class="' + chipClass + '">' + shortName + ' ' + score + '</span>';
-    }).join('');
-
-    var detailHtml = '';
-    if (fb.strengths) {
-      detailHtml +=
-        '<div style="margin-bottom:12px;">' +
-        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">' +
-        '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>' +
-        '<span style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-ghost);font-weight:600;">' + I18n.t('inbox.strengths') + '</span>' +
-        '</div>' +
-        '<p style="font-size:13px;color:var(--color-text-muted);line-height:1.7;margin:0;">' + fb.strengths + '</p>' +
-        '</div>';
-    }
-    if (fb.improvements) {
-      detailHtml +=
-        '<div>' +
-        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">' +
-        '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-orange);display:inline-block;"></span>' +
-        '<span style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-ghost);font-weight:600;">' + I18n.t('inbox.improvements') + '</span>' +
-        '</div>' +
-        '<p style="font-size:13px;color:var(--color-text-muted);line-height:1.7;margin:0;">' + fb.improvements + '</p>' +
-        '</div>';
-    }
-
-    return '<div>' +
-      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">' +
-      (fb.from.anonymous
-        ? '<div class="avatar anon-avatar" style="width:32px;height:32px;border-radius:8px;">' +
-          '<img class="anon-avatar-icon" alt="Anonym" src="img/incognito.svg" style="width:14px;height:14px;"/></div>' +
-          '<span style="color:var(--color-text-ghost);font-size:13px;">' + I18n.t('inbox.anonymous_sender') + '</span>'
-        : '<div class="avatar" style="width:32px;height:32px;font-size:10px;border-radius:8px;">' + fb.from.initials + '</div>' +
-          '<span style="color:var(--color-text-primary);font-size:13px;font-weight:500;">' + fb.from.name + '</span>') +
-      '<span style="margin-left:auto;font-size:12px;color:var(--color-text-dim);">' + fb.date + '</span>' +
-      '</div>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">' + driversHtml + '</div>' +
-      detailHtml +
-      '</div>';
-  }
-
-  function openReportModal(fb) {
+  function openReportModal(feedbackId) {
     var existing = document.getElementById('report-modal');
     if (existing) existing.remove();
 
     var modal = document.createElement('div');
     modal.id = 'report-modal';
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:flex;align-items:center;justify-content:center;';
-
-    var tabStyle = 'padding:8px 16px;border:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:13px;font-weight:500;transition:background 0.15s,color 0.15s;';
-
     modal.innerHTML =
-      '<div style="background:var(--color-surface);border-radius:12px;max-width:480px;width:90%;border:1px solid var(--color-border);overflow:hidden;">' +
-
-      // Tab header
-      '<div style="display:flex;gap:2px;padding:16px 24px 0;border-bottom:1px solid var(--color-border);">' +
-      '<button id="report-tab-report" class="report-modal-tab active" style="' + tabStyle + 'background:var(--color-card);color:var(--color-text-primary);">' + I18n.t('inbox.report_tab_report') + '</button>' +
-      '<button id="report-tab-detail" class="report-modal-tab" style="' + tabStyle + 'background:transparent;color:var(--color-text-ghost);">' + I18n.t('inbox.report_tab_detail') + '</button>' +
-      '</div>' +
-
-      // Tab 1: Report form
-      '<div id="report-panel-report" style="padding:24px;">' +
-      '<p style="font-size:13px;color:var(--color-text-muted);margin:0 0 16px;">' + I18n.t('inbox.report_desc') + '</p>' +
+      '<div style="background:var(--color-surface);border-radius:12px;padding:24px;max-width:420px;width:90%;border:1px solid var(--color-border);">' +
+      '<h3 style="margin:0 0 8px;color:var(--color-text-primary);">' + I18n.t('inbox.report_title') + '</h3>' +
+      '<p style="font-size:13px;color:var(--color-text-muted);margin-bottom:16px;">' + I18n.t('inbox.report_desc') + '</p>' +
       '<textarea id="report-reason" rows="4" placeholder="' + I18n.t('inbox.report_placeholder') + '" ' +
       'style="width:100%;box-sizing:border-box;padding:10px;border-radius:8px;border:1px solid var(--color-border);' +
-      'background:var(--color-card);color:var(--color-text-primary);font-size:13px;resize:vertical;margin-bottom:16px;font-family:\'DM Sans\',sans-serif;"></textarea>' +
+      'background:var(--color-card);color:var(--color-text-primary);font-size:13px;resize:vertical;margin-bottom:16px;"></textarea>' +
       '<div style="display:flex;gap:10px;justify-content:flex-end;">' +
       '<button id="report-cancel" style="padding:8px 16px;border-radius:8px;border:1px solid var(--color-border);' +
       'background:none;color:var(--color-text-muted);cursor:pointer;">' + I18n.t('inbox.report_cancel') + '</button>' +
       '<button id="report-submit" style="padding:8px 16px;border-radius:8px;border:none;' +
       'background:var(--color-danger);color:#fff;cursor:pointer;">' + I18n.t('inbox.report_submit') + '</button>' +
-      '</div></div>' +
-
-      // Tab 2: Feedback detail
-      '<div id="report-panel-detail" style="padding:24px;display:none;">' +
-      buildFeedbackDetailTab(fb) +
-      '</div>' +
-
-      '</div>';
+      '</div></div>';
 
     document.body.appendChild(modal);
 
-    // Tab switching
-    var tabReport = document.getElementById('report-tab-report');
-    var tabDetail = document.getElementById('report-tab-detail');
-    var panelReport = document.getElementById('report-panel-report');
-    var panelDetail = document.getElementById('report-panel-detail');
-
-    tabReport.addEventListener('click', function () {
-      tabReport.style.background = 'var(--color-card)';
-      tabReport.style.color = 'var(--color-text-primary)';
-      tabDetail.style.background = 'transparent';
-      tabDetail.style.color = 'var(--color-text-ghost)';
-      panelReport.style.display = 'block';
-      panelDetail.style.display = 'none';
-    });
-    tabDetail.addEventListener('click', function () {
-      tabDetail.style.background = 'var(--color-card)';
-      tabDetail.style.color = 'var(--color-text-primary)';
-      tabReport.style.background = 'transparent';
-      tabReport.style.color = 'var(--color-text-ghost)';
-      panelDetail.style.display = 'block';
-      panelReport.style.display = 'none';
-    });
-
-    // Close handlers
     document.getElementById('report-cancel').addEventListener('click', function () { modal.remove(); });
     modal.addEventListener('click', function (e) { if (e.target === modal) modal.remove(); });
 
-    // Submit handler
     document.getElementById('report-submit').addEventListener('click', async function () {
       var reason = document.getElementById('report-reason').value.trim();
       if (!reason) return;
@@ -324,14 +230,9 @@
       submitBtn.disabled = true;
 
       try {
-        await FeedbackAPI.reportFeedback(fb.id, reason);
+        await FeedbackAPI.reportFeedback(feedbackId, reason);
         Render.showToast(I18n.t('inbox.report_success'));
         modal.remove();
-        var reportBtn = document.querySelector('.report-btn[data-feedback-id="' + fb.id + '"]');
-        if (reportBtn) {
-          reportBtn.outerHTML = '<span style="font-size:12px;color:var(--color-text-ghost);padding:6px 14px;">' +
-            I18n.t('inbox.report_already_short') + '</span>';
-        }
       } catch (err) {
         console.error('Report failed:', err);
         var msg = (err && err.errorCode === 'already_reported')
@@ -386,7 +287,6 @@
           cardsEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
             'Du hast noch keine Feedbacks erhalten.</p>';
         } else {
-          _feedbacksCache = feedbacks;
           cardsEl.innerHTML = feedbacks.map(renderFeedbackCard).join('\n');
           bindCardClicks();
           bindReportButtons();

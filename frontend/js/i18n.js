@@ -51,10 +51,6 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback wurde gemeldet.',
       'inbox.report_error':   'Meldung konnte nicht gesendet werden.',
       'inbox.report_already': 'Du hast dieses Feedback bereits gemeldet.',
-      'inbox.report_already_short': 'Bereits gemeldet',
-      'inbox.report_tab_report':  'Melden',
-      'inbox.report_tab_detail':  'Feedback ansehen',
-      'inbox.anonymous_sender':   'Anonymer Absender',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'Verlauf',
@@ -264,6 +260,9 @@ var I18n = (function () {
       'admin.report_feedback_recipient': 'Empfänger des Feedbacks',
 
       'admin.action_modal_title':       'Aktion auf Report',
+      'admin.tab_action':               'Aktion',
+      'admin.tab_feedback':             'Feedback ansehen',
+      'admin.fb_detail_to':             'An:',
       'admin.action_dismissed':         'Verwerfen',
       'admin.action_dismissed_desc':    'Keine Verletzung des Code of Conduct festgestellt.',
       'admin.action_retained':          'Mit Hinweis behalten',
@@ -395,10 +394,6 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback has been reported.',
       'inbox.report_error':   'Report could not be sent.',
       'inbox.report_already': 'You have already reported this feedback.',
-      'inbox.report_already_short': 'Already reported',
-      'inbox.report_tab_report':  'Report',
-      'inbox.report_tab_detail':  'View feedback',
-      'inbox.anonymous_sender':   'Anonymous sender',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'History',
@@ -608,6 +603,9 @@ var I18n = (function () {
       'admin.report_feedback_recipient': 'Feedback recipient',
 
       'admin.action_modal_title':       'Report Action',
+      'admin.tab_action':               'Action',
+      'admin.tab_feedback':             'View feedback',
+      'admin.fb_detail_to':             'To:',
       'admin.action_dismissed':         'Dismiss',
       'admin.action_dismissed_desc':    'No violation of the Code of Conduct found.',
       'admin.action_retained':          'Retain with Note',
