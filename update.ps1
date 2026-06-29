@@ -36,4 +36,5 @@ Write-Host "Build erfolgreich." -ForegroundColor Green
 Write-Host "`n[3/3] Backend starten auf Port 5185..." -ForegroundColor Yellow
 Write-Host "Backend erreichbar unter: http://<SERVER-IP>:5185" -ForegroundColor Cyan
 Write-Host "Stoppen mit Ctrl+C`n" -ForegroundColor Gray
-dotnet run --launch-profile http
+$env:ASPNETCORE_URLS = "http://0.0.0.0:5185"
+dotnet run
