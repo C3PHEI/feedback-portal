@@ -1,40 +1,35 @@
-# update.ps1 - Git Pull & Backend Update Script
-# Ausfuehren: powershell -ExecutionPolicy Bypass -File update.ps1
+$srcPath     = "C:\Apps\feedbackhub-src"
+$publishPath = "C:\Apps\feedbackhub-api"
+$port        = 5185
 
-$ErrorActionPreference = "Stop"
-$RepoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$BackendProject = Join-Path $RepoRoot "backend\feedbackhub\feedbackhub"
+Write-Host "== Pull neuester Code =="
+Set-Location $srcPath
+git pull
 
-Write-Host "=== Feedback Portal Update ===" -ForegroundColor Cyan
+Write-Host "== Publish =="
+dotnet publish ".\backend\feedbackhub\feedbackhub\feedbackhub.csproj" -c Release -o $publishPath
 
-# 1. Git Pull
-Write-Host "`n[1/3] Git pull..." -ForegroundColor Yellow
-Set-Location $RepoRoot
-git pull origin (git branch --show-current)
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Git pull fehlgeschlagen!" -ForegroundColor Red
-    exit 1
+Write-Host "== Laufenden Prozess stoppen =="
+$conn = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue
+if ($conn) {
+    Stop-Process -Id $conn.OwningProcess -Force
+    Start-Sleep -Seconds 2
 }
-Write-Host "Git pull erfolgreich." -ForegroundColor Green
 
-# 2. Backend restore & build
-Write-Host "`n[2/3] dotnet restore & build..." -ForegroundColor Yellow
-Set-Location $BackendProject
-dotnet restore
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "dotnet restore fehlgeschlagen!" -ForegroundColor Red
-    exit 1
-}
-dotnet build -c Release --no-restore
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "dotnet build fehlgeschlagen!" -ForegroundColor Red
-    exit 1
-}
-Write-Host "Build erfolgreich." -ForegroundColor Green
+Write-Host "== Neustart auf Port $port =="
+$env:ASPNETCORE_URLS = "http://0.0.0.0:$port"
 
-# 3. Backend starten
-Write-Host "`n[3/3] Backend starten auf Port 5185..." -ForegroundColor Yellow
-Write-Host "Backend erreichbar unter: http://<SERVER-IP>:5185" -ForegroundColor Cyan
-Write-Host "Stoppen mit Ctrl+C`n" -ForegroundColor Gray
-$env:ASPNETCORE_URLS = "http://0.0.0.0:5185"
-dotnet run
+Start-Process -FilePath "dotnet" `
+    -ArgumentList "$publishPath\feedbackhub.dll" `
+    -WorkingDirectory $publishPath `
+    -WindowStyle Hidden
+
+Start-Sleep -Seconds 3
+
+Write-Host "== Check =="
+$check = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue
+if ($check) {
+    Write-Host "OK: Backend laeuft auf Port $port" -ForegroundColor Green
+} else {
+    Write-Host "FEHLER: Backend ist NICHT erreichbar auf Port $port — appsettings.json/Connection-String pruefen!" -ForegroundColor Red
+}
