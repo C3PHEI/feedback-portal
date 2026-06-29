@@ -129,10 +129,10 @@
 
     var shortId = 'FB-' + r.feedbackId.substring(0, 8).toUpperCase();
 
-    var isResolved = r.statusClass === 'resolved';
-    var rowStyle = isResolved ? 'cursor:default;opacity:0.6;' : 'cursor:pointer;';
+    var isDismissed = r.status === 'dismissed';
+    var rowStyle = isDismissed ? 'cursor:default;opacity:0.5;' : 'cursor:pointer;';
     return '<tr class="mod-report-row" data-report-id="' + r.id + '"' +
-      (isResolved ? ' data-resolved="true"' : '') + ' style="' + rowStyle + '">' +
+      (isDismissed ? ' data-dismissed="true"' : '') + ' style="' + rowStyle + '">' +
       '<td><span style="color:#666;font-size:12px;font-family:\'Bodoni MT\',sans-serif;">' + shortId + '</span></td>' +
       '<td><div class="flex items-center gap-2">' + recipientAvatar +
       '<span class="text-white text-sm">' + r.recipientDisplayName + '</span></div></td>' +
@@ -374,7 +374,7 @@
 
     tbody.addEventListener('click', function (e) {
       var row = e.target.closest('.mod-report-row');
-      if (!row || row.dataset.resolved === 'true') return;
+      if (!row || row.dataset.dismissed === 'true') return;
       var reportId = row.dataset.reportId;
       if (reportId) openReportModal(reportId);
     });
@@ -671,9 +671,12 @@
     var f = _currentReport.feedback;
     var shortId = 'FB-' + f.id.substring(0, 8).toUpperCase();
 
-    document.getElementById('actionModalContext').textContent =
-      'Report ' + shortId + ' \u2014 von ' + _currentReport.reporterDisplayName +
+    var contextText = 'Report ' + shortId + ' \u2014 von ' + _currentReport.reporterDisplayName +
       ' \u2192 an ' + f.recipientName;
+    if (_currentReport.status === 'resolved' || _currentReport.status === 'dismissed') {
+      contextText += ' \u00b7 ' + I18n.t('admin.report_already_resolved');
+    }
+    document.getElementById('actionModalContext').textContent = contextText;
 
     // Reset action form
     document.querySelectorAll('input[name="reportAction"]').forEach(function (r) { r.checked = false; });
