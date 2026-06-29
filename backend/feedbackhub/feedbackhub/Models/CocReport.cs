@@ -28,17 +28,23 @@ public class CocReport
   [Column("resolved_at")]
   public DateTime? ResolvedAt { get; set; }
 
-  [Column("action_taken")]
-  public string? ActionTaken { get; set; }
+  [Column("action")]
+  public string? Action { get; set; }
 
-  [Column("admin_reason")]
-  public string? AdminReason { get; set; }
+  [Column("action_reason")]
+  public string? ActionReason { get; set; }
+
+  [Column("action_notes")]
+  public string? ActionNotes { get; set; }
 
   [Column("hr_intervention")]
-  public bool HrIntervention { get; set; }
+  public bool? HrIntervention { get; set; }
 
   [Column("hr_escalation")]
-  public bool HrEscalation { get; set; }
+  public bool? HrEscalation { get; set; }
+
+  [Column("resolved_by")]
+  public Guid? ResolvedBy { get; set; }
 
   // Navigation
   [ForeignKey("FeedbackId")]
