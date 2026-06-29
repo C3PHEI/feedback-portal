@@ -618,6 +618,10 @@ var FeedbackAPI = (function () {
       resolvedAt:            dto.resolvedAt,
       reporterId:            dto.reporterId,
       reporterDisplayName:   dto.reporterDisplayName,
+      actionTaken:           dto.actionTaken || null,
+      adminReason:           dto.adminReason || '',
+      hrIntervention:        !!dto.hrIntervention,
+      hrEscalation:          !!dto.hrEscalation,
       feedback: {
         id:                  f.id,
         isAnonymous:         f.isAnonymous,

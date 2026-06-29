@@ -129,10 +129,7 @@
 
     var shortId = 'FB-' + r.feedbackId.substring(0, 8).toUpperCase();
 
-    var isDismissed = r.status === 'dismissed';
-    var rowStyle = isDismissed ? 'cursor:default;opacity:0.5;' : 'cursor:pointer;';
-    return '<tr class="mod-report-row" data-report-id="' + r.id + '"' +
-      (isDismissed ? ' data-dismissed="true"' : '') + ' style="' + rowStyle + '">' +
+    return '<tr class="mod-report-row" data-report-id="' + r.id + '" style="cursor:pointer;">' +
       '<td><span style="color:#666;font-size:12px;font-family:\'Bodoni MT\',sans-serif;">' + shortId + '</span></td>' +
       '<td><div class="flex items-center gap-2">' + recipientAvatar +
       '<span class="text-white text-sm">' + r.recipientDisplayName + '</span></div></td>' +
@@ -374,7 +371,7 @@
 
     tbody.addEventListener('click', function (e) {
       var row = e.target.closest('.mod-report-row');
-      if (!row || row.dataset.dismissed === 'true') return;
+      if (!row) return;
       var reportId = row.dataset.reportId;
       if (reportId) openReportModal(reportId);
     });
@@ -678,12 +675,15 @@
     }
     document.getElementById('actionModalContext').textContent = contextText;
 
-    // Reset action form
-    document.querySelectorAll('input[name="reportAction"]').forEach(function (r) { r.checked = false; });
-    document.getElementById('actionReason').value = '';
-    document.getElementById('actionHrIntervention').checked = false;
-    document.getElementById('actionHrEscalation').checked = false;
-    document.getElementById('actionWarning').style.display = 'none';
+    // Prefill from saved action data or reset
+    var savedAction = _currentReport.actionTaken;
+    document.querySelectorAll('input[name="reportAction"]').forEach(function (r) {
+      r.checked = savedAction ? (r.value === savedAction) : false;
+    });
+    document.getElementById('actionReason').value = _currentReport.adminReason || '';
+    document.getElementById('actionHrIntervention').checked = _currentReport.hrIntervention || false;
+    document.getElementById('actionHrEscalation').checked = _currentReport.hrEscalation || false;
+    document.getElementById('actionWarning').style.display = (savedAction === 'removed') ? 'flex' : 'none';
 
     // Reset tabs to action tab
     document.getElementById('actionTabAction').classList.add('active');
