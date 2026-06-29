@@ -173,7 +173,7 @@
           <input type="checkbox" id="cocAccepted" required>
           <span>
           <span data-i18n="feedback.coc_accept">Ich akzeptiere den</span>
-            <a href="#" style="color: var(--color-orange); text-decoration:underline;"
+            <a href="#" id="cocPopupLink" style="color: var(--color-orange); text-decoration:underline;"
               data-i18n="feedback.coc_link">Code of Conduct</a>
          </span>
         </label>
@@ -195,6 +195,17 @@
 </div>
 
 <div id="toast"></div>
+
+<!-- CoC Popup Modal -->
+<div class="modal-overlay" id="cocModal">
+  <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:28px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <h2 style="font-family:'Bodoni MT',sans-serif;font-weight:700;color:var(--color-text-primary);margin:0;" data-i18n="feedback.section_coc">Code of Conduct</h2>
+      <button id="closeCocModal" type="button" style="background:none;border:none;color:var(--color-text-dim);font-size:20px;cursor:pointer;padding:4px 8px;">&#10005;</button>
+    </div>
+    <ul class="coc-list" id="coc-modal-list" style="margin:0;"></ul>
+  </div>
+</div>
 
 <script src="js/i18n.js"></script>
 <script src="js/data.js"></script>

@@ -77,9 +77,27 @@
     var el = document.getElementById('coc-list');
     if (!el) return;
     var items = I18n.t('feedback.coc.items');
-    el.innerHTML = items.map(function (item) {
+    var html = items.map(function (item) {
       return '<li>' + item + '</li>';
     }).join('\n');
+    el.innerHTML = html;
+
+    var modalList = document.getElementById('coc-modal-list');
+    if (modalList) modalList.innerHTML = html;
+  }
+
+  function bindCoCPopup() {
+    var link = document.getElementById('cocPopupLink');
+    var modal = document.getElementById('cocModal');
+    var closeBtn = document.getElementById('closeCocModal');
+    if (!link || !modal) return;
+
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      modal.classList.add('show');
+    });
+    if (closeBtn) closeBtn.addEventListener('click', function () { modal.classList.remove('show'); });
+    modal.addEventListener('click', function (e) { if (e.target === modal) modal.classList.remove('show'); });
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -386,7 +404,9 @@
 
     await renderRecipients();
     renderDrivers();
+    renderCoC();
     bindEvents();
+    bindCoCPopup();
     validateForm();
   }
 

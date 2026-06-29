@@ -28,6 +28,18 @@ public class CocReport
   [Column("resolved_at")]
   public DateTime? ResolvedAt { get; set; }
 
+  [Column("action_taken")]
+  public string? ActionTaken { get; set; }
+
+  [Column("admin_reason")]
+  public string? AdminReason { get; set; }
+
+  [Column("hr_intervention")]
+  public bool HrIntervention { get; set; }
+
+  [Column("hr_escalation")]
+  public bool HrEscalation { get; set; }
+
   // Navigation
   [ForeignKey("FeedbackId")]
   public Feedback Feedback { get; set; } = null!;

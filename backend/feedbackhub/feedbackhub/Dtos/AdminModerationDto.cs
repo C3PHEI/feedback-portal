@@ -29,6 +29,10 @@ public record AdminReportDetailDto(
   DateTime? ResolvedAt,
   Guid ReporterId,
   string ReporterDisplayName,
+  string? ActionTaken,
+  string? AdminReason,
+  bool HrIntervention,
+  bool HrEscalation,
   AdminReportFeedbackDto Feedback
 );
 

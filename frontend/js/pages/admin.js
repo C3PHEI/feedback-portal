@@ -120,11 +120,6 @@
     var statusColors = { flagged: '#E52620', pending: '#FF6B00', resolved: '#22c55e' };
     var statusColor = statusColors[r.statusClass] || '#999';
 
-    // Reporter-Avatar (immer sichtbar, ist nicht der anonyme Submitter)
-    var reporterInitials = buildReporterInitials(r.reporterDisplayName);
-    var reporterAvatar = '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + reporterInitials + '</div>';
-
-    // Recipient-Avatar
     var recipientInitials = buildReporterInitials(r.recipientDisplayName);
     var recipientAvatar = '<div class="avatar" style="width:28px;height:28px;font-size:10px;border-radius:6px;">' + recipientInitials + '</div>';
 
@@ -132,15 +127,13 @@
       ? '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' + I18n.t('common.anonymous') + '</span>'
       : '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
 
-    // Kurze ID für Anzeige
     var shortId = 'FB-' + r.feedbackId.substring(0, 8).toUpperCase();
 
     return '<tr class="mod-report-row" data-report-id="' + r.id + '" style="cursor:pointer;">' +
       '<td><span style="color:#666;font-size:12px;font-family:\'Bodoni MT\',sans-serif;">' + shortId + '</span></td>' +
-      '<td><div class="flex items-center gap-2">' + reporterAvatar +
-      '<span class="text-white text-sm">' + r.reporterDisplayName + '</span></div></td>' +
       '<td><div class="flex items-center gap-2">' + recipientAvatar +
       '<span class="text-white text-sm">' + r.recipientDisplayName + '</span></div></td>' +
+      '<td><span style="color:#999;font-size:13px;">' + (r.feedbackDateLabel || r.dateLabel) + '</span></td>' +
       '<td><span style="color:#999;font-size:13px;">' + r.dateLabel + '</span></td>' +
       '<td>' + typBadge + '</td>' +
       '<td class="hide-mobile"><span style="color:#999;font-size:12px;font-style:italic;">' +
@@ -203,7 +196,7 @@
         : I18n.t('admin.role_user');
 
     var managerSuffix = u.isDepartmentManager
-      ? ' <span style="color:var(--color-orange);font-size:10px;margin-left:4px;" title="Abteilungsleiter">\u2605</span>'
+      ? '<div style="margin-top:2px;"><span class="role-badge" style="background:rgba(255,107,0,0.1);color:var(--color-orange);font-size:9px;padding:1px 6px;">\ud83c\udfe2 ' + I18n.t('dept.role_badge') + '</span></div>'
       : '';
 
     var feedbackStr = u.feedbackReceived + ' / ' + u.feedbackGiven;
@@ -217,14 +210,14 @@
     }
 
     return '<tr' + inactiveCls + ' data-user-id="' + u.id + '">' +
-      '<td><div class="flex items-center gap-3">' +
-      '<div class="avatar" style="width:34px;height:34px;font-size:11px;border-radius:8px;">' + u.initials + '</div>' +
-      '<div><div class="text-white text-sm font-medium">' + u.name + '</div>' +
-      '<div class="text-xs" style="color:#666;">' + u.email + '</div></div></div></td>' +
+      '<td><div class="flex items-center gap-2">' +
+      '<div class="avatar" style="width:30px;height:30px;font-size:10px;border-radius:8px;flex-shrink:0;">' + u.initials + '</div>' +
+      '<div style="min-width:0;"><div class="text-white text-sm font-medium" style="white-space:nowrap;">' + u.name + '</div>' +
+      '<div class="text-xs" style="color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;">' + u.email + '</div></div></div></td>' +
       '<td><span style="color:#999;font-size:13px;">' + u.department + '</span></td>' +
-      '<td><span class="role-badge ' + roleCls + '">' + roleLabel + '</span>' + managerSuffix + '</td>' +
+      '<td><div><span class="role-badge ' + roleCls + '">' + roleLabel + '</span>' + managerSuffix + '</div></td>' +
       '<td class="hide-mobile"><span style="color:#999;font-size:13px;">' + feedbackStr + '</span></td>' +
-      '<td style="text-align:right;"><div class="flex gap-2 justify-end">' +
+      '<td style="text-align:right;"><div class="flex gap-1 justify-end">' +
       '<button class="btn-admin user-action-btn" data-action="role" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_role') + '">\uD83D\uDC64</button>' +
       '<button class="btn-admin user-action-btn" data-action="dept" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_dept') + '">\uD83C\uDFE2</button>' +
       activateBtn +
@@ -513,16 +506,40 @@
      Aktivieren / Deaktivieren (Schritt 9)
      ═══════════════════════════════════════════════════════ */
 
-  async function handleActivate(user) {
+  var _currentActivateUser = null;
+
+  function handleActivate(user) {
+    _currentActivateUser = user;
+    var modal = document.getElementById('activateModal');
+    if (!modal) return;
+
+    document.getElementById('activateAvatar').textContent = user.initials;
+    document.getElementById('activateName').textContent = user.name;
+    document.getElementById('activateEmail').textContent = user.email;
+
+    modal.classList.add('show');
+  }
+
+  async function confirmActivate() {
+    if (!_currentActivateUser) return;
+    var user = _currentActivateUser;
+    var modal = document.getElementById('activateModal');
+    var btn = document.getElementById('confirmActivateBtn');
+    btn.disabled = true;
+
     try {
       await FeedbackAPI.activateUser(user.id);
       user.active = true;
       user.deactivatedAt = null;
       refreshUserRow(user);
       Render.showToast(user.name + ' \u2014 ' + I18n.t('admin.toast_activated'));
+      modal.classList.remove('show');
+      _currentActivateUser = null;
     } catch (e) {
       console.error('activateUser failed:', e);
       Render.showToast(translateError(e));
+    } finally {
+      btn.disabled = false;
     }
   }
 
@@ -576,158 +593,72 @@
   var _currentReport = null;
 
   async function openReportModal(reportId) {
-    var modal = document.getElementById('reportDetailModal');
-    if (!modal) return;
-
-    // Loading-State
-    var idEl = document.getElementById('reportModalId');
-    if (idEl) idEl.textContent = 'Lade…';
-
-    modal.classList.add('show');
-
     try {
       var report = await FeedbackAPI.getModerationReportDetail(reportId);
       _currentReport = report;
-      fillReportModal(report);
+      openActionModal();
     } catch (e) {
       console.error('Report-Detail konnte nicht geladen werden:', e);
       Render.showToast(translateError(e));
-      modal.classList.remove('show');
     }
   }
 
-  function fillReportModal(report) {
-    var f = report.feedback;
-    var shortId = 'FB-' + f.id.substring(0, 8).toUpperCase();
 
-    if (document.getElementById('reportModalId')) {
-      document.getElementById('reportModalId').textContent = shortId;
-    }
-
-    // Reporter (immer sichtbar)
-    var reporterInitials = buildReporterInitials(report.reporterDisplayName);
-    var vonAvatar = document.getElementById('reportModalVonAvatar');
-    if (vonAvatar) {
-      vonAvatar.style.background = '';
-      vonAvatar.style.color = '';
-      vonAvatar.textContent = reporterInitials;
-    }
-    if (document.getElementById('reportModalVon')) {
-      document.getElementById('reportModalVon').textContent = report.reporterDisplayName;
-    }
-
-    // Recipient
-    if (document.getElementById('reportModalAnAvatar')) {
-      document.getElementById('reportModalAnAvatar').textContent = f.recipientInitials;
-    }
-    if (document.getElementById('reportModalAn')) {
-      document.getElementById('reportModalAn').textContent = f.recipientName;
-    }
-
-    // Datum
-    if (document.getElementById('reportModalDatum')) {
-      document.getElementById('reportModalDatum').textContent = FeedbackAPI.formatDateShort
-        ? FeedbackAPI.formatDateShort(f.submittedDate)
-        : f.submittedDate;
-    }
-
-    // Typ-Badge: bei anonym Hinweis dass Submitter im Mod-Kontext sichtbar ist
-    var typEl = document.getElementById('reportModalTyp');
-    if (typEl) {
-      if (f.isAnonymous) {
-        typEl.innerHTML = '<span class="role-badge" style="background:rgba(229,38,32,0.1);color:#E52620;">' +
-          I18n.t('common.anonymous') + '</span>';
-      } else {
-        typEl.innerHTML = '<span class="role-badge user">' + I18n.t('common.public') + '</span>';
-      }
-    }
-
-    // Reason des Reports
-    if (document.getElementById('reportModalReason')) {
-      document.getElementById('reportModalReason').textContent = report.reason;
-    }
-
-    // Feedback-Inhalt
-    if (document.getElementById('reportModalStrengths')) {
-      document.getElementById('reportModalStrengths').textContent = f.strengths || '–';
-    }
-    if (document.getElementById('reportModalImprovements')) {
-      document.getElementById('reportModalImprovements').textContent = f.areasToImprove || '–';
-    }
-
-    // Driver-Ratings
-    var driversEl = document.getElementById('reportModalDrivers');
-    if (driversEl) {
-      driversEl.innerHTML = '';
-      f.ratings.forEach(function (r, idx, arr) {
-        var driverLabel = I18n.t('driver.' + r.name);
-        var val = r.na ? 'N/A' : (r.rating + ' \u2605');
-        var p = document.createElement('div');
-        p.style.cssText = 'display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #2e2e2e;font-size:13px;font-family:\'DM Sans\',sans-serif;';
-        p.innerHTML = '<span style="color:#666;">' + driverLabel + '</span>' +
-          '<span style="color:' + (r.na ? '#666' : '#FF6B00') + ';">' + val + '</span>';
-        if (idx === arr.length - 1) p.style.borderBottom = 'none';
-        driversEl.appendChild(p);
-      });
-    }
-
-    // Submitter-Hinweis bei anonymen Feedbacks (Audit-Visibility-Hinweis)
-    var hintEl = document.getElementById('reportSubmitterHint');
-    if (hintEl) {
-      if (f.isAnonymous && f.submitterName) {
-        hintEl.style.display = 'flex';
-        hintEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
-          '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' +
-          '<line x1="12" y1="9" x2="12" y2="13"/>' +
-          '<line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
-          '<span>Absender im Moderationskontext: <strong>' + f.submitterName +
-          '</strong> — der Empfänger sieht das Feedback weiterhin als anonym.</span>';
-      } else {
-        hintEl.style.display = 'none';
-      }
-    }
-
-    // Action-Buttons je nach aktuellem Status enablen/disablen
-    updateReportActionButtons(report.status);
-  }
-
-  function updateReportActionButtons(status) {
-    var review  = document.getElementById('reportActionReview');
-    var resolve = document.getElementById('reportActionResolve');
-    var dismiss = document.getElementById('reportActionDismiss');
-
-    var isFinal = (status === 'resolved' || status === 'dismissed');
-
-    [review, resolve, dismiss].forEach(function (btn) {
-      if (!btn) return;
-      btn.disabled = isFinal;
-      btn.style.opacity = isFinal ? '0.5' : '';
-      btn.style.pointerEvents = isFinal ? 'none' : '';
-    });
-  }
-
-  function closeReportModal() {
-    var modal = document.getElementById('reportDetailModal');
-    if (modal) modal.classList.remove('show');
-    _currentReport = null;
-  }
-
-  async function setReportInReview() {
-    if (!_currentReport) return;
-    try {
-      // Backend kennt nur 'resolved' und 'dismissed' als Übergänge → 'review' = Sub-Status
-      // Das eigentliche "In Prüfung" ist im Frontend ein UX-Indikator. Wir nutzen
-      // den dedizierten Action-Workflow (POST /action) statt PATCH /status hier.
-      Render.showToast(I18n.t('admin.toast_status_set_review'));
-    } catch (e) {
-      console.error('setReportInReview failed:', e);
-      Render.showToast(translateError(e));
-    }
-  }
 
   /* ═══════════════════════════════════════════════════════
      Modal: Report-Action (Schritt 10) — POST /action
      ═══════════════════════════════════════════════════════ */
+
+  function buildActionFeedbackDetail(f) {
+    var fromHtml;
+    if (f.isAnonymous) {
+      fromHtml = '<div class="avatar anon-avatar" style="width:32px;height:32px;border-radius:8px;">' +
+        '<img class="anon-avatar-icon" alt="Anonym" src="img/incognito.svg" style="width:14px;height:14px;"/></div>' +
+        '<span style="color:var(--color-text-ghost);font-size:13px;">' + I18n.t('common.anonymous') + '</span>';
+    } else {
+      fromHtml = '<div class="avatar" style="width:32px;height:32px;font-size:10px;border-radius:8px;">' +
+        (f.submitterInitials || '?') + '</div>' +
+        '<span style="color:var(--color-text-primary);font-size:13px;font-weight:500;">' + (f.submitterName || '?') + '</span>';
+    }
+
+    var chipsHtml = f.ratings.map(function (d) {
+      var shortName = I18n.t('driver.' + d.name).split('/')[0].trim();
+      var chipClass = 'action-fb-driver-chip' + (d.na ? ' na-chip' : '');
+      var score = d.na ? '<span class="score">N/A</span>' : '<span class="score">' + d.rating + '\u2605</span>';
+      return '<span class="' + chipClass + '">' + shortName + ' ' + score + '</span>';
+    }).join('');
+
+    var recipientHtml = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 12px;background:var(--color-card);border:1px solid var(--color-border);border-radius:8px;">' +
+      '<span style="font-size:12px;color:var(--color-text-ghost);">' + I18n.t('admin.fb_detail_to') + '</span>' +
+      '<div class="avatar" style="width:24px;height:24px;font-size:9px;border-radius:6px;">' + (f.recipientInitials || '?') + '</div>' +
+      '<span style="font-size:13px;color:var(--color-text-primary);">' + (f.recipientName || '?') + '</span>' +
+      '</div>';
+
+    var textHtml = '';
+    if (f.strengths) {
+      textHtml += '<div class="action-fb-text-block">' +
+        '<div class="action-fb-text-label">' +
+        '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>' +
+        I18n.t('inbox.strengths') +
+        '</div>' +
+        '<p class="action-fb-text-content">' + f.strengths + '</p>' +
+        '</div>';
+    }
+    if (f.areasToImprove) {
+      textHtml += '<div class="action-fb-text-block">' +
+        '<div class="action-fb-text-label">' +
+        '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-orange);display:inline-block;"></span>' +
+        I18n.t('inbox.improvements') +
+        '</div>' +
+        '<p class="action-fb-text-content">' + f.areasToImprove + '</p>' +
+        '</div>';
+    }
+
+    return '<div class="action-fb-from">' + fromHtml + '</div>' +
+      recipientHtml +
+      '<div class="action-fb-drivers">' + chipsHtml + '</div>' +
+      textHtml;
+  }
 
   function openActionModal() {
     if (!_currentReport) return;
@@ -737,16 +668,31 @@
     var f = _currentReport.feedback;
     var shortId = 'FB-' + f.id.substring(0, 8).toUpperCase();
 
-    document.getElementById('actionModalContext').textContent =
-      'Report ' + shortId + ' \u2014 von ' + _currentReport.reporterDisplayName +
+    var contextText = 'Report ' + shortId + ' \u2014 von ' + _currentReport.reporterDisplayName +
       ' \u2192 an ' + f.recipientName;
+    if (_currentReport.status === 'resolved' || _currentReport.status === 'dismissed') {
+      contextText += ' \u00b7 ' + I18n.t('admin.report_already_resolved');
+    }
+    document.getElementById('actionModalContext').textContent = contextText;
 
-    // Reset
-    document.querySelectorAll('input[name="reportAction"]').forEach(function (r) { r.checked = false; });
-    document.getElementById('actionReason').value = '';
-    document.getElementById('actionHrIntervention').checked = false;
-    document.getElementById('actionHrEscalation').checked = false;
-    document.getElementById('actionWarning').style.display = 'none';
+    // Prefill from saved action data or reset
+    var savedAction = _currentReport.actionTaken;
+    document.querySelectorAll('input[name="reportAction"]').forEach(function (r) {
+      r.checked = savedAction ? (r.value === savedAction) : false;
+    });
+    document.getElementById('actionReason').value = _currentReport.adminReason || '';
+    document.getElementById('actionHrIntervention').checked = _currentReport.hrIntervention || false;
+    document.getElementById('actionHrEscalation').checked = _currentReport.hrEscalation || false;
+    document.getElementById('actionWarning').style.display = (savedAction === 'removed') ? 'flex' : 'none';
+
+    // Reset tabs to action tab
+    document.getElementById('actionTabAction').classList.add('active');
+    document.getElementById('actionTabFeedback').classList.remove('active');
+    document.getElementById('actionPanelAction').style.display = 'block';
+    document.getElementById('actionPanelFeedback').style.display = 'none';
+
+    // Populate feedback detail tab
+    document.getElementById('actionFeedbackDetail').innerHTML = buildActionFeedbackDetail(f);
 
     modal.classList.add('show');
   }
@@ -754,6 +700,27 @@
   function closeActionModal() {
     var modal = document.getElementById('reportActionModal');
     if (modal) modal.classList.remove('show');
+  }
+
+  function bindActionTabs() {
+    var tabAction = document.getElementById('actionTabAction');
+    var tabFeedback = document.getElementById('actionTabFeedback');
+    var panelAction = document.getElementById('actionPanelAction');
+    var panelFeedback = document.getElementById('actionPanelFeedback');
+    if (!tabAction || !tabFeedback) return;
+
+    tabAction.addEventListener('click', function () {
+      tabAction.classList.add('active');
+      tabFeedback.classList.remove('active');
+      panelAction.style.display = 'block';
+      panelFeedback.style.display = 'none';
+    });
+    tabFeedback.addEventListener('click', function () {
+      tabFeedback.classList.add('active');
+      tabAction.classList.remove('active');
+      panelFeedback.style.display = 'block';
+      panelAction.style.display = 'none';
+    });
   }
 
   function bindActionRadios() {
@@ -825,7 +792,6 @@
 
       Render.showToast(I18n.t('admin.toast_action_executed'));
       closeActionModal();
-      closeReportModal();
     } catch (e) {
       console.error('applyReportAction failed:', e);
       Render.showToast(translateError(e));
@@ -897,36 +863,12 @@
       });
     });
 
-    /* Report Detail Modal */
-    var reportDetailModal = document.getElementById('reportDetailModal');
-    var closeReportModalBtn = document.getElementById('closeReportModalBtn');
-
-    if (closeReportModalBtn) closeReportModalBtn.addEventListener('click', closeReportModal);
-    if (reportDetailModal) reportDetailModal.addEventListener('click', function (e) {
-      if (e.target === reportDetailModal) closeReportModal();
-    });
-
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        closeReportModal();
         closeRoleModal();
         closeDeptModal();
         closeActionModal();
       }
-    });
-
-    /* Report-Status-Buttons → öffnen Action-Modal mit vorausgewählter Aktion */
-    var reportActionReview  = document.getElementById('reportActionReview');
-    var reportActionResolve = document.getElementById('reportActionResolve');
-    var reportActionDismiss = document.getElementById('reportActionDismiss');
-
-    if (reportActionReview)  reportActionReview.addEventListener('click', setReportInReview);
-    if (reportActionResolve) reportActionResolve.addEventListener('click', openActionModal);
-    if (reportActionDismiss) reportActionDismiss.addEventListener('click', function () {
-      // Direkt-Action: Dismiss
-      openActionModal();
-      var radio = document.querySelector('input[name="reportAction"][value="dismissed"]');
-      if (radio) radio.checked = true;
     });
 
     /* Action Modal Bindings */
@@ -943,6 +885,7 @@
     });
 
     bindActionRadios();
+    bindActionTabs();
 
     /* Deactivate User Modal */
     var deactivateModal = document.getElementById('deactivateModal');
@@ -961,6 +904,25 @@
     });
     if (confirmDeactivateBtn) {
       confirmDeactivateBtn.addEventListener('click', confirmDeactivate);
+    }
+
+    /* Activate User Modal */
+    var activateModal = document.getElementById('activateModal');
+    var cancelActivateBtn = document.getElementById('cancelActivateBtn');
+    var confirmActivateBtn = document.getElementById('confirmActivateBtn');
+
+    if (cancelActivateBtn) cancelActivateBtn.addEventListener('click', function () {
+      activateModal.classList.remove('show');
+      _currentActivateUser = null;
+    });
+    if (activateModal) activateModal.addEventListener('click', function (e) {
+      if (e.target === activateModal) {
+        activateModal.classList.remove('show');
+        _currentActivateUser = null;
+      }
+    });
+    if (confirmActivateBtn) {
+      confirmActivateBtn.addEventListener('click', confirmActivate);
     }
 
     /* Role Modal */

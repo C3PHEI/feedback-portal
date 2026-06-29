@@ -204,12 +204,12 @@
     modal.id = 'report-modal';
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:flex;align-items:center;justify-content:center;';
     modal.innerHTML =
-      '<div style="background:var(--color-bg-card);border-radius:12px;padding:24px;max-width:420px;width:90%;">' +
-      '<h3 style="margin:0 0 8px;color:var(--color-text);">' + I18n.t('inbox.report_title') + '</h3>' +
+      '<div style="background:var(--color-surface);border-radius:12px;padding:24px;max-width:420px;width:90%;border:1px solid var(--color-border);">' +
+      '<h3 style="margin:0 0 8px;color:var(--color-text-primary);">' + I18n.t('inbox.report_title') + '</h3>' +
       '<p style="font-size:13px;color:var(--color-text-muted);margin-bottom:16px;">' + I18n.t('inbox.report_desc') + '</p>' +
       '<textarea id="report-reason" rows="4" placeholder="' + I18n.t('inbox.report_placeholder') + '" ' +
       'style="width:100%;box-sizing:border-box;padding:10px;border-radius:8px;border:1px solid var(--color-border);' +
-      'background:var(--color-bg);color:var(--color-text);font-size:13px;resize:vertical;margin-bottom:16px;"></textarea>' +
+      'background:var(--color-card);color:var(--color-text-primary);font-size:13px;resize:vertical;margin-bottom:16px;"></textarea>' +
       '<div style="display:flex;gap:10px;justify-content:flex-end;">' +
       '<button id="report-cancel" style="padding:8px 16px;border-radius:8px;border:1px solid var(--color-border);' +
       'background:none;color:var(--color-text-muted);cursor:pointer;">' + I18n.t('inbox.report_cancel') + '</button>' +
@@ -234,6 +234,7 @@
         Render.showToast(I18n.t('inbox.report_success'));
         modal.remove();
       } catch (err) {
+        console.error('Report failed:', err);
         var msg = (err && err.errorCode === 'already_reported')
           ? I18n.t('inbox.report_already')
           : I18n.t('inbox.report_error');

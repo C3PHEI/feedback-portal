@@ -91,7 +91,7 @@
   text-transform: uppercase;
   color: var(--color-text-ghost);
   text-align: left;
-  padding: 10px 12px;
+  padding: 10px 8px;
   border-bottom: 1px solid var(--color-border);
 }
 .admin-table tbody tr {
@@ -101,8 +101,8 @@
   background: rgba(255, 255, 255, 0.02);
 }
 .admin-table tbody td {
-  padding: 14px 12px;
-  font-size: 14px;
+  padding: 12px 8px;
+  font-size: 13px;
   color: var(--color-text-secondary);
   border-bottom: 1px solid #1a1a1a;
   vertical-align: middle;
@@ -195,6 +195,10 @@
   font-size: 13px;
   cursor: pointer;
   transition: all 0.15s;
+}
+.btn-admin.user-action-btn {
+  padding: 5px 10px;
+  font-size: 12px;
 }
 .btn-admin:hover {
   border-color: var(--color-orange);
@@ -855,6 +859,88 @@
 /* ═══════════════════════════════════════════════════════
    Report Action Modal
    ═══════════════════════════════════════════════════════ */
+
+/* ─── Action Modal Tabs ──────────────────────────────── */
+.action-modal-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+.action-modal-tab {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  background: transparent;
+  color: var(--color-text-ghost);
+  transition: background 0.15s, color 0.15s;
+}
+.action-modal-tab.active {
+  background: var(--color-card);
+  color: var(--color-text-primary);
+}
+.action-modal-tab:hover:not(.active) {
+  color: var(--color-text-muted);
+}
+
+/* ─── Action Modal Feedback Detail ──────────────────── */
+.action-fb-from {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.action-fb-drivers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.action-fb-driver-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+.action-fb-driver-chip .score {
+  color: var(--color-orange);
+  font-weight: 600;
+}
+.action-fb-driver-chip.na-chip .score {
+  color: var(--color-text-ghost);
+}
+.action-fb-text-block {
+  margin-bottom: 12px;
+}
+.action-fb-text-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-ghost);
+  font-weight: 600;
+  font-family: 'Bodoni MT', sans-serif;
+}
+.action-fb-text-content {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+}
 
 .action-modal-context {
   font-family: 'DM Sans', sans-serif;

@@ -118,6 +118,10 @@ public class AdminModerationService
             ResolvedAt:           report.ResolvedAt,
             ReporterId:           report.ReporterUserId,
             ReporterDisplayName:  report.Reporter.DisplayName,
+            ActionTaken:          report.ActionTaken,
+            AdminReason:          report.AdminReason,
+            HrIntervention:       report.HrIntervention,
+            HrEscalation:         report.HrEscalation,
             Feedback:             feedbackDto
         );
     }
@@ -180,6 +184,10 @@ public class AdminModerationService
         }
 
         report.ResolvedAt = now;
+        report.ActionTaken = req.Action;
+        report.AdminReason = req.Reason;
+        report.HrIntervention = req.HrIntervention;
+        report.HrEscalation = req.HrEscalation;
 
         await _db.SaveChangesAsync();
         return new ServiceResult(true);

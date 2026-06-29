@@ -47,8 +47,9 @@
      ═══════════════════════════════════════════════════════ */
 
   function renderCard(fb) {
-    var isEditable = !fb.locked && fb.submittedAt &&
+    var inWindow = !fb.locked && fb.submittedAt &&
       (Date.now() - new Date(fb.submittedAt).getTime()) < HISTORY_EDIT_WINDOW_MS;
+    var isEditable = inWindow && !fb.edited;
     var cardClass = 'history-card' + (isEditable ? ' editable' : '');
 
     // Avatar
@@ -79,6 +80,15 @@
         '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
         '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>' +
         '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' + I18n.t('history.status_edited') + '</span>';
+    }
+
+    // Already-edited info banner
+    var alreadyEditedHtml = '';
+    if (inWindow && fb.edited) {
+      alreadyEditedHtml = '<div class="edit-timer-bar mb-4" style="border-color:var(--color-border);background:rgba(255,255,255,0.02);">' +
+        '<span class="edit-timer-icon">🔒</span>' +
+        '<span class="edit-timer-text" style="color:var(--color-text-muted);">' + I18n.t('history.already_edited_info') + '</span>' +
+        '</div>';
     }
 
     // Timer bar (only for editable)
@@ -146,6 +156,7 @@
       '<div class="flex items-center gap-2 mt-1">' + badgesHtml + '</div></div></div>' +
       headerRight + '</div>' +
       timerHtml +
+      alreadyEditedHtml +
       renderDrivers(fb.drivers) +
       '<div class="mb-3"><div class="history-text-label">' + I18n.t('history.strenghts') + '</div>' +
       '<div class="history-text-content" id="strengths-' + fb.id + '">' + fb.strengths + '</div></div>' +
@@ -263,9 +274,10 @@
     var naKeys = ['impact', 'ownership', 'collaboration', 'growth'];
     document.querySelectorAll('[id^="editNa-"]').forEach(function (naBtn) {
       naBtn.addEventListener('click', function () {
-        var parts = naBtn.id.replace('editNa-', '').split('-');
-        var cardId = parts[0];
-        var key = parts[1];
+        var rest = naBtn.id.replace('editNa-', '');
+        var lastDash = rest.lastIndexOf('-');
+        var cardId = rest.substring(0, lastDash);
+        var key = rest.substring(lastDash + 1);
         var starsEl = document.getElementById('editStars-' + cardId + '-' + key);
         var driverCard = document.getElementById('editDriver-' + cardId + '-' + key);
         var isNa = naBtn.classList.toggle('na-active');
@@ -291,6 +303,12 @@
 
         var keys = ['impact', 'ownership', 'collaboration', 'growth'];
         var card = document.getElementById('card-' + cardId);
+
+        if (card.dataset.edited === 'true') {
+          Render.showToast(I18n.t('history.toast_already_edited'));
+          saveBtn.disabled = false;
+          return;
+        }
         var driverIds = card.dataset.driverIds.split(',');
 
         var ratings = keys.map(function (key, idx) {
@@ -348,6 +366,7 @@
           if (overlay) overlay.classList.remove('active');
           if (editBtn && !editBtn.disabled) editBtn.style.display = '';
 
+          card.dataset.edited = 'true';
           Render.showToast(I18n.t('history.toast_saved'));
         } catch (err) {
           console.error('Feedback-Update fehlgeschlagen:', err);

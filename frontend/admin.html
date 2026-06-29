@@ -185,9 +185,9 @@
         <thead>
         <tr>
           <th data-i18n="admin.col_id">ID</th>
-          <th data-i18n="admin.col_reporter">Gemeldet von</th>
-          <th data-i18n="admin.col_feedback_recipient">Empfänger des Feedbacks</th>
-          <th data-i18n="admin.col_date">Datum</th>
+          <th data-i18n="admin.col_feedback_by">Feedback von</th>
+          <th data-i18n="admin.col_date">Feedback-Datum</th>
+          <th data-i18n="admin.col_report_date">Melde-Datum</th>
           <th data-i18n="admin.col_type">Typ</th>
           <th class="hide-mobile" data-i18n="admin.col_reason">Begründung</th>
           <th style="text-align:right;" data-i18n="admin.col_status">Status</th>
@@ -245,7 +245,7 @@
           <th data-i18n="admin.col_user">Benutzer</th>
           <th data-i18n="admin.col_dept">Abteilung</th>
           <th data-i18n="admin.col_role">Rolle</th>
-          <th class="hide-mobile" data-i18n="admin.col_feedback_col">Feedback (Erhalten/Bekommen)</th>
+          <th class="hide-mobile" data-i18n="admin.col_feedback_col">Feedback</th>
           <th style="text-align:right;" data-i18n="admin.col_actions">Aktionen</th>
         </tr>
         </thead>
@@ -303,6 +303,25 @@
         <div class="flex gap-3 justify-end">
           <button class="btn-admin" type="button" id="cancelDeactivateBtn" data-i18n="common.cancel">Abbrechen</button>
           <button class="btn-admin danger" type="button" id="confirmDeactivateBtn" data-i18n="admin.deactivate_confirm_btn">&#128683; Deaktivieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activate User Modal -->
+    <div class="modal-overlay" id="activateModal">
+      <div class="modal-box">
+        <h2 class="modal-title" data-i18n="admin.activate_title">Benutzer aktivieren</h2>
+        <div class="flex items-center gap-3 mb-5">
+          <div class="avatar deactivate-avatar" id="activateAvatar"></div>
+          <div>
+            <div class="text-white font-medium" id="activateName"></div>
+            <div class="text-xs text-muted" id="activateEmail"></div>
+          </div>
+        </div>
+        <p style="color:var(--color-text-muted);font-size:13px;margin-bottom:20px;" data-i18n="admin.activate_confirm_text">Möchtest du diesen Benutzer wirklich wieder aktivieren?</p>
+        <div class="flex gap-3 justify-end">
+          <button class="btn-admin" type="button" id="cancelActivateBtn" data-i18n="common.cancel">Abbrechen</button>
+          <button class="btn-admin" type="button" id="confirmActivateBtn" style="color:#22c55e;border-color:#22c55e33;" data-i18n="admin.activate_confirm_btn">✅ Aktivieren</button>
         </div>
       </div>
     </div>
@@ -391,62 +410,76 @@
     <div class="modal-body">
       <p class="action-modal-context" id="actionModalContext"></p>
 
-      <div class="action-options">
-        <label class="action-option">
-          <input type="radio" name="reportAction" value="dismissed">
-          <div class="action-option-label">
-            <span class="action-name" data-i18n="admin.action_dismissed">Verwerfen</span>
-            <span class="action-desc" data-i18n="admin.action_dismissed_desc">Keine Verletzung des Code of Conduct festgestellt.</span>
-          </div>
-        </label>
-
-        <label class="action-option">
-          <input type="radio" name="reportAction" value="retained_with_note">
-          <div class="action-option-label">
-            <span class="action-name" data-i18n="admin.action_retained">Mit Hinweis behalten</span>
-            <span class="action-desc" data-i18n="admin.action_retained_desc">Grenzwertig, Feedback bleibt sichtbar mit Anmerkung.</span>
-          </div>
-        </label>
-
-        <label class="action-option">
-          <input type="radio" name="reportAction" value="redacted">
-          <div class="action-option-label">
-            <span class="action-name" data-i18n="admin.action_redacted">Teilweise zensieren</span>
-            <span class="action-desc" data-i18n="admin.action_redacted_desc">Problematische Passagen werden geschwärzt.</span>
-          </div>
-        </label>
-
-        <label class="action-option danger">
-          <input type="radio" name="reportAction" value="removed">
-          <div class="action-option-label">
-            <span class="action-name" data-i18n="admin.action_removed">Entfernen</span>
-            <span class="action-desc" data-i18n="admin.action_removed_desc">Aus Empfänger-Sicht entfernt, fließt nicht in Durchschnitt ein. Irreversibel.</span>
-          </div>
-        </label>
+      <!-- Tabs -->
+      <div class="action-modal-tabs">
+        <button class="action-modal-tab active" id="actionTabAction" data-i18n="admin.tab_action">Aktion</button>
+        <button class="action-modal-tab" id="actionTabFeedback" data-i18n="admin.tab_feedback">Feedback ansehen</button>
       </div>
 
-      <label class="action-reason-label" data-i18n="admin.action_reason_label">Begründung (Pflicht, mindestens 10 Zeichen):</label>
-      <textarea id="actionReason" class="action-reason-input" rows="3" maxlength="500"
-                placeholder="Warum wird diese Aktion ausgeführt?"></textarea>
+      <!-- Tab 1: Action form -->
+      <div id="actionPanelAction">
+        <div class="action-options">
+          <label class="action-option">
+            <input type="radio" name="reportAction" value="dismissed">
+            <div class="action-option-label">
+              <span class="action-name" data-i18n="admin.action_dismissed">Verwerfen</span>
+              <span class="action-desc" data-i18n="admin.action_dismissed_desc">Keine Verletzung des Code of Conduct festgestellt.</span>
+            </div>
+          </label>
 
-      <div class="action-toggles">
-        <label class="action-toggle">
-          <input type="checkbox" id="actionHrIntervention">
-          <span data-i18n="admin.action_hr_intervention">HR-Intervention erforderlich</span>
-        </label>
-        <label class="action-toggle">
-          <input type="checkbox" id="actionHrEscalation">
-          <span data-i18n="admin.action_hr_escalation">An HR eskalieren</span>
-        </label>
+          <label class="action-option">
+            <input type="radio" name="reportAction" value="retained_with_note">
+            <div class="action-option-label">
+              <span class="action-name" data-i18n="admin.action_retained">Mit Hinweis behalten</span>
+              <span class="action-desc" data-i18n="admin.action_retained_desc">Grenzwertig, Feedback bleibt sichtbar mit Anmerkung.</span>
+            </div>
+          </label>
+
+          <label class="action-option">
+            <input type="radio" name="reportAction" value="redacted">
+            <div class="action-option-label">
+              <span class="action-name" data-i18n="admin.action_redacted">Teilweise zensieren</span>
+              <span class="action-desc" data-i18n="admin.action_redacted_desc">Problematische Passagen werden geschwärzt.</span>
+            </div>
+          </label>
+
+          <label class="action-option danger">
+            <input type="radio" name="reportAction" value="removed">
+            <div class="action-option-label">
+              <span class="action-name" data-i18n="admin.action_removed">Entfernen</span>
+              <span class="action-desc" data-i18n="admin.action_removed_desc">Aus Empfänger-Sicht entfernt, fließt nicht in Durchschnitt ein. Irreversibel.</span>
+            </div>
+          </label>
+        </div>
+
+        <label class="action-reason-label" data-i18n="admin.action_reason_label">Begründung (Pflicht, mindestens 10 Zeichen):</label>
+        <textarea id="actionReason" class="action-reason-input" rows="3" maxlength="500"
+                  placeholder="Warum wird diese Aktion ausgeführt?"></textarea>
+
+        <div class="action-toggles">
+          <label class="action-toggle">
+            <input type="checkbox" id="actionHrIntervention">
+            <span data-i18n="admin.action_hr_intervention">HR-Intervention erforderlich</span>
+          </label>
+          <label class="action-toggle">
+            <input type="checkbox" id="actionHrEscalation">
+            <span data-i18n="admin.action_hr_escalation">An HR eskalieren</span>
+          </label>
+        </div>
+
+        <div class="action-warning" id="actionWarning" style="display:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span data-i18n="admin.action_warning_irreversible">Diese Aktion ist irreversibel.</span>
+        </div>
       </div>
 
-      <div class="action-warning" id="actionWarning" style="display:none;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        <span data-i18n="admin.action_warning_irreversible">Diese Aktion ist irreversibel.</span>
+      <!-- Tab 2: Feedback detail -->
+      <div id="actionPanelFeedback" style="display:none;">
+        <div id="actionFeedbackDetail"></div>
       </div>
     </div>
 
@@ -493,71 +526,6 @@
   </div>
 </div>
 
-<!-- Report Detail Modal -->
-<div class="modal-overlay" id="reportDetailModal">
-  <div class="modal-box" style="max-width:560px;max-height:90vh;overflow-y:auto;">
-    <div class="flex items-center justify-between mb-5">
-      <div>
-        <h2 class="modal-title" style="margin-bottom:4px;" data-i18n="admin.report_modal_title">Meldung prüfen</h2>
-        <span style="font-size:12px;color:#666;font-family:'Bodoni MT',sans-serif;" id="reportModalId"></span>
-      </div>
-      <button id="closeReportModalBtn" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;" data-i18n-title="common.close" title="Schliessen">&#10005;</button>
-    </div>
-    <div class="deactivate-info-box mb-4" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_reporter">Gemeldet von</div>
-        <div class="flex items-center gap-2">
-          <div class="avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;" id="reportModalVonAvatar"></div>
-          <span class="text-white text-sm" id="reportModalVon"></span>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_to">An (Empfänger)</div>
-        <div class="flex items-center gap-2">
-          <div class="avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;" id="reportModalAnAvatar"></div>
-          <span class="text-white text-sm" id="reportModalAn"></span>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;" data-i18n="admin.report_date">Datum</div>
-        <span class="text-white text-sm" id="reportModalDatum"></span>
-      </div>
-      <div>
-        <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;" data-i18n="admin.report_type">Typ</div>
-        <span id="reportModalTyp"></span>
-      </div>
-    </div>
-    <div class="deactivate-info-box mb-4">
-      <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;" data-i18n="admin.report_reason">Meldegrund</div>
-      <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalReason"></p>
-    </div>
-    <div class="deactivate-info-box mb-4">
-      <div style="font-size:11px;color:#666;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;" data-i18n="admin.report_drivers">Driver-Bewertungen</div>
-      <div id="reportModalDrivers"></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-      <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;">
-        <div class="flex items-center gap-2 mb-2">
-          <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
-          <span style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;" data-i18n="admin.report_strengths">Stärken</span>
-        </div>
-        <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalStrengths"></p>
-      </div>
-      <div style="background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;">
-        <div class="flex items-center gap-2 mb-2">
-          <span style="width:7px;height:7px;border-radius:50%;background:#FF6B00;display:inline-block;"></span>
-          <span style="font-size:11px;color:#555;font-family:'Bodoni MT',sans-serif;text-transform:uppercase;letter-spacing:0.08em;" data-i18n="admin.report_improvements">Verbesserungsbereiche</span>
-        </div>
-        <p style="color:#ccc;font-size:13px;line-height:1.7;font-family:'DM Sans',sans-serif;" id="reportModalImprovements"></p>
-      </div>
-    </div>
-    <div class="flex gap-2 pt-2" style="border-top:1px solid #2e2e2e;padding-top:16px;">
-      <button id="reportActionReview" class="btn-admin" type="button" style="color:#FF6B00;border-color:rgba(255,107,0,0.3);flex:1;" data-i18n="admin.report_action_review">&#128269; In Prüfung setzen</button>
-      <button id="reportActionResolve" class="btn-admin" type="button" style="color:#22c55e;border-color:rgba(34,197,94,0.3);flex:1;" data-i18n="admin.report_action_resolve">&#9989; Erledigen</button>
-      <button id="reportActionDismiss" class="btn-admin" type="button" style="color:#666;flex:1;" data-i18n="admin.report_action_dismiss">&#10005; Ablehnen</button>
-    </div>
-  </div>
-</div>
 
 <script src="js/i18n.js"></script>
 <script src="js/data.js"></script>
