@@ -36,6 +36,9 @@ builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddScoped<AdminDashboardService>();
 builder.Services.AddScoped<AdminUserService>();
 builder.Services.AddScoped<AdminModerationService>();
+builder.Services.AddScoped<AdSyncService>();
+builder.Services.AddSingleton<AdSyncStatusStore>();
+builder.Services.AddHostedService<AdSyncBackgroundService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers();
