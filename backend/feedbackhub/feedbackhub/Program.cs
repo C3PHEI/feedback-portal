@@ -46,9 +46,6 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Wichtig: KEIN app.Urls.Add(...) mehr.
-// Die URL kommt aus Umgebungsvariable ASPNETCORE_URLS (in Docker: http://+:8080).
-
 if (app.Environment.IsDevelopment())
 {
   app.MapOpenApi();
@@ -59,8 +56,15 @@ if (app.Environment.IsDevelopment())
   });
 }
 
-app.UseCors("FrontendPolicy");
+// Frontend (gebautes dist/) ausliefern
+app.UseDefaultFiles();   // index.html als Default
+app.UseStaticFiles();    // statische Dateien aus wwwroot
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+// SPA-Fallback: alles was kein /api ist -> index.html
+app.MapFallbackToFile("index.html");
+
 app.Run();
