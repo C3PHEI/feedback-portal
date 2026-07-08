@@ -12,9 +12,9 @@ Write-Host "== Frontend bauen =="
 Set-Location $frontendPath
 if (-not (Test-Path "$frontendPath\node_modules")) {
     Write-Host "-- node_modules fehlt, npm install --"
-    npm install
+    cmd /c "npm install"
 }
-npm run build
+cmd /c "npm run build"
 if ($LASTEXITCODE -ne 0) {
     Write-Host "FEHLER: Frontend-Build fehlgeschlagen — Abbruch." -ForegroundColor Red
     exit 1
