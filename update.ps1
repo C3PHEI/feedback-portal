@@ -1,5 +1,5 @@
 $srcPath     = "C:\Apps\feedbackhub-src"
-$publishPath = "C:\Apps\feedbackhub-api"
+$publishPath = "C:\Apps\feedbackhub"
 $frontendPath = "$srcPath\frontend"
 $wwwrootPath  = "$srcPath\backend\feedbackhub\feedbackhub\wwwroot"
 $port        = 5185
