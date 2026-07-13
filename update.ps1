@@ -54,8 +54,8 @@ Remove-Item "$publishPath\app_offline.htm" -Force
 Write-Host "== Warm-up Request =="
 Start-Sleep -Seconds 2
 try {
-    $resp = Invoke-WebRequest "http://localhost:$port" -UseBasicParsing -TimeoutSec 15
+    $resp = Invoke-WebRequest "https://feedbackhub.cd.ch" -UseBasicParsing -TimeoutSec 20
     Write-Host "OK: App antwortet (HTTP $($resp.StatusCode))" -ForegroundColor Green
 } catch {
-    Write-Host "WARNUNG: Kein Response auf Port $port - IIS-Binding/Log pruefen" -ForegroundColor Yellow
+    Write-Host "WARNUNG: App antwortet nicht auf https://feedbackhub.cd.ch - IIS-Log pruefen" -ForegroundColor Yellow
 }
