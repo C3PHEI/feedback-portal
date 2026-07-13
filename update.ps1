@@ -26,14 +26,9 @@ foreach ($dir in @("js", "css", "img")) {
 }
 Copy-Item "$frontendPath\*.html" $wwwrootPath -Force -ErrorAction SilentlyContinue
 
-Write-Host "== Laufenden Prozess stoppen (VOR dem Publish - Datei-Locks!) =="
-$conns = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
-if ($conns) {
-    $conns.OwningProcess | Sort-Object -Unique | ForEach-Object {
-        Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue
-    }
-    Start-Sleep -Seconds 2
-}
+Write-Host "== App offline nehmen (IIS gibt Locks frei) =="
+Set-Content "$publishPath\app_offline.htm" "<html><body><h2>Update laeuft, bitte kurz warten...</h2></body></html>"
+Start-Sleep -Seconds 5
 
 Write-Host "== appsettings.json sichern =="
 $settingsBackup = $null
@@ -43,25 +38,24 @@ if (Test-Path "$publishPath\appsettings.json") {
 
 Write-Host "== Publish =="
 dotnet publish "$srcPath\backend\feedbackhub\feedbackhub\feedbackhub.csproj" -c Release -o $publishPath
-if ($LASTEXITCODE -ne 0) { Write-Host "FEHLER: Publish fehlgeschlagen" -ForegroundColor Red; exit 1 }
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "FEHLER: Publish fehlgeschlagen - App bleibt offline (app_offline.htm manuell loeschen!)" -ForegroundColor Red
+    exit 1
+}
 
 if ($settingsBackup) {
     Set-Content "$publishPath\appsettings.json" $settingsBackup -NoNewline
     Write-Host "-- Server-appsettings.json wiederhergestellt --"
 }
 
-Write-Host "== Neustart auf Port $port =="
-Start-Process -FilePath "dotnet" `
-    -ArgumentList "`"$publishPath\feedbackhub.dll`"" `
-    -WorkingDirectory $publishPath `
-    -WindowStyle Hidden
+Write-Host "== App wieder online nehmen =="
+Remove-Item "$publishPath\app_offline.htm" -Force
 
-Start-Sleep -Seconds 5
-
-Write-Host "== Check =="
-$check = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
-if ($check) {
-    Write-Host "OK: Backend laeuft auf Port $port" -ForegroundColor Green
-} else {
-    Write-Host "FEHLER: Backend NICHT erreichbar - Log pruefen: dotnet $publishPath\feedbackhub.dll manuell starten" -ForegroundColor Red
+Write-Host "== Warm-up Request =="
+Start-Sleep -Seconds 2
+try {
+    $resp = Invoke-WebRequest "http://localhost:$port" -UseBasicParsing -TimeoutSec 15
+    Write-Host "OK: App antwortet (HTTP $($resp.StatusCode))" -ForegroundColor Green
+} catch {
+    Write-Host "WARNUNG: Kein Response auf Port $port - IIS-Binding/Log pruefen" -ForegroundColor Yellow
 }
