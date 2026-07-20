@@ -101,7 +101,10 @@ if (profileBtn && profileDropdown) {
 
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
-    // MSAL Logout — später mit echtem msalInstance.logoutRedirect() ersetzen
-    window.location.href = 'index.html';
+    if (typeof window.msalLogout === 'function') {
+      window.msalLogout();
+    } else {
+      window.location.href = 'index.html';
+    }
   });
 }

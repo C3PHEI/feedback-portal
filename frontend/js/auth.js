@@ -21,7 +21,15 @@ async function ensureLogin() {
   await msalInstance.initialize();
 
   const result = await msalInstance.handleRedirectPromise();
-  if (result) msalInstance.setActiveAccount(result.account);
+  if (result) {
+    msalInstance.setActiveAccount(result.account);
+    // Auth-Response-Fragment (#code=…&state=…&session_state=…) aus der
+    // Adressleiste entfernen, damit keine langen Redirect-URLs sichtbar bleiben.
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title,
+        window.location.pathname + window.location.search);
+    }
+  }
 
   const accounts = msalInstance.getAllAccounts();
   if (accounts.length === 0) {
@@ -54,8 +62,25 @@ async function getApiToken() {
   }
 }
 
+// Echtes Logout: MSAL-Session (sessionStorage) leeren und über den
+// Microsoft-Logout-Endpoint abmelden. Ein blosser Redirect auf index.html
+// hätte den Account im Cache belassen → User blieb angemeldet.
+async function logout() {
+  try { await loginReady; } catch (_) { /* Login evtl. nie abgeschlossen */ }
+
+  const account = msalInstance.getActiveAccount()
+                  || msalInstance.getAllAccounts()[0]
+                  || null;
+
+  await msalInstance.logoutRedirect({
+    account,
+    postLogoutRedirectUri: msalConfig.auth.redirectUri
+  });
+}
+
 // Global verfügbar machen für api.js (kein ES-Modul)
 window.getApiToken = getApiToken;
+window.msalLogout = logout;
 
 // um JWT zum testen in der Konsole auszulesen
 window.__getToken = getApiToken;

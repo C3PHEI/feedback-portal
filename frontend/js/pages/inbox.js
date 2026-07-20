@@ -285,7 +285,7 @@
       if (cardsEl) {
         if (feedbacks.length === 0) {
           cardsEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
-            'Du hast noch keine Feedbacks erhalten.</p>';
+            I18n.t('inbox.empty') + '</p>';
         } else {
           cardsEl.innerHTML = feedbacks.map(renderFeedbackCard).join('\n');
           bindCardClicks();
@@ -296,8 +296,7 @@
       console.error('Inbox-Daten konnten nicht geladen werden:', e);
       if (cardsEl) {
         cardsEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;">' +
-          'Fehler beim Laden der Feedbacks (' + (e.errorCode || 'unknown') + '). ' +
-          'Bitte Seite neu laden.</p>';
+          I18n.t('inbox.load_error').replace('{code}', e.errorCode || 'unknown') + '</p>';
       }
     }
   }

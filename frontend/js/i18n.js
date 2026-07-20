@@ -51,6 +51,8 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback wurde gemeldet.',
       'inbox.report_error':   'Meldung konnte nicht gesendet werden.',
       'inbox.report_already': 'Du hast dieses Feedback bereits gemeldet.',
+      'inbox.empty':          'Du hast noch keine Feedbacks erhalten.',
+      'inbox.load_error':     'Fehler beim Laden ({code}). Bitte Seite neu laden.',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'Verlauf',
@@ -75,6 +77,8 @@ var I18n = (function () {
       'history.toast_error':        'Speichern fehlgeschlagen',
       'history.strenghts':          'Stärken',
       'history.improvements':       'Verbesserungsvorschläge',
+      'history.empty':              'Du hast noch keine Feedbacks gesendet.',
+      'history.load_error':         'Fehler beim Laden ({code}). Bitte Seite neu laden.',
 
       /* ─── feedback.html ───────────────────────────────── */
       'feedback.title':                   'Feedback',
@@ -134,6 +138,8 @@ var I18n = (function () {
       'dept.drawer_disclaimer': 'Individuelle Feedbacks sind aus Datenschutzgründen nicht einsehbar.',
       'dept.low_warning':       'Zu wenig Feedbacks für aussagekräftige Durchschnittswerte.',
       'dept.no_feedback':       'Noch kein Feedback erhalten.',
+      'dept.no_permission':     'Du hast keine Berechtigung, dieses Team einzusehen.',
+      'dept.load_error':        'Fehler beim Laden ({code}).',
       'dept.stat_reviews':      'Feedbacks',
       'dept.stat_avg':          'Ø Gesamt',
       'dept.section_drivers':   'Driver-Bewertungen',
@@ -395,6 +401,8 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback has been reported.',
       'inbox.report_error':   'Report could not be sent.',
       'inbox.report_already': 'You have already reported this feedback.',
+      'inbox.empty':          'You have not received any feedback yet.',
+      'inbox.load_error':     'Failed to load ({code}). Please reload the page.',
 
       /* ─── history.html ────────────────────────────────── */
       'history.title':              'History',
@@ -419,6 +427,8 @@ var I18n = (function () {
       'history.toast_error':        'Save failed',
       'history.strenghts':          'Strengths',
       'history.improvements':       'Areas to Improve',
+      'history.empty':              'You have not sent any feedback yet.',
+      'history.load_error':         'Failed to load ({code}). Please reload the page.',
 
       /* ─── feedback.html ───────────────────────────────── */
       'feedback.title':                   'Feedback',
@@ -478,6 +488,8 @@ var I18n = (function () {
       'dept.drawer_disclaimer': 'Individual feedback is not visible for privacy reasons.',
       'dept.low_warning':       'Not enough ratings for meaningful averages.',
       'dept.no_feedback':       'No feedback received yet.',
+      'dept.no_permission':     'You do not have permission to view this team.',
+      'dept.load_error':        'Failed to load ({code}).',
       'dept.stat_reviews':      'Feedbacks',
       'dept.stat_avg':          'Ø Overall',
       'dept.section_drivers':   'Driver Ratings',

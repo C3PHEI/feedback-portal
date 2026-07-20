@@ -413,10 +413,10 @@
       if (membersEl) {
         if (e.status === 403) {
           membersEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
-            'Du hast keine Berechtigung, dieses Team einzusehen.</p>';
+            I18n.t('dept.no_permission') + '</p>';
         } else {
           membersEl.innerHTML = '<p style="color:var(--color-danger);padding:40px;text-align:center;">' +
-            'Fehler beim Laden (' + (e.errorCode || 'unknown') + ').</p>';
+            I18n.t('dept.load_error').replace('{code}', e.errorCode || 'unknown') + '</p>';
         }
       }
     }
