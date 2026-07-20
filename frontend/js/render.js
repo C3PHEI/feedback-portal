@@ -201,6 +201,24 @@ var Render = (function () {
       '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
   }
 
+  /* ═══════════════════════════════════════════════════════
+     HTML-Escaping
+     Benutzereingaben (Feedback-Texte, Namen) werden per innerHTML
+     eingefügt. Ohne Escaping bricht ein '<' im Text das DOM auf
+     (Folge-Karten werden verschachtelt) — und es entsteht ein
+     Stored-XSS-Risiko. Immer VOR dem Einsetzen in HTML anwenden.
+     ═══════════════════════════════════════════════════════ */
+
+  function escapeHtml(value) {
+    if (value == null) return '';
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   return {
     stars:               stars,
     starsDisplay:        starsDisplay,
@@ -208,7 +226,8 @@ var Render = (function () {
     navbar:              navbar,
     showToast:           showToast,
     initProfileDropdown: initProfileDropdown,
-    editIconSvg:         editIconSvg
+    editIconSvg:         editIconSvg,
+    escapeHtml:          escapeHtml
   };
 
   /* ═══════════════════════════════════════════════════════

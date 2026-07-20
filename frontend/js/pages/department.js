@@ -271,7 +271,7 @@
             '</div>'
             : '<div class="dept-history-from">' +
             '<div class="avatar" style="width:28px;height:28px;font-size:9px;border-radius:7px;">' + fb.fromInitials + '</div>' +
-            '<span class="dept-history-from-label">' + fb.fromName + '</span>' +
+            '<span class="dept-history-from-label">' + Render.escapeHtml(fb.fromName) + '</span>' +
             '</div>';
 
           /* ── Driver Chips ── */
@@ -300,7 +300,7 @@
                 '</svg>' +
                 ' ' + I18n.t('dept.strengths_label') +
                 '</div>' +
-                '<p class="dept-fb-text-content">' + fb.strengths + '</p>' +
+                '<p class="dept-fb-text-content">' + Render.escapeHtml(fb.strengths) + '</p>' +
                 '</div>';
             }
 
@@ -313,7 +313,7 @@
                 '</svg>' +
                 ' ' + I18n.t('dept.improvements_label') +
                 '</div>' +
-                '<p class="dept-fb-text-content">' + fb.improvements + '</p>' +
+                '<p class="dept-fb-text-content">' + Render.escapeHtml(fb.improvements) + '</p>' +
                 '</div>';
             }
 
