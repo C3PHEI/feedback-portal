@@ -9,10 +9,35 @@ public class AdSyncStatusStore
   private readonly object _lock = new();
   private AdSyncResult? _lastResult;
 
+  // Ringpuffer der letzten Läufe (neuester zuerst), im RAM.
+  // Geht bei App-Neustart verloren — für einen dauerhaften Audit-Verlauf
+  // müsste er in die DB persistiert werden.
+  private const int MaxHistory = 20;
+  private readonly LinkedList<AdSyncResult> _history = new();
+
   public AdSyncResult? LastResult
   {
     get { lock (_lock) return _lastResult; }
     set { lock (_lock) _lastResult = value; }
+  }
+
+  /// <summary>
+  /// Legt ein Sync-Ergebnis als letzten Lauf ab und hängt es an den Verlauf an.
+  /// </summary>
+  public void Add(AdSyncResult result)
+  {
+    lock (_lock)
+    {
+      _lastResult = result;
+      _history.AddFirst(result);
+      while (_history.Count > MaxHistory) _history.RemoveLast();
+    }
+  }
+
+  /// <summary>Die letzten Läufe, neuester zuerst (Kopie).</summary>
+  public IReadOnlyList<AdSyncResult> History
+  {
+    get { lock (_lock) return _history.ToList(); }
   }
 }
 
@@ -106,13 +131,13 @@ public class AdSyncBackgroundService : BackgroundService
     try
     {
       var result = await syncService.RunAsync(stoppingToken);
-      _status.LastResult = result;
+      _status.Add(result);
     }
     catch (Exception ex)
     {
       _logger.LogError(ex, "AD-Sync: unerwarteter Fehler im Background-Lauf");
       var now = DateTime.UtcNow;
-      _status.LastResult = new AdSyncResult(false, ex.Message, 0, 0, 0, 0, 0, now, now);
+      _status.Add(new AdSyncResult(false, ex.Message, 0, 0, 0, 0, 0, now, now));
     }
   }
 

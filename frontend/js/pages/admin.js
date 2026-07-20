@@ -89,6 +89,38 @@
     }).join('');
   }
 
+  /* ── AD-Sync-Verlauf → System-Status-Item ─────────────────
+     Formatiert einen einzelnen Sync-Lauf als Detail-Zeile. */
+  function formatSyncRun(run) {
+    var when = run.finishedAt ? new Date(run.finishedAt).toLocaleString() : '';
+    if (!run.success) {
+      return when + ' — ⚠ Fehler: ' + Render.escapeHtml(run.error || 'unbekannt');
+    }
+    return when + ' — ' +
+      run.created + ' neu, ' + run.updated + ' akt., ' +
+      run.reactivated + ' react., ' + run.deactivated + ' deakt., ' +
+      run.skipped + ' übersprungen';
+  }
+
+  /* Baut die System-Status-Items: AD-Sync aus echten Logs,
+     restliche Karten (E-Mail, Retention) bleiben vorerst Mock. */
+  function buildSystemStatusItems(syncLogs) {
+    var runs = syncLogs || [];
+    var last = runs[0];
+    var adItem = {
+      dot:     last ? (last.success ? 'active' : 'warning') : 'warning',
+      title:   'AD Sync',
+      details: last ? runs.slice(0, 5).map(formatSyncRun)
+                    : ['Noch kein Sync-Lauf seit dem letzten App-Start.']
+    };
+
+    var items = [adItem];
+    (FeedbackAPI.getAdminSystemStatus() || []).forEach(function (m) {
+      if (m.title !== 'AD Sync') items.push(m);   // Mock-Rest übernehmen
+    });
+    return items;
+  }
+
   /* ═══════════════════════════════════════════════════════
      Moderation: Stats + Table (Schritt 10)
      ═══════════════════════════════════════════════════════ */
@@ -983,8 +1015,10 @@
     Render.initProfileDropdown();
     initTabSwitching();
 
-    // System-Status bleibt Mock (Post-IPA)
-    renderSystemStatus(FeedbackAPI.getAdminSystemStatus());
+    // System-Status: AD-Sync aus echtem Endpoint, Rest (E-Mail/Retention) Mock.
+    FeedbackAPI.getAdminSyncLogs()
+      .then(function (logs) { renderSystemStatus(buildSystemStatusItems(logs)); })
+      .catch(function () { renderSystemStatus(FeedbackAPI.getAdminSystemStatus()); });
 
     // Backend-Daten parallel
     try {

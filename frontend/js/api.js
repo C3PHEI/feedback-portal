@@ -473,9 +473,14 @@ var FeedbackAPI = (function () {
     });
   }
 
-// System-Status-Endpoint ist Post-IPA → Mock bleibt
+// System-Status-Endpoint ist Post-IPA → Mock bleibt (E-Mail, Retention)
   function getAdminSystemStatus() {
     return MockData.adminSystemStatus;
+  }
+
+  // AD-Sync-Verlauf (letzte Läufe, neuester zuerst) — echter Endpoint.
+  function getAdminSyncLogs() {
+    return apiGet('/api/admin/sync/logs');
   }
 
   /* ─── Helper: Monatslabel-Formatierung ─────────────────────
@@ -720,6 +725,7 @@ var FeedbackAPI = (function () {
     getAdminDriverAverages:     getAdminDriverAverages,
     getAdminDepartments:        getAdminDepartments,
     getAdminSystemStatus:       getAdminSystemStatus,
+    getAdminSyncLogs:           getAdminSyncLogs,
     getModerationStats:         getModerationStats,
     getModerationReports:       getModerationReports,
     getDepartmentTeam:          getDepartmentTeam,
