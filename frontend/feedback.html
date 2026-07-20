@@ -26,7 +26,7 @@
             orange:  'var(--color-orange)',
           },
           fontFamily: {
-            display: ['Bodoni MT', 'sans-serif'],
+            display: ['Syne', 'sans-serif'],
             body:    ['DM Sans', 'sans-serif'],
           }
         }
@@ -49,7 +49,7 @@
 
   <!-- Header -->
   <div class="fade-up mb-10">
-    <h1 style="font-family:'Bodoni MT',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
+    <h1 style="font-family:'Syne',sans-serif; font-weight:800;" class="text-4xl text-white tracking-tight leading-tight mb-2">
       Feedback
     </h1>
     <p class="text-sm" style="color: var(--color-text-dim);" data-i18n="feedback.subtitle">Feedback einreichen — wähle eine Person und bewerte sie in den vier Drivers.</p>
@@ -59,7 +59,7 @@
 
     <!-- Empfänger (AD-Liste) -->
     <div class="fade-up delay-1 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_recipient">Empfänger</p>
+      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_recipient">Empfänger</p>
       <div>
         <label class="block font-normal text-sm mb-2" style="color: var(--color-text-dim);" data-i18n="feedback.recipient_label">Mitarbeiter aus dem Active Directory</label>
         <select id="recipientSelect" class="fancy-input" required></select>
@@ -68,7 +68,7 @@
 
     <!-- Sichtbarkeit -->
     <div class="fade-up delay-2 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-      <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_visibility">Sichtbarkeit</p>
+      <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_visibility">Sichtbarkeit</p>
       <p class="text-sm mb-4" style="color: var(--color-text-faint);" data-i18n="feedback.visibility_intro">Wähle, ob dein Feedback namentlich oder anonym eingereicht wird. Diese Auswahl muss zuerst getroffen werden.</p>
 
       <div class="flex gap-4 mb-4">
@@ -115,7 +115,7 @@
 
       <!-- Drivers & Stars -->
       <div class="fade-up delay-3 mb-6">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-2" data-i18n="feedback.section_rating">Bewertung</p>
+        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-2" data-i18n="feedback.section_rating">Bewertung</p>
         <p class="text-sm mb-4" style="color: var(--color-text-faint);" data-i18n="feedback.validation_drivers">Mindestens 2 der 4 Drivers müssen bewertet werden. Maximal 2 dürfen leer oder N/A bleiben.</p>
 
         <div class="flex flex-col gap-3" id="drivers-container"></div>
@@ -128,7 +128,7 @@
 
       <!-- Actionable Feedback -->
       <div class="fade-up delay-4 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-5" data-i18n="feedback.section_text">Freitext</p>
+        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-xs uppercase mb-5" data-i18n="feedback.section_text">Freitext</p>
         <p class="text-sm mb-4" style="color: var(--color-text-faint);" data-i18n="feedback.text_intro">Mindestens eines der beiden Felder muss ausgefüllt werden (min. 200 Zeichen).</p>
 
         <div class="mb-5">
@@ -162,7 +162,7 @@
 
       <!-- Code of Conduct -->
       <div class="fade-up delay-5 mb-6" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 24px;">
-        <p style="font-family:'Bodoni MT',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_coc">Code of Conduct</p>
+        <p style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:0.1em; color: var(--color-text-muted);" class="text-sm uppercase mb-4" data-i18n="feedback.section_coc">Code of Conduct</p>
 
         <div class="text-sm leading-relaxed mb-4" style="color: var(--color-text-dim);">
           <p class="mb-2" data-i18n="feedback.coc_intro">Mit dem Absenden bestätigst du die Einhaltung des folgenden Verhaltenskodex:</p>
@@ -200,7 +200,7 @@
 <div class="modal-overlay" id="cocModal">
   <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:28px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <h2 style="font-family:'Bodoni MT',sans-serif;font-weight:700;color:var(--color-text-primary);margin:0;" data-i18n="feedback.section_coc">Code of Conduct</h2>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:700;color:var(--color-text-primary);margin:0;" data-i18n="feedback.section_coc">Code of Conduct</h2>
       <button id="closeCocModal" type="button" style="background:none;border:none;color:var(--color-text-dim);font-size:20px;cursor:pointer;padding:4px 8px;">&#10005;</button>
     </div>
     <ul class="coc-list" id="coc-modal-list" style="margin:0;"></ul>

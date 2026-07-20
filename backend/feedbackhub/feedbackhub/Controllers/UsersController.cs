@@ -14,10 +14,17 @@ namespace feedbackhub.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly IConfiguration _config;
 
-    public UsersController(AppDbContext db)
+    // Display-Name-Muster für technische/administrative Konten (z. B. ADMA),
+    // die nicht als Feedback-Empfänger auswählbar sein sollen. Überschreibbar
+    // via appsettings "Recipients:ExcludedDisplayNamePatterns".
+    private static readonly string[] DefaultExcludedPatterns = { "ADMA" };
+
+    public UsersController(AppDbContext db, IConfiguration config)
     {
         _db = db;
+        _config = config;
     }
 
     // GET /api/users/recipients
@@ -27,11 +34,24 @@ public class UsersController : ControllerBase
         var me = await ResolveCurrentUserAsync();
         if (me == null) return Unauthorized();
 
-        var recipients = await _db.Users
+        var excludedPatterns = _config.GetSection("Recipients:ExcludedDisplayNamePatterns")
+                                   .Get<string[]>() ?? DefaultExcludedPatterns;
+
+        var candidates = await _db.Users
             .Where(u => u.IsActive && u.Id != me.Id)
             .OrderBy(u => u.DisplayName)
-            .Select(u => new RecipientDto(u.Id, u.DisplayName))
+            .Select(u => new { u.Id, u.DisplayName })
             .ToListAsync();
+
+        // Konten mit ADMA-artigem Anzeigenamen herausfiltern (wie das eigene
+        // Konto bereits ausgeschlossen ist). In-Memory, damit mehrere Muster
+        // case-insensitiv geprüft werden können.
+        var recipients = candidates
+            .Where(u => !excludedPatterns.Any(p =>
+                !string.IsNullOrWhiteSpace(p) &&
+                u.DisplayName.Contains(p, StringComparison.OrdinalIgnoreCase)))
+            .Select(u => new RecipientDto(u.Id, u.DisplayName))
+            .ToList();
 
         return Ok(recipients);
     }
