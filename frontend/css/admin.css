@@ -22,7 +22,7 @@
   border-radius: 10px;
   background: transparent;
   color: var(--color-text-ghost);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.02em;
@@ -68,7 +68,7 @@
   border-color: var(--color-border-strong);
 }
 .admin-card-title {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--color-text-primary);
@@ -84,7 +84,7 @@
   border-spacing: 0;
 }
 .admin-table thead th {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -130,7 +130,7 @@
   display: inline-block;
   padding: 3px 10px;
   border-radius: 99px;
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.03em;
@@ -169,7 +169,7 @@
   border-radius: 99px;
   font-size: 11px;
   font-weight: 600;
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
 }
 .severity-pill.high {
   background: rgba(229, 38, 32, 0.12);
@@ -303,7 +303,7 @@
   border-color: var(--color-border-strong);
 }
 .stat-number {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 800;
   font-size: 32px;
   color: var(--color-text-primary);
@@ -350,7 +350,7 @@
   border: none;
   color: var(--color-orange);
   font-size: 12px;
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   cursor: pointer;
   margin-top: 8px;
@@ -424,7 +424,7 @@
 
 .deactivate-detail-label {
   display: block;
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 13px;
   color: var(--color-text-dim);
@@ -457,7 +457,7 @@
   display: inline-block;
   background: rgba(255, 107, 0, 0.12);
   color: var(--color-orange);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 11px;
   padding: 2px 8px;
@@ -689,7 +689,7 @@
   box-shadow: 0 0 8px rgba(229, 38, 32, 0.4);
 }
 .dash-status-title {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 13px;
   color: var(--color-text-secondary);
@@ -932,7 +932,7 @@
   letter-spacing: 0.08em;
   color: var(--color-text-ghost);
   font-weight: 600;
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
 }
 .action-fb-text-content {
   font-size: 13px;
@@ -995,7 +995,7 @@
   flex: 1;
 }
 .action-name {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: var(--color-text-primary);

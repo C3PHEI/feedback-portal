@@ -95,7 +95,7 @@
   margin-top: 12px;
 }
 .dept-member-avg {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 20px;
   font-weight: 700;
   color: var(--color-orange);
@@ -152,7 +152,7 @@
   flex: 1;
 }
 .dept-mini-driver-score {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: var(--color-orange);
@@ -280,7 +280,7 @@
   text-align: center;
 }
 .dept-stat-value {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 22px;
   font-weight: 700;
   color: var(--color-text-primary);
@@ -331,7 +331,7 @@
 
 /* ─── Section Label ──────────────────────────────────── */
 .dept-section-label {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -371,7 +371,7 @@
 }
 .dept-driver-row-stars .empty { opacity: 0.2; }
 .dept-driver-row-score {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--color-text-primary);
@@ -502,7 +502,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;

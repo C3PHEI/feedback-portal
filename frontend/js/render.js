@@ -181,7 +181,11 @@ var Render = (function () {
 
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function () {
-        window.location.href = 'index.html';
+        if (typeof window.msalLogout === 'function') {
+          window.msalLogout();
+        } else {
+          window.location.href = 'index.html';
+        }
       });
     }
   }

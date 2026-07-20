@@ -36,7 +36,7 @@
 }
 .visibility-title {
   color: var(--color-text-primary);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 15px;
 }
@@ -156,7 +156,7 @@
   background: transparent;
   border: 1px solid var(--color-border-strong);
   color: var(--color-text-faint);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 12px;
   padding: 4px 10px;
@@ -193,7 +193,7 @@
   border-radius: 12px;
   padding: 14px 28px;
   color: var(--color-text-primary);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);

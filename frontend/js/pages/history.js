@@ -419,7 +419,7 @@
       if (cardsEl) {
         if (feedbacks.length === 0) {
           cardsEl.innerHTML = '<p style="color:var(--color-text-muted);padding:40px;text-align:center;">' +
-            'Du hast noch keine Feedbacks gesendet.</p>';
+            I18n.t('history.empty') + '</p>';
         } else {
           cardsEl.innerHTML = feedbacks.map(renderCard).join('\n');
           initHistoryTimers();
@@ -430,7 +430,7 @@
       console.error('History konnte nicht geladen werden:', e);
       if (cardsEl) {
         cardsEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;">' +
-          'Fehler beim Laden (' + (e.errorCode || 'unknown') + '). Bitte Seite neu laden.</p>';
+          I18n.t('history.load_error').replace('{code}', e.errorCode || 'unknown') + '</p>';
       }
     }
   }

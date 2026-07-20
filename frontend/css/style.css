@@ -179,7 +179,7 @@ select.fancy-input option {
 
 /* ─── N/A Display (Read-only, feedbackResponce.html) ─────── */
 .na-display {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--color-text-faint);
@@ -193,7 +193,7 @@ select.fancy-input option {
 .btn-submit {
   background: var(--gradient-brand);
   color: var(--color-text-primary);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 18px;
   letter-spacing: 0.04em;
@@ -288,7 +288,7 @@ select.fancy-input option {
   border-radius: 6px;
   background: rgba(229, 38, 32, 0.15);
   color: var(--color-red);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 14px;
   display: flex;
@@ -328,7 +328,7 @@ select.fancy-input option {
   border-radius: 10px;
   background: rgba(229, 38, 32, 0.15);
   color: var(--color-red);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 13px;
   display: flex;
@@ -359,7 +359,7 @@ select.fancy-input option {
 .badge-count {
   background: rgba(229, 38, 32, 0.15);
   color: var(--color-red);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 14px;
   padding: 2px 8px;
@@ -439,7 +439,7 @@ select.fancy-input option {
   gap: 8px;
 }
 .avg-num {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 15px;
   color: var(--color-orange);
@@ -468,7 +468,7 @@ select.fancy-input option {
   background: transparent;
   border: 1px solid var(--color-orange);
   color: var(--color-orange);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 13px;
   padding: 6px 16px;
@@ -539,7 +539,7 @@ select.fancy-input option {
   border-radius: 50%;
   background: rgba(255,107,0,0.15);
   color: var(--color-orange);
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.03em;
@@ -582,7 +582,7 @@ select.fancy-input option {
 }
 
 .profile-dropdown-name {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 14px;
   color: var(--color-text-secondary);
@@ -644,7 +644,7 @@ select.fancy-input option {
   opacity: 0.45;
 }
 .chip-label {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: var(--color-text-dim);
@@ -670,7 +670,7 @@ select.fancy-input option {
 .inbox-detail-hint {
   margin-top: 10px;
   font-size: 12px;
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   color: var(--color-text-ghost);
   letter-spacing: 0.04em;
@@ -682,7 +682,7 @@ select.fancy-input option {
 
 /* ─── Modal (shared, used by inbox + admin) ─────────────── */
 .modal-title {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 22px;
   color: var(--color-text-primary);
@@ -713,7 +713,7 @@ select.fancy-input option {
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
 }
 .modal-title {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 22px;
   color: var(--color-text-primary);
@@ -744,7 +744,7 @@ select.fancy-input option {
   opacity: 0.45;
 }
 .chip-label {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: var(--color-text-dim);
@@ -807,7 +807,7 @@ select.fancy-input option {
   margin-bottom: 10px;
 }
 .inbox-detail-section-title {
-  font-family: 'Bodoni MT', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 700;
   font-size: 11px;
   letter-spacing: 0.1em;
