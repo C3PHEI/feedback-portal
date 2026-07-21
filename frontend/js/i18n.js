@@ -26,6 +26,13 @@ var I18n = (function () {
       'nav.department':       'Abteilung',
       'nav.admin':            'Admin',
 
+      /* ─── Tab-Titel (document.title) ──────────────────── */
+      'page.inbox':           'Feedback Hub — Inbox',
+      'page.feedback':        'Feedback Hub — Feedback geben',
+      'page.history':         'Feedback Hub — Verlauf',
+      'page.department':      'Feedback Hub — Abteilung',
+      'page.admin':           'Feedback Hub — Admin',
+
       /* ─── Profil-Dropdown ─────────────────────────────── */
       'profile.logout':       'Abmelden',
       'profile.language':     'Sprache',
@@ -375,6 +382,13 @@ var I18n = (function () {
       'nav.history':          'History',
       'nav.department':       'Department',
       'nav.admin':            'Admin',
+
+      /* ─── Tab-Titel (document.title) ──────────────────── */
+      'page.inbox':           'Feedback Hub — Inbox',
+      'page.feedback':        'Feedback Hub — Give Feedback',
+      'page.history':         'Feedback Hub — History',
+      'page.department':      'Feedback Hub — Department',
+      'page.admin':           'Feedback Hub — Admin',
 
       /* ─── Profil-Dropdown ─────────────────────────────── */
       'profile.logout':       'Sign out',
@@ -754,6 +768,9 @@ var I18n = (function () {
     document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
       el.title = t(el.getAttribute('data-i18n-title'));
     });
+    // Tab-Titel (document.title) übersetzen — Key steht auf dem <html>-Element.
+    var docTitleKey = document.documentElement.getAttribute('data-i18n-doctitle');
+    if (docTitleKey) document.title = t(docTitleKey);
     document.documentElement.lang = currentLang;
     updateLangButtons();
   }
