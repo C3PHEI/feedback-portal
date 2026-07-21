@@ -73,7 +73,7 @@
       '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>' +
       '<span class="inbox-detail-section-title" style="margin-bottom:0;">' + I18n.t('inbox.strengths') + '</span>' +
       '</div>' +
-      '<p class="inbox-detail-text">' + (fb.strengths || '-') + '</p>' +
+      '<p class="inbox-detail-text">' + (fb.strengths ? Render.escapeHtml(fb.strengths) : '-') + '</p>' +
       '</div>' +
 
       // Improvements
@@ -82,7 +82,7 @@
       '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-orange);display:inline-block;"></span>' +
       '<span class="inbox-detail-section-title" style="margin-bottom:0;">' + I18n.t('inbox.improvements') + '</span>' +
       '</div>' +
-      '<p class="inbox-detail-text">' + (fb.improvements || '-') + '</p>' +
+      '<p class="inbox-detail-text">' + (fb.improvements ? Render.escapeHtml(fb.improvements) : '-') + '</p>' +
       '</div>' +
 
       // Melden-Button
@@ -144,7 +144,7 @@
       avatarHtml +
       '<div class="flex-1 min-w-0">' +
       '<div class="flex items-center justify-between gap-2 mb-1">' +
-      '<span ' + nameStyle + '>' + fb.from.name + '</span>' +
+      '<span ' + nameStyle + '>' + Render.escapeHtml(fb.from.name) + '</span>' +
       '<div class="flex items-center gap-2 flex-shrink-0">' +
       (fb.unread ? '<div class="unread-dot"></div>' : '') +
       '<span class="text-sm" style="color:var(--color-text-dim);">' + fb.date + '</span>' +
@@ -152,7 +152,7 @@
       '</div></div>' +
       '<div class="star-display mb-2">' + Render.stars(fb.stars) + '</div>' +
       driversHtml +
-      '<p class="text-sm leading-relaxed mt-3" style="color:var(--color-text-muted);">' + fb.preview + '</p>' +
+      '<p class="text-sm leading-relaxed mt-3" style="color:var(--color-text-muted);">' + Render.escapeHtml(fb.preview) + '</p>' +
       '</div></div>' +
       '</div>' +
 

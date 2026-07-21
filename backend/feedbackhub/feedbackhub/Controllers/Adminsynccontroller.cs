@@ -38,12 +38,20 @@ public class AdminSyncController : ControllerBase
     if (!await IsAdminAsync()) return Forbid();
 
     var result = await _syncService.RunAsync(ct);
-    _status.LastResult = result;
+    _status.Add(result);
 
     if (!result.Success)
       return StatusCode(StatusCodes.Status502BadGateway, result);
 
     return Ok(result);
+  }
+
+  // GET /api/admin/sync/logs — Verlauf der letzten Läufe (neuester zuerst)
+  [HttpGet("logs")]
+  public async Task<IActionResult> Logs()
+  {
+    if (!await IsAdminAsync()) return Forbid();
+    return Ok(_status.History);
   }
 
   // GET /api/admin/sync/status — Ergebnis des letzten Laufs

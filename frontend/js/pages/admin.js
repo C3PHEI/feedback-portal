@@ -89,6 +89,38 @@
     }).join('');
   }
 
+  /* ── AD-Sync-Verlauf → System-Status-Item ─────────────────
+     Formatiert einen einzelnen Sync-Lauf als Detail-Zeile. */
+  function formatSyncRun(run) {
+    var when = run.finishedAt ? new Date(run.finishedAt).toLocaleString() : '';
+    if (!run.success) {
+      return when + ' — ⚠ Fehler: ' + Render.escapeHtml(run.error || 'unbekannt');
+    }
+    return when + ' — ' +
+      run.created + ' neu, ' + run.updated + ' akt., ' +
+      run.reactivated + ' react., ' + run.deactivated + ' deakt., ' +
+      run.skipped + ' übersprungen';
+  }
+
+  /* Baut die System-Status-Items: AD-Sync aus echten Logs,
+     restliche Karten (E-Mail, Retention) bleiben vorerst Mock. */
+  function buildSystemStatusItems(syncLogs) {
+    var runs = syncLogs || [];
+    var last = runs[0];
+    var adItem = {
+      dot:     last ? (last.success ? 'active' : 'warning') : 'warning',
+      title:   'AD Sync',
+      details: last ? runs.slice(0, 5).map(formatSyncRun)
+                    : ['Noch kein Sync-Lauf seit dem letzten App-Start.']
+    };
+
+    var items = [adItem];
+    (FeedbackAPI.getAdminSystemStatus() || []).forEach(function (m) {
+      if (m.title !== 'AD Sync') items.push(m);   // Mock-Rest übernehmen
+    });
+    return items;
+  }
+
   /* ═══════════════════════════════════════════════════════
      Moderation: Stats + Table (Schritt 10)
      ═══════════════════════════════════════════════════════ */
@@ -132,12 +164,12 @@
     return '<tr class="mod-report-row" data-report-id="' + r.id + '" style="cursor:pointer;">' +
       '<td><span style="color:#666;font-size:12px;font-family:\'Syne\',sans-serif;">' + shortId + '</span></td>' +
       '<td><div class="flex items-center gap-2">' + recipientAvatar +
-      '<span class="text-white text-sm">' + r.recipientDisplayName + '</span></div></td>' +
+      '<span class="text-white text-sm">' + Render.escapeHtml(r.recipientDisplayName) + '</span></div></td>' +
       '<td><span style="color:#999;font-size:13px;">' + (r.feedbackDateLabel || r.dateLabel) + '</span></td>' +
       '<td><span style="color:#999;font-size:13px;">' + r.dateLabel + '</span></td>' +
       '<td>' + typBadge + '</td>' +
       '<td class="hide-mobile"><span style="color:#999;font-size:12px;font-style:italic;">' +
-      truncate(r.reason, 40) + '</span></td>' +
+      Render.escapeHtml(truncate(r.reason, 40)) + '</span></td>' +
       '<td class="fb-status-cell"><span class="status-dot ' + r.statusClass + '"></span>' +
       '<span style="color:' + statusColor + ';font-size:12px;">' + r.statusLabel + '</span></td>' +
       '</tr>';
@@ -618,7 +650,7 @@
     } else {
       fromHtml = '<div class="avatar" style="width:32px;height:32px;font-size:10px;border-radius:8px;">' +
         (f.submitterInitials || '?') + '</div>' +
-        '<span style="color:var(--color-text-primary);font-size:13px;font-weight:500;">' + (f.submitterName || '?') + '</span>';
+        '<span style="color:var(--color-text-primary);font-size:13px;font-weight:500;">' + Render.escapeHtml(f.submitterName || '?') + '</span>';
     }
 
     var chipsHtml = f.ratings.map(function (d) {
@@ -631,7 +663,7 @@
     var recipientHtml = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 12px;background:var(--color-card);border:1px solid var(--color-border);border-radius:8px;">' +
       '<span style="font-size:12px;color:var(--color-text-ghost);">' + I18n.t('admin.fb_detail_to') + '</span>' +
       '<div class="avatar" style="width:24px;height:24px;font-size:9px;border-radius:6px;">' + (f.recipientInitials || '?') + '</div>' +
-      '<span style="font-size:13px;color:var(--color-text-primary);">' + (f.recipientName || '?') + '</span>' +
+      '<span style="font-size:13px;color:var(--color-text-primary);">' + Render.escapeHtml(f.recipientName || '?') + '</span>' +
       '</div>';
 
     var textHtml = '';
@@ -641,7 +673,7 @@
         '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>' +
         I18n.t('inbox.strengths') +
         '</div>' +
-        '<p class="action-fb-text-content">' + f.strengths + '</p>' +
+        '<p class="action-fb-text-content">' + Render.escapeHtml(f.strengths) + '</p>' +
         '</div>';
     }
     if (f.areasToImprove) {
@@ -650,7 +682,7 @@
         '<span style="width:7px;height:7px;border-radius:50%;background:var(--color-orange);display:inline-block;"></span>' +
         I18n.t('inbox.improvements') +
         '</div>' +
-        '<p class="action-fb-text-content">' + f.areasToImprove + '</p>' +
+        '<p class="action-fb-text-content">' + Render.escapeHtml(f.areasToImprove) + '</p>' +
         '</div>';
     }
 
@@ -983,8 +1015,10 @@
     Render.initProfileDropdown();
     initTabSwitching();
 
-    // System-Status bleibt Mock (Post-IPA)
-    renderSystemStatus(FeedbackAPI.getAdminSystemStatus());
+    // System-Status: AD-Sync aus echtem Endpoint, Rest (E-Mail/Retention) Mock.
+    FeedbackAPI.getAdminSyncLogs()
+      .then(function (logs) { renderSystemStatus(buildSystemStatusItems(logs)); })
+      .catch(function () { renderSystemStatus(FeedbackAPI.getAdminSystemStatus()); });
 
     // Backend-Daten parallel
     try {

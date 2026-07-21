@@ -138,9 +138,9 @@
         driverEditHtml +
         '<hr class="divider my-4"/>' +
         '<div class="mb-4"><div class="history-text-label mb-2">' + I18n.t('history.edit_strenghts') + '</div>' +
-        '<textarea rows="4" id="editStrengths-' + fb.id + '">' + fb.strengths + '</textarea></div>' +
+        '<textarea rows="4" id="editStrengths-' + fb.id + '">' + Render.escapeHtml(fb.strengths) + '</textarea></div>' +
         '<div class="mb-2"><div class="history-text-label mb-2">' + I18n.t('history.edit_improvements') + '</div>' +
-        '<textarea rows="4" id="editImprovements-' + fb.id + '">' + fb.improvements + '</textarea></div>' +
+        '<textarea rows="4" id="editImprovements-' + fb.id + '">' + Render.escapeHtml(fb.improvements) + '</textarea></div>' +
         '<div class="edit-actions">' +
         '<button class="btn-edit-cancel" id="cancelEdit-' + fb.id + '">' + I18n.t('history.cancel') + '</button>' +
         '<button class="btn-edit-save" id="saveEdit-' + fb.id + '">' + I18n.t('history.save_btn') + '</button>' +
@@ -152,16 +152,16 @@
     return '<div class="' + cardClass + '" id="card-' + fb.id + '" data-submitted-at="' + fb.submittedAt + '" data-driver-ids="' + driverIdsJson + '">' +
       '<div class="flex items-start justify-between gap-3 mb-4">' +
       '<div class="flex items-center gap-3">' + avatarHtml +
-      '<div><span class="history-recipient">' + fb.to.name + '</span>' +
+      '<div><span class="history-recipient">' + Render.escapeHtml(fb.to.name) + '</span>' +
       '<div class="flex items-center gap-2 mt-1">' + badgesHtml + '</div></div></div>' +
       headerRight + '</div>' +
       timerHtml +
       alreadyEditedHtml +
       renderDrivers(fb.drivers) +
       '<div class="mb-3"><div class="history-text-label">' + I18n.t('history.strenghts') + '</div>' +
-      '<div class="history-text-content" id="strengths-' + fb.id + '">' + fb.strengths + '</div></div>' +
+      '<div class="history-text-content" id="strengths-' + fb.id + '">' + Render.escapeHtml(fb.strengths) + '</div></div>' +
       '<div><div class="history-text-label">' + I18n.t('history.improvements') + '</div>' +
-      '<div class="history-text-content" id="improvements-' + fb.id + '">' + fb.improvements + '</div></div>' +
+      '<div class="history-text-content" id="improvements-' + fb.id + '">' + Render.escapeHtml(fb.improvements) + '</div></div>' +
       editOverlayHtml +
       '</div>';
   }
