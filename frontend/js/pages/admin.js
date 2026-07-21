@@ -274,7 +274,18 @@
      ═══════════════════════════════════════════════════════ */
 
   function initDashboardCharts(activityData, visData) {
-    if (typeof Chart === 'undefined') return;
+    if (typeof Chart === 'undefined') {
+      // Chart.js nicht geladen → statt stiller Leere einen sichtbaren Hinweis.
+      ['activityChart', 'visibilityChart'].forEach(function (id) {
+        var canvas = document.getElementById(id);
+        if (canvas && canvas.parentNode) {
+          canvas.parentNode.innerHTML =
+            '<p style="color:var(--color-text-muted);padding:20px;text-align:center;font-size:13px;">' +
+            'Diagramm-Bibliothek (Chart.js) konnte nicht geladen werden.</p>';
+        }
+      });
+      return;
+    }
 
     Chart.defaults.color = '#777';
     Chart.defaults.borderColor = '#2e2e2e';
