@@ -11,7 +11,11 @@ if ($LASTEXITCODE -ne 0) { Write-Host "FEHLER: git pull fehlgeschlagen" -Foregro
 
 Write-Host "== Frontend bauen =="
 Set-Location $frontendPath
-if (-not (Test-Path "$frontendPath\node_modules")) { cmd /c "npm install" }
+# Immer 'npm install' — sonst werden neu hinzugefügte Dependencies
+# (package.json) bei bereits vorhandenem node_modules nicht installiert
+# und der Build schlägt fehl.
+cmd /c "npm install"
+if ($LASTEXITCODE -ne 0) { Write-Host "FEHLER: npm install fehlgeschlagen" -ForegroundColor Red; exit 1 }
 cmd /c "npm run build"
 if ($LASTEXITCODE -ne 0) { Write-Host "FEHLER: Frontend-Build fehlgeschlagen" -ForegroundColor Red; exit 1 }
 
