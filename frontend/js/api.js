@@ -483,6 +483,11 @@ var FeedbackAPI = (function () {
     return apiGet('/api/admin/sync/logs');
   }
 
+  // AD-Sync sofort auslösen (Admin). Wirft ApiError bei Fehler (z. B. 502).
+  function runAdminSync() {
+    return apiPost('/api/admin/sync/run', {});
+  }
+
   /* ─── Helper: Monatslabel-Formatierung ─────────────────────
      "2025-11" → "Nov" (i18n-fähig)
      ────────────────────────────────────────────────────────── */
@@ -726,6 +731,7 @@ var FeedbackAPI = (function () {
     getAdminDepartments:        getAdminDepartments,
     getAdminSystemStatus:       getAdminSystemStatus,
     getAdminSyncLogs:           getAdminSyncLogs,
+    runAdminSync:               runAdminSync,
     getModerationStats:         getModerationStats,
     getModerationReports:       getModerationReports,
     getDepartmentTeam:          getDepartmentTeam,

@@ -28,6 +28,11 @@ public class User
   [Column("department_id")]
   public Guid? DepartmentId { get; set; }
 
+  // AD-Manager-Beziehung (Self-FK). Nur gesetzt, wenn der Manager selbst
+  // im Sync-Scope (G_FeedbackHub) ist, sonst null. Basis der Team-Sichtbarkeit.
+  [Column("manager_user_id")]
+  public Guid? ManagerUserId { get; set; }
+
   [Column("role")]
   public string Role { get; set; } = "user";
 
@@ -49,4 +54,7 @@ public class User
   // Navigation
   [ForeignKey("DepartmentId")]
   public Department? Department { get; set; }
+
+  [ForeignKey("ManagerUserId")]
+  public User? Manager { get; set; }
 }
