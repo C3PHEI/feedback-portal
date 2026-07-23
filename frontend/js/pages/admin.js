@@ -94,12 +94,15 @@
   function formatSyncRun(run) {
     var when = run.finishedAt ? new Date(run.finishedAt).toLocaleString() : '';
     if (!run.success) {
-      return when + ' — ⚠ Fehler: ' + Render.escapeHtml(run.error || 'unbekannt');
+      return when + ' — ' + I18n.t('admin.sync_error_prefix') +
+        Render.escapeHtml(run.error || I18n.t('admin.sync_unknown'));
     }
-    return when + ' — ' +
-      run.created + ' neu, ' + run.updated + ' akt., ' +
-      run.reactivated + ' react., ' + run.deactivated + ' deakt., ' +
-      run.skipped + ' übersprungen';
+    return when + ' — ' + I18n.t('admin.sync_counts')
+      .replace('{created}', run.created)
+      .replace('{updated}', run.updated)
+      .replace('{reactivated}', run.reactivated)
+      .replace('{deactivated}', run.deactivated)
+      .replace('{skipped}', run.skipped);
   }
 
   /* Baut die System-Status-Items: AD-Sync aus echten Logs,
@@ -111,7 +114,7 @@
       dot:     last ? (last.success ? 'active' : 'warning') : 'warning',
       title:   'AD Sync',
       details: last ? runs.slice(0, 5).map(formatSyncRun)
-                    : ['Noch kein Sync-Lauf seit dem letzten App-Start.']
+                    : [I18n.t('admin.sync_none')]
     };
 
     var items = [adItem];
@@ -119,6 +122,36 @@
       if (m.title !== 'AD Sync') items.push(m);   // Mock-Rest übernehmen
     });
     return items;
+  }
+
+  /* Manueller AD-Sync per Button (POST /api/admin/sync/run).
+     Danach den Verlauf neu laden, damit der Lauf sofort sichtbar ist. */
+  function initManualSyncButton() {
+    var btn = document.getElementById('syncNowBtn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async function () {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = I18n.t('admin.sync_running');
+
+      try {
+        await FeedbackAPI.runAdminSync();
+        Render.showToast(I18n.t('admin.sync_toast_ok'));
+      } catch (e) {
+        console.error('Manueller AD-Sync fehlgeschlagen:', e);
+        Render.showToast(I18n.t('admin.sync_toast_err'));
+      }
+
+      // Verlauf aktualisieren (unabhängig von Erfolg/Fehler).
+      try {
+        var logs = await FeedbackAPI.getAdminSyncLogs();
+        renderSystemStatus(buildSystemStatusItems(logs));
+      } catch (_) { /* Verlauf bleibt wie er war */ }
+
+      btn.disabled = false;
+      btn.textContent = I18n.t('admin.sync_now');
+    });
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -141,7 +174,7 @@
 
     if (!_reportCache.length) {
       el.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--color-text-ghost);padding:40px;">' +
-        'Keine Reports vorhanden.</td></tr>';
+        I18n.t('admin.no_reports') + '</td></tr>';
       return;
     }
 
@@ -212,7 +245,7 @@
 
     if (!_userCache.length) {
       el.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--color-text-ghost);padding:40px;">' +
-        'Keine Benutzer gefunden.</td></tr>';
+        I18n.t('admin.no_users') + '</td></tr>';
       return;
     }
 
@@ -281,7 +314,7 @@
         if (canvas && canvas.parentNode) {
           canvas.parentNode.innerHTML =
             '<p style="color:var(--color-text-muted);padding:20px;text-align:center;font-size:13px;">' +
-            'Diagramm-Bibliothek (Chart.js) konnte nicht geladen werden.</p>';
+            I18n.t('admin.chart_load_error') + '</p>';
         }
       });
       return;
@@ -711,8 +744,8 @@
     var f = _currentReport.feedback;
     var shortId = 'FB-' + f.id.substring(0, 8).toUpperCase();
 
-    var contextText = 'Report ' + shortId + ' \u2014 von ' + _currentReport.reporterDisplayName +
-      ' \u2192 an ' + f.recipientName;
+    var contextText = 'Report ' + shortId + ' \u2014 ' + I18n.t('admin.action_context_from') + ' ' +
+      _currentReport.reporterDisplayName + ' \u2192 ' + I18n.t('admin.action_context_to') + ' ' + f.recipientName;
     if (_currentReport.status === 'resolved' || _currentReport.status === 'dismissed') {
       contextText += ' \u00b7 ' + I18n.t('admin.report_already_resolved');
     }
@@ -796,7 +829,7 @@
 
     // Bei 'removed' eine zusätzliche Bestätigung verlangen
     if (actionRadio.value === 'removed') {
-      var ok = window.confirm('Diese Aktion ist irreversibel. Wirklich entfernen?');
+      var ok = window.confirm(I18n.t('admin.confirm_remove'));
       if (!ok) return;
     }
 
@@ -821,7 +854,8 @@
         var updated = _reportCache[listItemIdx];
         updated.status      = newStatus;
         updated.statusClass = (newStatus === 'resolved') ? 'resolved' : 'pending';
-        updated.statusLabel = (newStatus === 'resolved') ? 'Erledigt' : 'Verworfen';
+        updated.statusLabel = (newStatus === 'resolved')
+          ? I18n.t('admin.mod_stat_resolved') : I18n.t('admin.mod_stat_dismissed');
         refreshReportRow(updated);
       }
 
@@ -1005,7 +1039,7 @@
     } catch (e) {
       console.error('Bootstrap fehlgeschlagen:', e);
       document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
-        '<h1>Fehler beim Laden</h1>' +
+        '<h1>' + I18n.t('admin.fatal_title') + '</h1>' +
         '<p>Status: ' + (e.status || 'unbekannt') + ' / ' + (e.errorCode || 'unknown') + '</p>' +
         '</div>';
       return;
@@ -1014,8 +1048,8 @@
     var me = FeedbackAPI.getCurrentUser();
     if (!me || me.role !== 'admin') {
       document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
-        '<h1>Keine Berechtigung</h1>' +
-        '<p>Diese Seite ist nur für Administratoren zugänglich.</p>' +
+        '<h1>' + I18n.t('admin.no_permission_title') + '</h1>' +
+        '<p>' + I18n.t('admin.no_permission_text') + '</p>' +
         '</div>';
       return;
     }
@@ -1030,6 +1064,8 @@
     FeedbackAPI.getAdminSyncLogs()
       .then(function (logs) { renderSystemStatus(buildSystemStatusItems(logs)); })
       .catch(function () { renderSystemStatus(FeedbackAPI.getAdminSystemStatus()); });
+
+    initManualSyncButton();
 
     // Backend-Daten parallel
     try {
@@ -1072,7 +1108,7 @@
       var kpisEl = document.getElementById('admin-kpis-container');
       if (kpisEl) {
         kpisEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;grid-column:1/-1;">' +
-          'Fehler beim Laden (' + (e.errorCode || 'unknown') + '). Bitte Seite neu laden.</p>';
+          I18n.t('admin.load_error').replace('{code}', e.errorCode || 'unknown') + '</p>';
       }
     }
 

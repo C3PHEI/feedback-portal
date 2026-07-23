@@ -191,6 +191,26 @@ var I18n = (function () {
       'admin.driver_note':                '⚠ Durchschnitte sind Richtwerte — keine abschliessende Beurteilung.',
       'admin.dept_feedback_title':        'Feedbacks pro Abteilung',
       'admin.system_status_title':        'System Status',
+
+      /* ─── admin.html — AD-Sync / Diverses ────────────── */
+      'admin.sync_now':                   'Jetzt synchronisieren',
+      'admin.sync_running':               'Synchronisiere…',
+      'admin.sync_toast_ok':              'AD-Sync abgeschlossen',
+      'admin.sync_toast_err':             'AD-Sync fehlgeschlagen',
+      'admin.sync_none':                  'Noch kein Sync-Lauf seit dem letzten App-Start.',
+      'admin.sync_error_prefix':          '⚠ Fehler: ',
+      'admin.sync_unknown':               'unbekannt',
+      'admin.sync_counts':                '{created} neu, {updated} akt., {reactivated} react., {deactivated} deakt., {skipped} übersprungen',
+      'admin.no_reports':                 'Keine Reports vorhanden.',
+      'admin.no_users':                   'Keine Benutzer gefunden.',
+      'admin.chart_load_error':           'Diagramm-Bibliothek (Chart.js) konnte nicht geladen werden.',
+      'admin.confirm_remove':             'Diese Aktion ist irreversibel. Wirklich entfernen?',
+      'admin.load_error':                 'Fehler beim Laden ({code}). Bitte Seite neu laden.',
+      'admin.fatal_title':                'Fehler beim Laden',
+      'admin.no_permission_title':        'Keine Berechtigung',
+      'admin.no_permission_text':         'Diese Seite ist nur für Administratoren zugänglich.',
+      'admin.action_context_from':        'von',
+      'admin.action_context_to':          'an',
       'admin.privacy_notice':             '🔒 Dieses Dashboard zeigt ausschliesslich aggregierte Daten. Individuelle Feedbacks werden aus Datenschutzgründen nicht angezeigt (DSG\u00a0/\u00a0DSGVO).',
 
       /* ─── admin.html — Moderation-Tab ────────────────── */
@@ -548,6 +568,26 @@ var I18n = (function () {
       'admin.driver_note':              '⚠ Averages are indicative — not a final assessment.',
       'admin.dept_feedback_title':      'Feedback per Department',
       'admin.system_status_title':      'System Status',
+
+      /* ─── admin.html — AD-Sync / misc ────────────────── */
+      'admin.sync_now':                   'Sync now',
+      'admin.sync_running':               'Syncing…',
+      'admin.sync_toast_ok':              'AD sync completed',
+      'admin.sync_toast_err':             'AD sync failed',
+      'admin.sync_none':                  'No sync run since the last app start.',
+      'admin.sync_error_prefix':          '⚠ Error: ',
+      'admin.sync_unknown':               'unknown',
+      'admin.sync_counts':                '{created} new, {updated} upd., {reactivated} react., {deactivated} deact., {skipped} skipped',
+      'admin.no_reports':                 'No reports available.',
+      'admin.no_users':                   'No users found.',
+      'admin.chart_load_error':           'Chart library (Chart.js) could not be loaded.',
+      'admin.confirm_remove':             'This action is irreversible. Really remove?',
+      'admin.load_error':                 'Failed to load ({code}). Please reload the page.',
+      'admin.fatal_title':                'Failed to load',
+      'admin.no_permission_title':        'No permission',
+      'admin.no_permission_text':         'This page is only accessible to administrators.',
+      'admin.action_context_from':        'from',
+      'admin.action_context_to':          'to',
       'admin.privacy_notice':           '🔒 This dashboard shows aggregated data only. Individual feedback is not displayed for privacy reasons (DSG\u00a0/\u00a0GDPR).',
 
       /* ─── admin.html — Moderation-Tab ────────────────── */
