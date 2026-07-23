@@ -29,5 +29,12 @@ public class AppDbContext : DbContext
       .WithMany(d => d.Users)
       .HasForeignKey(u => u.DepartmentId)
       .OnDelete(DeleteBehavior.SetNull);
+
+    // Self-referenzierende Manager-Beziehung (users.manager_user_id → users.id)
+    modelBuilder.Entity<User>()
+      .HasOne(u => u.Manager)
+      .WithMany()
+      .HasForeignKey(u => u.ManagerUserId)
+      .OnDelete(DeleteBehavior.SetNull);
   }
 }

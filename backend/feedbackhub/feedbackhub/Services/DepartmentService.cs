@@ -34,16 +34,13 @@ public class DepartmentService
     var me = await _currentUser.GetAsync();
     if (me is null) return new(false, null, "Unauthorized");
     if (!me.IsDepartmentManager) return new(false, null, "Forbidden");
-    if (me.DepartmentId is null) return new(false, null, "Forbidden");
 
-    var departmentId = me.DepartmentId.Value;
     var myId = me.Id;
 
-    // Schritt 1: Team-User
+    // Schritt 1: Team-User = eigene Direct Reports (AD-Manager-Beziehung)
     var teamUsers = await _db.Users
-      .Where(u => u.DepartmentId == departmentId
-               && u.IsActive
-               && u.Id != myId)
+      .Where(u => u.ManagerUserId == myId
+               && u.IsActive)
       .Select(u => new { u.Id, u.DisplayName, u.Role })
       .ToListAsync();
 
@@ -102,15 +99,12 @@ public class DepartmentService
     var me = await _currentUser.GetAsync();
     if (me is null) return new(false, null, "Unauthorized");
     if (!me.IsDepartmentManager) return new(false, null, "Forbidden");
-    if (me.DepartmentId is null) return new(false, null, "Forbidden");
 
-    var departmentId = me.DepartmentId.Value;
     var myId = me.Id;
 
     var teamIds = await _db.Users
-      .Where(u => u.DepartmentId == departmentId
-               && u.IsActive
-               && u.Id != myId)
+      .Where(u => u.ManagerUserId == myId
+               && u.IsActive)
       .Select(u => u.Id)
       .ToListAsync();
 
@@ -170,15 +164,14 @@ public class DepartmentService
     var me = await _currentUser.GetAsync();
     if (me is null) return new(false, null, "Unauthorized");
     if (!me.IsDepartmentManager) return new(false, null, "Forbidden");
-    if (me.DepartmentId is null) return new(false, null, "Forbidden");
 
     var target = await _db.Users
       .Where(u => u.Id == userId && u.IsActive)
-      .Select(u => new { u.Id, u.DepartmentId })
+      .Select(u => new { u.Id, u.ManagerUserId })
       .FirstOrDefaultAsync();
 
     if (target is null) return new(false, null, "NotFound");
-    if (target.DepartmentId != me.DepartmentId) return new(false, null, "Forbidden");
+    if (target.ManagerUserId != me.Id) return new(false, null, "Forbidden");
     if (target.Id == me.Id)
       return new(false, null, "Use /api/feedback/inbox for your own feedbacks.");
 

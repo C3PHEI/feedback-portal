@@ -1,8 +1,9 @@
-﻿using Azure.Identity;
+using Azure.Identity;
 using feedbackhub.Data;
 using feedbackhub.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
+using Microsoft.Graph.Models.ODataErrors;
 // Alias, weil Microsoft.Graph.Models.User mit feedbackhub.Models.User kollidiert:
 using GraphUser = Microsoft.Graph.Models.User;
 
@@ -26,23 +27,28 @@ public record AdSyncResult(
 
 /// <summary>
 /// Täglicher Benutzer-Sync aus Entra ID (Microsoft Graph).
-/// Quelle: homepage-retention-usersync.txt →
-///   "Daily automated sync job: Pull users from AD (OU or Group) with the
-///    filters, New Users = create, Existing users = Update attributes,
-///    Missing users = tag them as 'inactive'"
+/// Das AD ist Single Source of Truth für Benutzer, Rollen und Team-Zugehörigkeit.
 ///
 /// Regeln:
 ///   - Scope   = Mitglieder der Gruppe G_FeedbackHub          (AdSync:UserGroupId)
-///   - Rolle   = admin  wenn Mitglied in G_FeedbackHub_Admin   (AdSync:AdminGroupId)
-///             = manager wenn Mitglied in G_FeedbackHub_Manager (AdSync:ManagerGroupId)
-///             = user   sonst
-///   - Manager-Flag  = Mitgliedschaft in G_FeedbackHub_Manager
-///   - Department    = AD-Attribut "department" (auto-create in departments-Tabelle)
-///   - Filter 2 der Spezifikation: mail + displayName müssen gesetzt sein
-///   - Fehlende / in AD deaktivierte User → is_active=false, deactivated_at=now
-///     (startet den 12-Monate-Retention-Countdown)
-///   - Lockout-Schutz: bliebe nach dem Sync kein aktiver Admin übrig,
-///     wird der komplette Lauf verworfen.
+///   - Rolle   = admin    wenn Mitglied in G_FeedbackHub_Admin (AdSync:AdminGroupId)
+///             = manager  wenn von ≥1 Hub-Mitglied als Manager referenziert
+///                        (AD-Attribut "manager", GET /users/{id}/manager)
+///             = user     sonst.  Priorität admin > manager > user.
+///     Es gibt KEINE Manager-Gruppe.
+///   - is_department_manager = hat ≥1 Direct Report im Hub (= wird referenziert)
+///   - manager_user_id       = DB-Id des Managers, aber nur wenn dieser selbst
+///                             im Scope (Hub-Mitglied) ist, sonst NULL.
+///   - Department = AD-Attribut "department" (auto-create in departments-Tabelle);
+///                  ist nur noch Anzeige-Info, nicht mehr Basis der Sichtbarkeit.
+///   - Filter: mail (Fallback userPrincipalName) + displayName müssen gesetzt sein.
+///   - Fehlende / in AD deaktivierte User → is_active=false, deactivated_at=now.
+///   - Sicherungen: leere Scope-Gruppe → Abbruch; bliebe kein aktiver Admin übrig
+///     → kompletter Lauf verworfen.
+///
+/// Reihenfolge: erst alle upserten, DANN manager_user_id auflösen (neue User
+/// müssen referenzierbar sein), dann Deaktivierung, dann Lockout-Check, dann
+/// EIN SaveChanges.
 /// </summary>
 public class AdSyncService
 {
@@ -74,31 +80,28 @@ public class AdSyncService
     // ── 1. Konfiguration lesen ──────────────────────────────────────────
     // TenantId/ClientId werden aus der bestehenden AzureAd-Sektion
     // wiederverwendet, das Secret + die Gruppen-IDs kommen aus "AdSync".
-    var tenantId       = _config["AdSync:TenantId"] ?? _config["AzureAd:TenantId"];
-    var clientId       = _config["AdSync:ClientId"] ?? _config["AzureAd:ClientId"];
-    var clientSecret   = _config["AdSync:ClientSecret"];
-    var userGroupId    = _config["AdSync:UserGroupId"];
-    var managerGroupId = _config["AdSync:ManagerGroupId"];
-    var adminGroupId   = _config["AdSync:AdminGroupId"];
+    var tenantId     = _config["AdSync:TenantId"] ?? _config["AzureAd:TenantId"];
+    var clientId     = _config["AdSync:ClientId"] ?? _config["AzureAd:ClientId"];
+    var clientSecret = _config["AdSync:ClientSecret"];
+    var userGroupId  = _config["AdSync:UserGroupId"];
+    var adminGroupId = _config["AdSync:AdminGroupId"];
 
     if (string.IsNullOrWhiteSpace(tenantId) || string.IsNullOrWhiteSpace(clientId) ||
         string.IsNullOrWhiteSpace(clientSecret) || string.IsNullOrWhiteSpace(userGroupId) ||
-        string.IsNullOrWhiteSpace(managerGroupId) || string.IsNullOrWhiteSpace(adminGroupId))
-      return Fail("missing_configuration (AdSync:ClientSecret / UserGroupId / ManagerGroupId / AdminGroupId)");
+        string.IsNullOrWhiteSpace(adminGroupId))
+      return Fail("missing_configuration (AdSync:ClientSecret / UserGroupId / AdminGroupId)");
 
     // ── 2. Graph-Client (Client-Credentials-Flow, App-Identität) ───────
     var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
     var graph = new GraphServiceClient(credential, new[] { "https://graph.microsoft.com/.default" });
 
     List<GraphUser> adUsers;
-    HashSet<string> managerOids, adminOids;
+    HashSet<string> adminOids;
     try
     {
-      adUsers     = await GetGroupUsersAsync(graph, userGroupId, ct);
-      managerOids = (await GetGroupUsersAsync(graph, managerGroupId, ct))
-                    .Where(u => u.Id != null).Select(u => u.Id!).ToHashSet();
-      adminOids   = (await GetGroupUsersAsync(graph, adminGroupId, ct))
-                    .Where(u => u.Id != null).Select(u => u.Id!).ToHashSet();
+      adUsers   = await GetGroupUsersAsync(graph, userGroupId, ct);
+      adminOids = (await GetGroupUsersAsync(graph, adminGroupId, ct))
+                  .Where(u => u.Id != null).Select(u => u.Id!).ToHashSet();
     }
     catch (Exception ex)
     {
@@ -110,18 +113,13 @@ public class AdSyncService
     if (adUsers.Count == 0)
       return Fail("user_group_empty — Sync abgebrochen, um Massen-Deaktivierung zu verhindern");
 
-    // ── 3. Upsert: Neue anlegen / Bestehende aktualisieren ─────────────
-    var dbUsers = await _db.Users.ToListAsync(ct);
-    var byOid   = dbUsers.ToDictionary(u => u.AdObjectId);
-    var now     = DateTime.UtcNow;
-    var seenOids = new HashSet<string>();
-
+    // ── 3. Filter: gültige, in AD aktive User-Objekte ──────────────────
+    // (schliesst Bot-/Ressourcen-Konten wie Drucker ohne mail/displayName aus)
+    var processable = new List<GraphUser>();
     foreach (var gu in adUsers)
     {
       if (string.IsNullOrWhiteSpace(gu.Id)) { skipped++; continue; }
 
-      // Filter 2 der Spezifikation: mail nicht leer, displayName gesetzt
-      // (schliesst Bot-/Ressourcen-Konten wie Drucker aus)
       var email = gu.Mail ?? gu.UserPrincipalName;
       if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(gu.DisplayName))
       {
@@ -130,25 +128,49 @@ public class AdSyncService
         continue;
       }
 
-      // In AD deaktivierte Konten NICHT in seenOids aufnehmen →
-      // werden in Schritt 4 wie "fehlend" behandelt (inactive + Countdown).
+      // In AD deaktivierte Konten NICHT verarbeiten → werden in Schritt 7 wie
+      // "fehlend" behandelt (inactive + Retention-Countdown).
       if (gu.AccountEnabled == false) { skipped++; continue; }
 
-      seenOids.Add(gu.Id);
+      processable.Add(gu);
+    }
 
-      var role = adminOids.Contains(gu.Id)   ? "admin"
-               : managerOids.Contains(gu.Id) ? "manager"
+    // ── 4. Manager-Beziehungen laden ───────────────────────────────────
+    // Pro Hub-Mitglied den Manager auflösen (GET /users/{id}/manager, 404 = keiner).
+    //   managerOfOid[reportOid] = managerOid
+    var managerOfOid = new Dictionary<string, string>();
+    foreach (var gu in processable)
+    {
+      var mgrOid = await GetManagerOidAsync(graph, gu.Id!, ct);
+      if (!string.IsNullOrWhiteSpace(mgrOid)) managerOfOid[gu.Id!] = mgrOid!;
+    }
+    // Wer von ≥1 Hub-Mitglied als Manager referenziert wird → Manager-Rolle +
+    // is_department_manager (sofern selbst Hub-Mitglied und kein Admin).
+    var referencedManagerOids = managerOfOid.Values.ToHashSet();
+
+    // ── 5. Upsert: Neue anlegen / Bestehende aktualisieren ─────────────
+    var dbUsers  = await _db.Users.ToListAsync(ct);
+    var byOid    = dbUsers.ToDictionary(u => u.AdObjectId);
+    var now      = DateTime.UtcNow;
+    var seenOids = new HashSet<string>();
+
+    foreach (var gu in processable)
+    {
+      var email = gu.Mail ?? gu.UserPrincipalName;   // bereits validiert
+
+      var role = adminOids.Contains(gu.Id!)             ? "admin"
+               : referencedManagerOids.Contains(gu.Id!) ? "manager"
                : "user";
-      var isManager = managerOids.Contains(gu.Id);
+      var isManager = referencedManagerOids.Contains(gu.Id!);
       var deptId    = await ResolveDepartmentAsync(gu.Department, now, ct);
 
-      if (byOid.TryGetValue(gu.Id, out var user))
+      if (byOid.TryGetValue(gu.Id!, out var user))
       {
         // ── Bestehender User: Attribute aus AD überschreiben ──
         var changed = false;
 
         if (user.DisplayName != gu.DisplayName)      { user.DisplayName = gu.DisplayName!;      changed = true; }
-        if (user.Email != email)                     { user.Email = email;                      changed = true; }
+        if (user.Email != email)                     { user.Email = email!;                     changed = true; }
         if (user.FirstName != gu.GivenName)          { user.FirstName = gu.GivenName;           changed = true; }
         if (user.LastName != gu.Surname)             { user.LastName = gu.Surname;              changed = true; }
         if (user.DepartmentId != deptId)             { user.DepartmentId = deptId;              changed = true; }
@@ -169,6 +191,8 @@ public class AdSyncService
           user.UpdatedAt = now;
           updated++;
         }
+
+        seenOids.Add(gu.Id!);
       }
       else
       {
@@ -179,14 +203,14 @@ public class AdSyncService
         {
           _logger.LogWarning("AD-Sync: {Email} übersprungen — E-Mail existiert bereits mit anderem oid", email);
           skipped++;
-          continue;
+          continue;   // NICHT als gesehen markieren
         }
 
         var newUser = new User
         {
           Id                  = Guid.NewGuid(),
-          AdObjectId          = gu.Id,
-          Email               = email,
+          AdObjectId          = gu.Id!,
+          Email               = email!,
           DisplayName         = gu.DisplayName!,
           FirstName           = gu.GivenName,
           LastName            = gu.Surname,
@@ -199,12 +223,32 @@ public class AdSyncService
         };
 
         _db.Users.Add(newUser);
-        dbUsers.Add(newUser); // damit der E-Mail-Duplikat-Check im selben Lauf greift
+        dbUsers.Add(newUser);       // damit E-Mail-Duplikat-Check im selben Lauf greift
+        byOid[gu.Id!] = newUser;    // damit die Manager-Auflösung neue User findet
+        seenOids.Add(gu.Id!);
         created++;
       }
     }
 
-    // ── 4. Fehlende User → inactive (12-Monate-Retention-Countdown) ────
+    // ── 6. manager_user_id auflösen (jetzt existieren alle User) ───────
+    // Nur setzen, wenn der Manager selbst im Scope (seen) ist, sonst NULL.
+    foreach (var oid in seenOids)
+    {
+      if (!byOid.TryGetValue(oid, out var user)) continue;
+
+      Guid? managerId = null;
+      if (managerOfOid.TryGetValue(oid, out var mgrOid) &&
+          seenOids.Contains(mgrOid) &&
+          byOid.TryGetValue(mgrOid, out var mgr))
+      {
+        managerId = mgr.Id;
+      }
+
+      if (user.ManagerUserId != managerId)
+        user.ManagerUserId = managerId;
+    }
+
+    // ── 7. Fehlende User → inactive (12-Monate-Retention-Countdown) ────
     foreach (var user in dbUsers.Where(u => u.IsActive && !seenOids.Contains(u.AdObjectId)))
     {
       user.IsActive = false;
@@ -214,10 +258,10 @@ public class AdSyncService
       _logger.LogInformation("AD-Sync: {Email} deaktiviert (nicht mehr in G_FeedbackHub / in AD deaktiviert)", user.Email);
     }
 
-    // ── 5. Lockout-Schutz ───────────────────────────────────────────────
+    // ── 8. Lockout-Schutz ───────────────────────────────────────────────
     // Bliebe kein aktiver Admin übrig (z. B. G_FeedbackHub_Admin leer oder
     // falsch konfiguriert), wird der GESAMTE Lauf verworfen.
-    var anyActiveAdmin = _db.Users.Local.Any(u => u.IsActive && u.Role == "admin");
+    var anyActiveAdmin = dbUsers.Any(u => u.IsActive && u.Role == "admin");
     if (!anyActiveAdmin)
     {
       _db.ChangeTracker.Clear();
@@ -225,7 +269,7 @@ public class AdSyncService
                   "Prüfe die Mitglieder von G_FeedbackHub_Admin (müssen auch in G_FeedbackHub sein).");
     }
 
-    // ── 6. Speichern ────────────────────────────────────────────────────
+    // ── 9. Speichern ────────────────────────────────────────────────────
     try
     {
       await _db.SaveChangesAsync(ct);
@@ -246,9 +290,7 @@ public class AdSyncService
   // ── Helpers ───────────────────────────────────────────────────────────
 
   /// <summary>
-  /// Lädt alle Mitglieder einer Gruppe, die vom Typ "user" sind
-  /// (Filter "objectClass = user" der Spezifikation — Graph erledigt das
-  /// über das GraphUser-Cast, Gruppen/Geräte fallen automatisch raus).
+  /// Lädt alle Mitglieder einer Gruppe, die vom Typ "user" sind.
   /// Mit Paging, falls die Gruppe > 999 Mitglieder hat.
   /// </summary>
   private static async Task<List<GraphUser>> GetGroupUsersAsync(
@@ -277,6 +319,31 @@ public class AdSyncService
     }
 
     return result;
+  }
+
+  /// <summary>
+  /// Liefert die Objekt-ID des Managers eines Users (AD-Attribut "manager")
+  /// oder null, wenn kein Manager gesetzt ist (Graph antwortet dann mit 404).
+  /// Andere Fehler werden geloggt und als "kein Manager" behandelt, damit ein
+  /// einzelner Lesefehler den Gesamt-Sync nicht abbricht.
+  /// </summary>
+  private async Task<string?> GetManagerOidAsync(
+    GraphServiceClient graph, string userId, CancellationToken ct)
+  {
+    try
+    {
+      var manager = await graph.Users[userId].Manager.GetAsync(cancellationToken: ct);
+      return manager?.Id;
+    }
+    catch (ODataError ex) when (ex.ResponseStatusCode == 404)
+    {
+      return null; // kein Manager gesetzt
+    }
+    catch (Exception ex)
+    {
+      _logger.LogWarning("AD-Sync: Manager für {Oid} konnte nicht gelesen werden: {Message}", userId, ex.Message);
+      return null;
+    }
   }
 
   /// <summary>
