@@ -243,7 +243,8 @@ var FeedbackAPI = (function () {
       unread:       false,
       drivers:      sortDrivers(dto.ratings.map(mapRating)),
       strengths:    dto.strengths || '',
-      improvements: dto.areasToImprove || ''
+      improvements: dto.areasToImprove || '',
+      moderationNote: dto.moderationNote || null
     };
   }
 
@@ -294,7 +295,8 @@ var FeedbackAPI = (function () {
       avatarStyle:  null,
       drivers:      sortDrivers(dto.ratings.map(mapRating)),
       strengths:    dto.strengths || '',
-      improvements: dto.areasToImprove || ''
+      improvements: dto.areasToImprove || '',
+      moderationNote: dto.moderationNote || null
     };
   }
 
