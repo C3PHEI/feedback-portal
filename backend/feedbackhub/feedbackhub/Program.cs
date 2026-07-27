@@ -3,8 +3,24 @@ using Microsoft.EntityFrameworkCore;
 using feedbackhub.Data;
 using feedbackhub.Services;
 using Scalar.AspNetCore;
+using System.Security.Cryptography.X509Certificates;
+using Azure.Identity;
+using Microsoft.Graph;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ── Graph ────────────────────────────────
+var graphSettings = builder.Configuration.GetSection("Graph");
+
+var certificate = new X509Certificate2(
+  FindCertificate(graphSettings["CertificateThumbprint"])
+);
+
+var credential = new ClientCertificateCredential(
+  graphSettings["TenantId"],
+  graphSettings["ClientId"],
+  certificate
+);
 
 // ── Auth (Entra ID / JWT) ────────────────────────────────
 builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
@@ -40,6 +56,7 @@ builder.Services.AddScoped<AdSyncService>();
 builder.Services.AddSingleton<AdSyncStatusStore>();
 builder.Services.AddHostedService<AdSyncBackgroundService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton(new GraphServiceClient(credential));
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -68,3 +85,28 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+static X509Certificate2 FindCertificate(string thumbprint)
+{
+  using var store = new X509Store(
+    StoreName.My,
+    StoreLocation.LocalMachine);
+
+  store.Open(OpenFlags.ReadOnly);
+
+  var certificate = store.Certificates
+    .Find(
+      X509FindType.FindByThumbprint,
+      thumbprint,
+      validOnly: false)
+    .OfType<X509Certificate2>()
+    .FirstOrDefault();
+
+  if (certificate == null)
+  {
+    throw new Exception(
+      $"Certificate with thumbprint {thumbprint} not found.");
+  }
+
+  return certificate;
+}
