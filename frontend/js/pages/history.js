@@ -7,6 +7,9 @@
 
   var HISTORY_EDIT_WINDOW_MS = 5 * 60 * 1000;
   var historyTimerInterval = null;
+  // Gerenderte Feedback-Objekte je Karte, damit wir eine Karte nach dem
+  // Bearbeiten direkt neu rendern können (ohne Seiten-Reload).
+  var feedbackById = {};
 
   /* ═══════════════════════════════════════════════════════
      Render Driver Ratings
@@ -47,6 +50,7 @@
      ═══════════════════════════════════════════════════════ */
 
   function renderCard(fb) {
+    feedbackById[fb.id] = fb;
     var inWindow = !fb.locked && fb.submittedAt &&
       (Date.now() - new Date(fb.submittedAt).getTime()) < HISTORY_EDIT_WINDOW_MS;
     var isEditable = inWindow && !fb.edited;
@@ -346,41 +350,32 @@
         try {
           await FeedbackAPI.updateFeedback(cardId, payload);
 
-          // DOM aktualisieren
-          var strengthsDisplay = document.getElementById('strengths-' + cardId);
-          var improvementsDisplay = document.getElementById('improvements-' + cardId);
-          if (newStrengths && strengthsDisplay) strengthsDisplay.textContent = newStrengths.value;
-          if (newImprovements && improvementsDisplay) improvementsDisplay.textContent = newImprovements.value;
+          // Gespeichertes Feedback-Objekt aktualisieren und die Karte direkt
+          // in den gesperrten "Bereits bearbeitet"-Zustand neu rendern —
+          // ohne Seiten-Reload.
+          var fb = feedbackById[cardId];
+          if (fb) {
+            fb.strengths = newStrengths ? (newStrengths.value || null) : fb.strengths;
+            fb.improvements = newImprovements ? (newImprovements.value || null) : fb.improvements;
+            fb.edited = true;
 
-          var driverEls = document.querySelectorAll('#card-' + cardId + ' .history-driver');
-          driverEls.forEach(function (driverEl, idx) {
-            var key = keys[idx];
-            var naBtn = document.getElementById('editNa-' + cardId + '-' + key);
-            var valEl = driverEl.querySelector('.history-driver-stars, .history-driver-na');
-            if (!valEl || !naBtn) return;
-
-            if (naBtn.classList.contains('na-active')) {
-              valEl.className = 'history-driver-na';
-              valEl.textContent = 'N/A';
-            } else {
-              var selected = document.querySelector('input[name="editDriver-' + cardId + '-' + key + '"]:checked');
-              if (selected) {
-                valEl.className = 'history-driver-stars';
-                var filled = parseInt(selected.value);
-                var empty = 5 - filled;
-                valEl.innerHTML = '★'.repeat(filled) +
-                  (empty > 0 ? '<span class="empty">' + '★'.repeat(empty) + '</span>' : '');
+            keys.forEach(function (key, idx) {
+              if (!fb.drivers || !fb.drivers[idx]) return;
+              var naBtn = document.getElementById('editNa-' + cardId + '-' + key);
+              if (naBtn && naBtn.classList.contains('na-active')) {
+                fb.drivers[idx].na = true;
+              } else {
+                fb.drivers[idx].na = false;
+                var selected = document.querySelector('input[name="editDriver-' + cardId + '-' + key + '"]:checked');
+                if (selected) fb.drivers[idx].rating = parseInt(selected.value);
               }
-            }
-          });
+            });
 
-          var overlay = document.getElementById('editOverlay-' + cardId);
-          var editBtn = document.getElementById('editBtn-' + cardId);
-          if (overlay) overlay.classList.remove('active');
-          if (editBtn && !editBtn.disabled) editBtn.style.display = '';
-          setDisplayTextsHidden(cardId, false);
+            card.outerHTML = renderCard(fb);
+          } else {
+            card.dataset.edited = 'true';
+          }
 
-          card.dataset.edited = 'true';
           Render.showToast(I18n.t('history.toast_saved'));
         } catch (err) {
           console.error('Feedback-Update fehlgeschlagen:', err);
