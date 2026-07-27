@@ -19,6 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Assets\logo.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
       <Folder Include="wwwroot\" />
     </ItemGroup>
 </Project>
