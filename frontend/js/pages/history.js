@@ -35,6 +35,17 @@
      Render Visibility Badge
      ═══════════════════════════════════════════════════════ */
 
+  function renderModerationNote(note) {
+    return '<div class="moderation-note">' +
+      '<div class="moderation-note-title">' +
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
+      '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>' +
+      '<line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+      I18n.t('moderation.note_title') + '</div>' +
+      '<div class="moderation-note-text">' + Render.escapeHtml(note) + '</div>' +
+      '</div>';
+  }
+
   function visBadge(visibility) {
     if (visibility === 'anon') {
       return '<span class="vis-badge anon">' +
@@ -153,6 +164,9 @@
 
     var driverIdsJson = fb.drivers.map(function (d) { return d.driverId; }).join(',');
 
+    // Moderations-Hinweis ("Mit Hinweis behalten") — für beide Parteien sichtbar.
+    var moderationNoteHtml = fb.moderationNote ? renderModerationNote(fb.moderationNote) : '';
+
     // Nur die tatsächlich genutzten Textabschnitte anzeigen — leere
     // Stärken/Verbesserungsvorschläge werden weggelassen.
     var hasStrengths = fb.strengths != null && String(fb.strengths).trim() !== '';
@@ -174,6 +188,7 @@
       headerRight + '</div>' +
       timerHtml +
       alreadyEditedHtml +
+      moderationNoteHtml +
       renderDrivers(fb.drivers) +
       '<div id="displayTexts-' + fb.id + '">' +
       strengthsBlock +

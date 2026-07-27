@@ -33,6 +33,8 @@ public record SubmitterInfo(Guid Id, string DisplayName);
 public record RatingResponse(Guid DriverId, string DriverName, int? Score, bool IsNa);
 
 // Inbox-Eintrag. Bei anonymen Feedbacks sind Submitter und SubmittedAt null.
+// ModerationNote ist gesetzt, wenn ein Report zu diesem Feedback als
+// "retained_with_note" abgeschlossen wurde (für beide Parteien sichtbar).
 public record InboxFeedbackResponse(
     Guid Id,
     bool IsAnonymous,
@@ -42,7 +44,8 @@ public record InboxFeedbackResponse(
     DateTime? SubmittedAt,        // null wenn IsAnonymous (Datenschutz)
     string? Strengths,
     string? AreasToImprove,
-    List<RatingResponse> Ratings
+    List<RatingResponse> Ratings,
+    string? ModerationNote = null
 );
 
 public record DriverAverageResponse(Guid DriverId, string DriverName, double? Average);
@@ -65,7 +68,8 @@ public record HistoryFeedbackResponse(
     DateTime SubmittedAt,
     string? Strengths,
     string? AreasToImprove,
-    List<RatingResponse> Ratings
+    List<RatingResponse> Ratings,
+    string? ModerationNote = null
 );
 
 // Detail-Ansicht eines Feedbacks. Nur für Sender oder Empfänger zugänglich.

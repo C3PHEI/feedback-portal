@@ -135,6 +135,8 @@ public class FeedbackService
             .OrderByDescending(f => f.SubmittedAt)
             .ToListAsync();
 
+        var notes = await GetModerationNotesAsync(feedbacks.Select(f => f.Id).ToList());
+
         return feedbacks.Select(f => new InboxFeedbackResponse(
             Id:             f.Id,
             IsAnonymous:    f.IsAnonymous,
@@ -144,7 +146,8 @@ public class FeedbackService
             SubmittedAt:    f.IsAnonymous ? null : f.SubmittedAt,  // [FEAT Feature 3]
             Strengths:      f.Strengths,
             AreasToImprove: f.AreasToImprove,
-            Ratings:        MapRatings(f.Ratings)
+            Ratings:        MapRatings(f.Ratings),
+            ModerationNote: notes.GetValueOrDefault(f.Id)
         )).ToList();
     }
 
@@ -194,6 +197,8 @@ public class FeedbackService
 
         var now = DateTime.UtcNow;
 
+        var notes = await GetModerationNotesAsync(feedbacks.Select(f => f.Id).ToList());
+
         return feedbacks.Select(f => new HistoryFeedbackResponse(
             Id:             f.Id,
             RecipientId:    f.RecipientId,
@@ -205,7 +210,8 @@ public class FeedbackService
             SubmittedAt:    f.SubmittedAt,
             Strengths:      f.Strengths,
             AreasToImprove: f.AreasToImprove,
-            Ratings:        MapRatings(f.Ratings)
+            Ratings:        MapRatings(f.Ratings),
+            ModerationNote: notes.GetValueOrDefault(f.Id)
         )).ToList();
     }
 
@@ -365,6 +371,25 @@ public class FeedbackService
     }
 
     // ── Private Helpers ───────────────────────────────────────────────────────
+
+    // Liefert je Feedback den Moderations-Hinweis, wenn ein zugehöriger Report
+    // als "retained_with_note" abgeschlossen wurde. Bei mehreren solchen Reports
+    // gewinnt der zuletzt aufgelöste. Für beide Parteien identisch sichtbar.
+    private async Task<Dictionary<Guid, string?>> GetModerationNotesAsync(List<Guid> feedbackIds)
+    {
+        if (feedbackIds.Count == 0)
+            return new Dictionary<Guid, string?>();
+
+        var reports = await _db.CocReports
+            .Where(r => feedbackIds.Contains(r.FeedbackId)
+                        && r.ActionTaken == "retained_with_note")
+            .OrderByDescending(r => r.ResolvedAt)
+            .ToListAsync();
+
+        return reports
+            .GroupBy(r => r.FeedbackId)
+            .ToDictionary(g => g.Key, g => g.First().ActionReason);
+    }
 
     private static List<RatingResponse> MapRatings(IEnumerable<Rating> ratings) =>
         ratings

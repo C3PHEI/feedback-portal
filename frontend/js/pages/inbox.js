@@ -15,6 +15,18 @@
     return I18n.t('driver.' + key).split(' / ')[0];
   }
 
+  // Moderations-Hinweis-Banner (identisch zur History-Ansicht).
+  function renderModerationNote(note) {
+    return '<div class="moderation-note">' +
+      '<div class="moderation-note-title">' +
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">' +
+      '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>' +
+      '<line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+      I18n.t('moderation.note_title') + '</div>' +
+      '<div class="moderation-note-text">' + Render.escapeHtml(note) + '</div>' +
+      '</div>';
+  }
+
   /* ═══════════════════════════════════════════════════════
      Mini Driver Chips
      ═══════════════════════════════════════════════════════ */
@@ -142,7 +154,12 @@
       ? I18n.t('inbox.strengths')
       : (fb.improvements ? I18n.t('inbox.improvements') : '');
 
+    // Moderations-Hinweis ("Mit Hinweis behalten") — für beide Parteien sichtbar.
+    var moderationNoteHtml = fb.moderationNote ? renderModerationNote(fb.moderationNote) : '';
+
     return '<div class="inbox-card' + (fb.unread ? ' unread' : '') + '" id="card-' + fb.id + '">' +
+
+      moderationNoteHtml +
 
       // Clickable header row
       '<div class="inbox-card-header" data-id="' + fb.id + '">' +
