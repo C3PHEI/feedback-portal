@@ -796,6 +796,21 @@ var I18n = (function () {
       'driver.growth.3':        'Steady development — Accepts feedback and shows recognizable progress over time.',
       'driver.growth.4':        'Strong growth — Actively seeks feedback, applies it consistently, and develops visibly.',
       'driver.growth.5':        'Exceptional development — Solves complex problems independently and elevates the team to a higher level.',
+
+      'admin.btn_set_review':           'Set to Under Review',
+      'admin.submitter_hint':           '⚠ Visible in moderation context only — the recipient still sees the feedback as anonymous.',
+      'admin.role_modal_title':         'Change Role',
+      'admin.dept_modal_title':         'Assign Department',
+      'admin.role_user_desc':           'Can give and receive feedback',
+      'admin.role_manager_desc':        'Sees aggregated team feedback',
+      'admin.role_admin_desc':          'Full administration and moderation rights',
+      'admin.role_dept_manager_toggle': 'Mark as department manager',
+      'admin.dept_select_label':        'Select department:',
+      'admin.btn_change_role':          'Change Role',
+      'admin.btn_change_dept':          'Assign Department',
+      'admin.toast_role_updated':       'Role updated',
+      'admin.toast_dept_updated':       'Department updated',
+      'admin.toast_activated':          'User activated',
     }
   };
 
