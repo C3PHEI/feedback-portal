@@ -451,6 +451,7 @@
   padding: 2px 7px;
 }
 .dept-history-driver-chip .score {
+  font-family: 'Manrope', sans-serif;
   color: var(--color-orange);
   font-weight: 600;
 }

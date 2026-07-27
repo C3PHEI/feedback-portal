@@ -913,6 +913,7 @@
   color: var(--color-text-muted);
 }
 .action-fb-driver-chip .score {
+  font-family: 'Manrope', sans-serif;
   color: var(--color-orange);
   font-weight: 600;
 }

@@ -111,7 +111,7 @@
     }).join('\n');
 
     return '<div class="flex items-center justify-between mb-3">' +
-      '<p style="font-family:\'Syne\',sans-serif;font-weight:700;letter-spacing:0.1em;color:var(--color-text-muted);" class="text-sm uppercase">' + I18n.t('inbox.avg_title') + '</p>' +
+      '<p style="font-family:\'Manrope\',sans-serif;font-weight:700;letter-spacing:0.1em;color:var(--color-text-muted);" class="text-sm uppercase">' + I18n.t('inbox.avg_title') + '</p>' +
       '<div class="grid grid-cols1 gap-1">' +
       '<span class="text-sm" style="color:var(--color-text-muted);">' + averages.totalReviews + ' ' + I18n.t('inbox.reviews') + '</span>' +
       '<span class="text-sm" style="color:var(--color-text-muted);">\u2514 ' + averages.anonymousCount + ' ' + I18n.t('inbox.anonymous') + '</span>' +
