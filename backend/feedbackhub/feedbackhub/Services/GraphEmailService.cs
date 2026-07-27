@@ -140,7 +140,7 @@ public class GraphEmailService
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e2e2e2;">
 
           <tr>
-            <td bgcolor="#6b6b6b" style="padding:28px 40px 24px 40px; background-color:#6b6b6b; border-bottom:1px solid #e2e2e2;">
+            <td bgcolor="#4a4a4a" style="padding:28px 40px 24px 40px; background-color:#4a4a4a; border-bottom:1px solid #e2e2e2;">
               <a href="{_portalUrl}" target="_blank" style="text-decoration:none; border:0; display:inline-block;">
                 <img src="cid:{LogoContentId}" alt="Casino Davos &ndash; FeedbackHub" width="150"
                     style="width:150px; max-width:150px; height:auto; display:block; border:0; outline:none; text-decoration:none;">
