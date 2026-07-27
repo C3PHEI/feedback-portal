@@ -119,7 +119,7 @@ public class GraphEmailService
     {
         const string font = "Arial, Helvetica, sans-serif";
 
-        return $$"""
+        return $"""
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -140,7 +140,7 @@ public class GraphEmailService
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e2e2e2;">
 
           <tr>
-            <td bgcolor="#949494" style="padding:28px 40px 24px 40px; background-color:#949494; border-bottom:1px solid #e2e2e2;">
+            <td bgcolor="#6b6b6b" style="padding:28px 40px 24px 40px; background-color:#6b6b6b; border-bottom:1px solid #e2e2e2;">
               <a href="{_portalUrl}" target="_blank" style="text-decoration:none; border:0; display:inline-block;">
                 <img src="cid:{LogoContentId}" alt="Casino Davos &ndash; FeedbackHub" width="150"
                     style="width:150px; max-width:150px; height:auto; display:block; border:0; outline:none; text-decoration:none;">
@@ -150,15 +150,15 @@ public class GraphEmailService
 
           <tr>
             <td style="padding:32px 40px;">
-              <p style="margin:0 0 16px 0; font-family:{{font}}; font-size:15px; line-height:1.6; color:#333333;">
+              <p style="margin:0 0 16px 0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 Guten Tag
               </p>
-              <p style="margin:0 0 16px 0; font-family:{{font}}; font-size:15px; line-height:1.6; color:#333333;">
+              <p style="margin:0 0 16px 0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 Sie haben neues Feedback im FeedbackHub erhalten. Bitte melden Sie sich im
-                <a href="{{_portalUrl}}" target="_blank" style="color:#c8201a; text-decoration:underline;">Portal</a>
+                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">Portal</a>
                 an, um es einzusehen.
               </p>
-              <p style="margin:0; font-family:{{font}}; font-size:15px; line-height:1.6; color:#333333;">
+              <p style="margin:0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 Freundliche Gr&uuml;sse<br>
               </p>
             </td>
@@ -174,15 +174,15 @@ public class GraphEmailService
 
           <tr>
             <td style="padding:32px 40px;">
-              <p style="margin:0 0 16px 0; font-family:{{font}}; font-size:15px; line-height:1.6; color:#333333;">
+              <p style="margin:0 0 16px 0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 Hello
               </p>
-              <p style="margin:0 0 16px 0; font-family:{{font}}; font-size:15px; line-height:1.6; color:#333333;">
+              <p style="margin:0 0 16px 0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 You have received new feedback in FeedbackHub. Please sign in to the
-                <a href="{{_portalUrl}}" target="_blank" style="color:#c8201a; text-decoration:underline;">portal</a>
+                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">portal</a>
                 to view it.
               </p>
-              <p style="margin:0; font-family:{{font}}; font-size:15px; line-height:1.6; color:#333333;">
+              <p style="margin:0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 Kind regards<br>
               </p>
             </td>
@@ -190,7 +190,7 @@ public class GraphEmailService
 
           <tr>
             <td style="padding:18px 40px; background-color:#fafafa; border-top:1px solid #e2e2e2;">
-              <p style="margin:0; font-family:{{font}}; font-size:12px; line-height:1.5; color:#888888;">
+              <p style="margin:0; font-family:{font}; font-size:12px; line-height:1.5; color:#888888;">
                 Automatisch versendete Nachricht &ndash; bitte nicht antworten.<br>
                 Automated message &ndash; please do not reply.
               </p>
