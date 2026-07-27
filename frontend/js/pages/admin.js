@@ -284,7 +284,6 @@
       '<td class="hide-mobile"><span style="color:#999;font-size:13px;">' + feedbackStr + '</span></td>' +
       '<td style="text-align:right;"><div class="flex gap-1 justify-end">' +
       '<button class="btn-admin user-action-btn" data-action="role" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_role') + '">\uD83D\uDC64</button>' +
-      '<button class="btn-admin user-action-btn" data-action="dept" data-user-id="' + u.id + '" type="button" title="' + I18n.t('admin.btn_change_dept') + '">\uD83C\uDFE2</button>' +
       activateBtn +
       '</div></td></tr>';
   }
