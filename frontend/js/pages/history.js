@@ -153,6 +153,19 @@
 
     var driverIdsJson = fb.drivers.map(function (d) { return d.driverId; }).join(',');
 
+    // Nur die tatsächlich genutzten Textabschnitte anzeigen — leere
+    // Stärken/Verbesserungsvorschläge werden weggelassen.
+    var hasStrengths = fb.strengths != null && String(fb.strengths).trim() !== '';
+    var hasImprovements = fb.improvements != null && String(fb.improvements).trim() !== '';
+    var strengthsBlock = hasStrengths
+      ? '<div class="mb-3"><div class="history-text-label">' + I18n.t('history.strenghts') + '</div>' +
+        '<div class="history-text-content" id="strengths-' + fb.id + '">' + Render.escapeHtml(fb.strengths) + '</div></div>'
+      : '';
+    var improvementsBlock = hasImprovements
+      ? '<div><div class="history-text-label">' + I18n.t('history.improvements') + '</div>' +
+        '<div class="history-text-content" id="improvements-' + fb.id + '">' + Render.escapeHtml(fb.improvements) + '</div></div>'
+      : '';
+
     return '<div class="' + cardClass + '" id="card-' + fb.id + '" data-submitted-at="' + fb.submittedAt + '" data-driver-ids="' + driverIdsJson + '">' +
       '<div class="flex items-start justify-between gap-3 mb-4">' +
       '<div class="flex items-center gap-3">' + avatarHtml +
@@ -163,10 +176,8 @@
       alreadyEditedHtml +
       renderDrivers(fb.drivers) +
       '<div id="displayTexts-' + fb.id + '">' +
-      '<div class="mb-3"><div class="history-text-label">' + I18n.t('history.strenghts') + '</div>' +
-      '<div class="history-text-content" id="strengths-' + fb.id + '">' + Render.escapeHtml(fb.strengths) + '</div></div>' +
-      '<div><div class="history-text-label">' + I18n.t('history.improvements') + '</div>' +
-      '<div class="history-text-content" id="improvements-' + fb.id + '">' + Render.escapeHtml(fb.improvements) + '</div></div>' +
+      strengthsBlock +
+      improvementsBlock +
       '</div>' +
       editOverlayHtml +
       '</div>';
