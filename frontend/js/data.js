@@ -256,23 +256,8 @@ var MockData = (function () {
     { name: 'HR / Finance', count: 12, pct: 43 }
   ];
 
-  var adminSystemStatus = [
-    {
-      dot: 'active',
-      title: 'AD Sync',
-      details: ['Letzter Sync: Heute, 02:00 UTC', 'Nächster Sync: Morgen, 02:00 UTC', '35 User synchronisiert']
-    },
-    {
-      dot: 'active',
-      title: 'E-Mail Benachrichtigungen',
-      details: ['84 von 86 zugestellt', '2 ausstehend', 'Letzte: vor 3 Stunden']
-    },
-    {
-      dot: 'warning',
-      title: 'Retention Policy',
-      details: ['Aufbewahrung: 3 Jahre (aktiv)', '2 User im 12-Mt. Countdown', '1 Feedback unter <span class="hl-badge">Legal Hold</span>']
-    }
-  ];
+  /* System-Status-Karten werden in api.js über I18n aufgebaut
+     (siehe getAdminSystemStatus), damit sie der Sprache folgen. */
 
   /* ═══════════════════════════════════════════════════════
      Admin — Moderation
@@ -471,7 +456,6 @@ var MockData = (function () {
     adminChartVisibility: adminChartVisibility,
     adminDriverAverages:  adminDriverAverages,
     adminDepartments:     adminDepartments,
-    adminSystemStatus:    adminSystemStatus,
     moderationStats:      moderationStats,
     moderationReports:    moderationReports,
     departmentTeam:       departmentTeam

@@ -178,7 +178,7 @@
         console.error('Team-Member-Feedbacks konnten nicht geladen werden:', e);
         if (historyEl) {
           historyEl.innerHTML = '<p style="color:var(--color-danger);padding:20px;text-align:center;">' +
-            'Fehler beim Laden (' + (e.errorCode || 'unknown') + '). Drawer schliessen und erneut versuchen.</p>';
+            I18n.t('dept.drawer_load_error').replace('{code}', e.errorCode || 'unknown') + '</p>';
         }
         return;
       }
@@ -377,9 +377,9 @@
     } catch (e) {
       console.error('Bootstrap fehlgeschlagen:', e);
       document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
-        '<h1>Fehler beim Laden</h1>' +
-        '<p>Status: ' + (e.status || 'unbekannt') + ' / ' + (e.errorCode || 'unknown') + '</p>' +
-        '<p>Bitte Seite neu laden oder erneut anmelden.</p>' +
+        '<h1>' + I18n.t('common.fatal_title') + '</h1>' +
+        '<p>Status: ' + (e.status || I18n.t('common.unknown')) + ' / ' + (e.errorCode || 'unknown') + '</p>' +
+        '<p>' + I18n.t('common.fatal_hint') + '</p>' +
         '</div>';
       return;
     }
