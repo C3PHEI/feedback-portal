@@ -42,7 +42,7 @@ public class GraphEmailService
     };
 
     await _graphClient
-      .Users["FeedbackHub@company.com"]
+      .Users["FeedbackHub@casinodavos.ch"]
       .SendMail
       .PostAsync(requestBody);
   }
