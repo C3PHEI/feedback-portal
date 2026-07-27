@@ -57,6 +57,7 @@ builder.Services.AddSingleton<AdSyncStatusStore>();
 builder.Services.AddHostedService<AdSyncBackgroundService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton(new GraphServiceClient(credential));
+builder.Services.AddTransient<GraphEmailService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
