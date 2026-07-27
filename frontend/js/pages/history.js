@@ -158,10 +158,12 @@
       timerHtml +
       alreadyEditedHtml +
       renderDrivers(fb.drivers) +
+      '<div id="displayTexts-' + fb.id + '">' +
       '<div class="mb-3"><div class="history-text-label">' + I18n.t('history.strenghts') + '</div>' +
       '<div class="history-text-content" id="strengths-' + fb.id + '">' + Render.escapeHtml(fb.strengths) + '</div></div>' +
       '<div><div class="history-text-label">' + I18n.t('history.improvements') + '</div>' +
       '<div class="history-text-content" id="improvements-' + fb.id + '">' + Render.escapeHtml(fb.improvements) + '</div></div>' +
+      '</div>' +
       editOverlayHtml +
       '</div>';
   }
@@ -219,6 +221,7 @@
 
         var overlay = document.getElementById('editOverlay-' + cardId);
         if (overlay) overlay.classList.remove('active');
+        setDisplayTextsHidden(cardId, false);
 
         clearInterval(historyTimerInterval);
         return;
@@ -246,6 +249,13 @@
      Edit Buttons
      ═══════════════════════════════════════════════════════ */
 
+  // Blendet die reine Anzeige von Stärken/Verbesserungsvorschlägen aus,
+  // während bearbeitet wird (die Textfelder im Edit-Overlay ersetzen sie).
+  function setDisplayTextsHidden(cardId, hidden) {
+    var displayTexts = document.getElementById('displayTexts-' + cardId);
+    if (displayTexts) displayTexts.style.display = hidden ? 'none' : '';
+  }
+
   function initHistoryEditButtons() {
     var editBtns = document.querySelectorAll('[id^="editBtn-"]');
     editBtns.forEach(function (btn) {
@@ -254,7 +264,9 @@
         var overlay = document.getElementById('editOverlay-' + cardId);
         if (overlay) {
           overlay.classList.toggle('active');
-          if (overlay.classList.contains('active')) btn.style.display = 'none';
+          var active = overlay.classList.contains('active');
+          if (active) btn.style.display = 'none';
+          setDisplayTextsHidden(cardId, active);
         }
       });
     });
@@ -267,6 +279,7 @@
         var editBtn = document.getElementById('editBtn-' + cardId);
         if (overlay) overlay.classList.remove('active');
         if (editBtn && !editBtn.disabled) editBtn.style.display = '';
+        setDisplayTextsHidden(cardId, false);
       });
     });
 
@@ -365,6 +378,7 @@
           var editBtn = document.getElementById('editBtn-' + cardId);
           if (overlay) overlay.classList.remove('active');
           if (editBtn && !editBtn.disabled) editBtn.style.display = '';
+          setDisplayTextsHidden(cardId, false);
 
           card.dataset.edited = 'true';
           Render.showToast(I18n.t('history.toast_saved'));
