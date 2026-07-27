@@ -288,7 +288,7 @@ var FeedbackAPI = (function () {
       },
       submittedAt:  dto.submittedAt,                       // ISO-String für Live-Timer
       dateLabel:    formatDateLabel(dto.submittedAt),
-      visibility:   dto.isAnonymous ? 'anonymous' : 'named',
+      visibility:   dto.isAnonymous ? 'anon' : 'named',
       edited:       dto.isEdited,
       locked:       dto.isLocked,
       avatarStyle:  null,
