@@ -195,7 +195,7 @@
     var shortId = 'FB-' + r.feedbackId.substring(0, 8).toUpperCase();
 
     return '<tr class="mod-report-row" data-report-id="' + r.id + '" style="cursor:pointer;">' +
-      '<td><span style="color:#666;font-size:12px;font-family:\'Syne\',sans-serif;">' + shortId + '</span></td>' +
+      '<td><span style="color:#666;font-size:12px;font-family:\'Manrope\',sans-serif;">' + shortId + '</span></td>' +
       '<td><div class="flex items-center gap-2">' + recipientAvatar +
       '<span class="text-white text-sm">' + Render.escapeHtml(r.recipientDisplayName) + '</span></div></td>' +
       '<td><span style="color:#999;font-size:13px;">' + (r.feedbackDateLabel || r.dateLabel) + '</span></td>' +
