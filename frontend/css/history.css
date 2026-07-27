@@ -152,7 +152,7 @@
 .edit-timer-time {
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Manrope', sans-serif;
   color: var(--color-orange);
   min-width: 42px;
   text-align: right;
@@ -290,7 +290,7 @@
 
 /* ─── History Count Badge ───────────────────────────────── */
 .history-count {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: var(--color-text-faint);

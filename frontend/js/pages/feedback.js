@@ -323,9 +323,7 @@
       var msgKey = err && err.errorCode
         ? 'feedback.error.' + err.errorCode
         : null;
-      var msg = (msgKey && I18n.t(msgKey)) ||
-        (I18n.t('feedback.toast_error')) ||
-        'Feedback konnte nicht gesendet werden.';
+      var msg = (msgKey && I18n.t(msgKey)) || I18n.t('feedback.toast_error');
 
       Render.showToast(msg);
       validateForm();                     // Button wieder freigeben, falls korrigierbar
@@ -390,9 +388,9 @@
     } catch (e) {
       console.error('Bootstrap fehlgeschlagen:', e);
       document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
-        '<h1>Fehler beim Laden</h1>' +
-        '<p>Status: ' + (e.status || 'unbekannt') + ' / ' + (e.errorCode || 'unknown') + '</p>' +
-        '<p>Bitte Seite neu laden oder erneut anmelden.</p>' +
+        '<h1>' + I18n.t('common.fatal_title') + '</h1>' +
+        '<p>Status: ' + (e.status || I18n.t('common.unknown')) + ' / ' + (e.errorCode || 'unknown') + '</p>' +
+        '<p>' + I18n.t('common.fatal_hint') + '</p>' +
         '</div>';
       return;
     }

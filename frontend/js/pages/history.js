@@ -438,8 +438,8 @@
   function showFatalError(e) {
     console.error('Fatal Bootstrap Error:', e);
     document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:sans-serif;">' +
-      '<h1>Fehler beim Laden</h1>' +
-      '<p><strong>Status:</strong> ' + (e.status != null ? e.status : 'unbekannt') + '</p>' +
+      '<h1>' + I18n.t('common.fatal_title') + '</h1>' +
+      '<p><strong>Status:</strong> ' + (e.status != null ? e.status : I18n.t('common.unknown')) + '</p>' +
       '<p><strong>Code:</strong> ' + (e.errorCode || e.name || 'unknown') + '</p>' +
       '<p><strong>Message:</strong> ' + (e.message || '-') + '</p>' +
       '</div>';

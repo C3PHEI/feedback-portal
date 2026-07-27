@@ -473,9 +473,26 @@ var FeedbackAPI = (function () {
     });
   }
 
-// System-Status-Endpoint ist Post-IPA → Mock bleibt (E-Mail, Retention)
+// System-Status-Endpoint ist Post-IPA → Mock bleibt (E-Mail, Retention).
+  // Labels laufen über I18n, damit die Karten der gewählten Sprache folgen.
   function getAdminSystemStatus() {
-    return MockData.adminSystemStatus;
+    return [
+      {
+        dot: 'active',
+        title: I18n.t('admin.sys_adsync_title'),
+        details: [I18n.t('admin.sys_adsync_d1'), I18n.t('admin.sys_adsync_d2'), I18n.t('admin.sys_adsync_d3')]
+      },
+      {
+        dot: 'active',
+        title: I18n.t('admin.sys_email_title'),
+        details: [I18n.t('admin.sys_email_d1'), I18n.t('admin.sys_email_d2'), I18n.t('admin.sys_email_d3')]
+      },
+      {
+        dot: 'warning',
+        title: I18n.t('admin.sys_retention_title'),
+        details: [I18n.t('admin.sys_retention_d1'), I18n.t('admin.sys_retention_d2'), I18n.t('admin.sys_retention_d3')]
+      }
+    ];
   }
 
   // AD-Sync-Verlauf (letzte Läufe, neuester zuerst) — echter Endpoint.
