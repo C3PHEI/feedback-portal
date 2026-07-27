@@ -136,6 +136,12 @@
     var driversHtml = fb.drivers ? renderDriverChips(fb.drivers) : '';
     var detailHtml  = fb.drivers ? renderDetailBlock(fb, fb.id) : '';
 
+    // Preview stammt aus Stärken (bzw. Verbesserungsvorschlägen als Fallback) —
+    // passendes Label anzeigen statt nur rohem Text.
+    var previewLabel = fb.strengths
+      ? I18n.t('inbox.strengths')
+      : (fb.improvements ? I18n.t('inbox.improvements') : '');
+
     return '<div class="inbox-card' + (fb.unread ? ' unread' : '') + '" id="card-' + fb.id + '">' +
 
       // Clickable header row
@@ -152,7 +158,10 @@
       '</div></div>' +
       '<div class="star-display mb-2">' + Render.stars(fb.stars) + '</div>' +
       driversHtml +
-      '<p class="text-sm leading-relaxed mt-3" style="color:var(--color-text-muted);">' + Render.escapeHtml(fb.preview) + '</p>' +
+      '<div class="inbox-preview" id="preview-' + fb.id + '">' +
+      (previewLabel ? '<span class="inbox-preview-label">' + previewLabel + '</span>' : '') +
+      '<p class="inbox-preview-text">' + Render.escapeHtml(fb.preview) + '</p>' +
+      '</div>' +
       '</div></div>' +
       '</div>' +
 
@@ -173,12 +182,15 @@
         var detail  = document.getElementById('detail-' + id);
         var chevron = document.getElementById('chevron-' + id);
         var card    = document.getElementById('card-' + id);
+        var preview = document.getElementById('preview-' + id);
 
         if (!detail) return;
 
         var isOpen = detail.classList.toggle('active');
         card.classList.toggle('expanded', isOpen);
         chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+        // Preview ist im aufgeklappten Zustand redundant zum Detailblock.
+        if (preview) preview.style.display = isOpen ? 'none' : '';
       });
     });
   }
