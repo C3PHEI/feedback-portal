@@ -64,6 +64,13 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.MapGet("/test-email", async (GraphEmailService emailService) =>
+{
+  await emailService.SendEmail("maximilian.laepple@casinodavos.ch");
+
+  return Results.Ok("Email sent");
+});
+
 if (app.Environment.IsDevelopment())
 {
   app.MapOpenApi();
