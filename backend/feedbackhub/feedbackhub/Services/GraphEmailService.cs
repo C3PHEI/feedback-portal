@@ -13,15 +13,28 @@ public class GraphEmailService
     _graphClient = graphClient;
   }
 
-  public async Task SendEmail(string recipient)
+  // Benachrichtigt den Empfänger, dass er ein neues Feedback erhalten hat.
+  // Bewusst ohne Inhalt/Absender – der Empfänger meldet sich für die Details an
+  // (wichtig für anonymes Feedback).
+  public Task SendFeedbackNotificationAsync(string recipient) =>
+    SendEmail(
+      recipient,
+      "Sie haben neues Feedback erhalten",
+      "Guten Tag\n\n" +
+      "Sie haben neues Feedback im FeedbackHub erhalten. " +
+      "Bitte melden Sie sich im Portal an, um es einzusehen.\n\n" +
+      "Freundliche Grüsse\n" +
+      "FeedbackHub");
+
+  public async Task SendEmail(string recipient, string subject, string body)
   {
     var message = new Message
     {
-      Subject = "FeedbackHub test notification",
+      Subject = subject,
       Body = new ItemBody
       {
         ContentType = BodyType.Text,
-        Content = "This is a test email from FeedbackHub."
+        Content = body
       },
       ToRecipients = new List<Recipient>
       {

@@ -2,16 +2,21 @@
 using feedbackhub.Dtos;
 using feedbackhub.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace feedbackhub.Services;
 
 public class FeedbackService
 {
-    private readonly AppDbContext _db;
+    private readonly AppDbContext           _db;
+    private readonly GraphEmailService       _email;
+    private readonly ILogger<FeedbackService> _logger;
 
-    public FeedbackService(AppDbContext db)
+    public FeedbackService(AppDbContext db, GraphEmailService email, ILogger<FeedbackService> logger)
     {
-        _db = db;
+        _db     = db;
+        _email  = email;
+        _logger = logger;
     }
 
     // ── Submit ────────────────────────────────────────────────────────────────
@@ -102,6 +107,20 @@ public class FeedbackService
         });
 
         await _db.SaveChangesAsync();
+
+        // E-Mail-Benachrichtigung an den Empfänger (best-effort).
+        // Ein Fehler beim Versand darf die Abgabe des Feedbacks nicht verhindern.
+        try
+        {
+            await _email.SendFeedbackNotificationAsync(recipient.Email);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Feedback-Benachrichtigung an {RecipientId} konnte nicht gesendet werden.",
+                recipient.Id);
+        }
+
         return new ServiceResult<Guid>(true, feedback.Id);
     }
 
