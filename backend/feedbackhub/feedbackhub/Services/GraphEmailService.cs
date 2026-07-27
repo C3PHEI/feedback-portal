@@ -14,8 +14,8 @@ public class GraphEmailService
     // Logo einmalig laden und im Speicher halten (statt bei jeder Mail von Disk)
     private static readonly Lazy<byte[]?> LogoBytes = new(() =>
     {
-        var path = Path.Combine(AppContext.BaseDirectory, "EmailAssets", "logo-email.png");
-        return File.Exists(path) ? File.ReadAllBytes(path) : null;
+      var path = Path.Combine(AppContext.BaseDirectory, "Assets", "logo.png");
+      return File.Exists(path) ? File.ReadAllBytes(path) : null;
     });
 
     private const string LogoContentId = "fh-logo";
@@ -79,7 +79,7 @@ public class GraphEmailService
         }
         else
         {
-            _logger.LogWarning("EmailAssets/logo-email.png nicht gefunden – Mail wird ohne Logo versendet.");
+          _logger.LogWarning("Assets/logo.png nicht gefunden – Mail wird ohne Logo versendet.");
         }
 
         await _graphClient
