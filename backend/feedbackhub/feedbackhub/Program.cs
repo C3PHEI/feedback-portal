@@ -68,7 +68,7 @@ app.MapGet("/test-email", async (GraphEmailService emailService) =>
 {
   try
   {
-    await emailService.SendEmail("feedbackhub@casinodavos.ch");
+    await emailService.SendEmail("maximilian.laepple@casinodavos.ch");
     return Results.Ok("Email sent");
   }
   catch (Exception ex)
