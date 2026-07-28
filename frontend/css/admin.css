@@ -701,6 +701,140 @@
   font-family: 'DM Sans', sans-serif;
 }
 
+/* ─── AD-Sync: letzter Lauf hervorgehoben ─────────────── */
+.sync-latest {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.sync-latest-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.sync-when {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-family: 'DM Sans', sans-serif;
+}
+.sync-status-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.sync-status-badge.ok {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--color-success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.sync-status-badge.err {
+  background: rgba(229, 38, 32, 0.12);
+  color: var(--color-red);
+  border: 1px solid rgba(229, 38, 32, 0.3);
+}
+.sync-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sync-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+  flex: 1;
+  padding: 6px 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+.sync-chip-val {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+.sync-chip-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-ghost);
+  margin-top: 2px;
+  text-align: center;
+}
+.sync-error-text {
+  font-size: 12px;
+  color: var(--color-red);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.sync-run-history {
+  margin-top: 10px;
+}
+.sync-run-history-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-ghost);
+  font-weight: 600;
+  font-family: 'Manrope', sans-serif;
+  margin-bottom: 4px;
+}
+
+/* ─── Retention: strukturierte Info-Zeilen ────────────── */
+.retention-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.retention-row:last-child {
+  border-bottom: none;
+}
+.retention-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-family: 'DM Sans', sans-serif;
+}
+.retention-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-family: 'Manrope', sans-serif;
+}
+.retention-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.retention-badge.active {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--color-success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.retention-badge.hold {
+  background: rgba(255, 107, 0, 0.14);
+  color: var(--color-orange);
+  border: 1px solid rgba(255, 107, 0, 0.35);
+}
+
 /* ─── Privacy Notice ───────────────────────────────── */
 .dash-privacy-notice {
   display: flex;

@@ -502,6 +502,11 @@ var FeedbackAPI = (function () {
     return apiGet('/api/admin/sync/logs');
   }
 
+  // Retention-/Legal-Hold-Status — echter Endpoint (nur real vorhandene Werte).
+  function getAdminRetentionStatus() {
+    return apiGet('/api/admin/retention-status');
+  }
+
   // AD-Sync sofort auslösen (Admin). Wirft ApiError bei Fehler (z. B. 502).
   function runAdminSync() {
     return apiPost('/api/admin/sync/run', {});
@@ -750,6 +755,7 @@ var FeedbackAPI = (function () {
     getAdminDepartments:        getAdminDepartments,
     getAdminSystemStatus:       getAdminSystemStatus,
     getAdminSyncLogs:           getAdminSyncLogs,
+    getAdminRetentionStatus:    getAdminRetentionStatus,
     runAdminSync:               runAdminSync,
     getModerationStats:         getModerationStats,
     getModerationReports:       getModerationReports,
