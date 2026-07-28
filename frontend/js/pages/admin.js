@@ -76,21 +76,21 @@
     }).join('');
   }
 
+  // Zuletzt geladener Retention-Status, damit ein manueller AD-Sync die
+  // Retention-Karte nicht verliert (sie muss dann nicht neu geladen werden).
+  var _lastRetention = null;
+
   function renderSystemStatus(items) {
     var el = document.getElementById('admin-system-status');
     if (!el || !items) return;
     el.innerHTML = items.map(function (s) {
-      var details = s.details.map(function (d) {
-        return '<div class="dash-status-detail">' + d + '</div>';
-      }).join('');
       return '<div class="dash-status-item">' +
         '<div class="dash-status-header"><span class="dash-status-dot ' + s.dot + '"></span><span class="dash-status-title">' + s.title + '</span></div>' +
-        details + '</div>';
+        s.detailsHtml + '</div>';
     }).join('');
   }
 
-  /* ── AD-Sync-Verlauf → System-Status-Item ─────────────────
-     Formatiert einen einzelnen Sync-Lauf als Detail-Zeile. */
+  /* Kompakte Detailzeile eines älteren Sync-Laufs (Zeitpunkt + Kurzfassung). */
   function formatSyncRun(run) {
     var when = run.finishedAt ? new Date(run.finishedAt).toLocaleString() : '';
     if (!run.success) {
@@ -105,23 +105,111 @@
       .replace('{skipped}', run.skipped);
   }
 
-  /* Baut die System-Status-Items: AD-Sync aus echten Logs,
-     restliche Karten (E-Mail, Retention) bleiben vorerst Mock. */
-  function buildSystemStatusItems(syncLogs) {
+  /* Eine Zähl-Kachel im letzten Sync-Lauf. */
+  function syncChip(label, value) {
+    return '<span class="sync-chip">' +
+      '<span class="sync-chip-val">' + (value != null ? value : 0) + '</span>' +
+      '<span class="sync-chip-label">' + label + '</span>' +
+      '</span>';
+  }
+
+  /* Letzter Sync-Lauf gut lesbar: Zeitpunkt + Status-Badge, darunter
+     entweder die Zähl-Kacheln oder die Fehlermeldung. */
+  function renderLatestSyncRun(run) {
+    var when = run.finishedAt ? new Date(run.finishedAt).toLocaleString() : '';
+    var statusClass = run.success ? 'ok' : 'err';
+    var statusLabel = run.success
+      ? I18n.t('admin.sync_status_ok')
+      : I18n.t('admin.sync_status_err');
+
+    var body;
+    if (run.success) {
+      body = '<div class="sync-chips">' +
+        syncChip(I18n.t('admin.sync_chip_created'),     run.created) +
+        syncChip(I18n.t('admin.sync_chip_updated'),     run.updated) +
+        syncChip(I18n.t('admin.sync_chip_reactivated'), run.reactivated) +
+        syncChip(I18n.t('admin.sync_chip_deactivated'), run.deactivated) +
+        syncChip(I18n.t('admin.sync_chip_skipped'),     run.skipped) +
+        '</div>';
+    } else {
+      body = '<div class="sync-error-text">' + I18n.t('admin.sync_error_prefix') +
+        Render.escapeHtml(run.error || I18n.t('admin.sync_unknown')) + '</div>';
+    }
+
+    return '<div class="sync-latest">' +
+      '<div class="sync-latest-top">' +
+      '<span class="sync-when">' + Render.escapeHtml(when) + '</span>' +
+      '<span class="sync-status-badge ' + statusClass + '">' + statusLabel + '</span>' +
+      '</div>' + body + '</div>';
+  }
+
+  /* AD-Sync-Karte: letzter Lauf hervorgehoben, darunter frühere Läufe kompakt. */
+  function buildAdSyncItem(syncLogs) {
     var runs = syncLogs || [];
     var last = runs[0];
-    var adItem = {
-      dot:     last ? (last.success ? 'active' : 'warning') : 'warning',
-      title:   'AD Sync',
-      details: last ? runs.slice(0, 5).map(formatSyncRun)
-                    : [I18n.t('admin.sync_none')]
-    };
 
-    var items = [adItem];
-    (FeedbackAPI.getAdminSystemStatus() || []).forEach(function (m) {
-      if (m.title !== 'AD Sync') items.push(m);   // Mock-Rest übernehmen
-    });
-    return items;
+    var detailsHtml;
+    if (!last) {
+      detailsHtml = '<div class="dash-status-detail">' + I18n.t('admin.sync_none') + '</div>';
+    } else {
+      detailsHtml = renderLatestSyncRun(last);
+      var older = runs.slice(1, 3);
+      if (older.length) {
+        detailsHtml += '<div class="sync-run-history">' +
+          '<div class="sync-run-history-label">' + I18n.t('admin.sync_previous_label') + '</div>' +
+          older.map(function (r) {
+            return '<div class="dash-status-detail">' + formatSyncRun(r) + '</div>';
+          }).join('') + '</div>';
+      }
+    }
+
+    return {
+      dot:         last ? (last.success ? 'active' : 'warning') : 'warning',
+      title:       I18n.t('admin.sys_adsync_title'),
+      detailsHtml: detailsHtml
+    };
+  }
+
+  /* Retention-Karte: nur real vorhandene Infos als strukturierte Zeilen.
+     Aufbewahrungsfrist (Policy) + Legal-Hold-Anzahl (nur wenn > 0). */
+  function buildRetentionItem(retention) {
+    var r = retention || {};
+    var rows = '';
+
+    if (r.retentionYears != null) {
+      rows += '<div class="retention-row">' +
+        '<span class="retention-label">' + I18n.t('admin.retention_period_label') + '</span>' +
+        '<span class="retention-value">' +
+        I18n.t('admin.retention_years').replace('{years}', r.retentionYears) +
+        (r.retentionActive ? ' <span class="retention-badge active">' + I18n.t('admin.retention_active') + '</span>' : '') +
+        '</span></div>';
+    }
+
+    if (r.legalHoldCount != null && r.legalHoldCount > 0) {
+      rows += '<div class="retention-row">' +
+        '<span class="retention-label">' + I18n.t('admin.retention_legal_hold_label') + '</span>' +
+        '<span class="retention-value">' + r.legalHoldCount +
+        ' <span class="retention-badge hold">Legal Hold</span></span></div>';
+    }
+
+    if (!rows) {
+      rows = '<div class="dash-status-detail">' + I18n.t('admin.retention_none') + '</div>';
+    }
+
+    return {
+      dot:         (r.legalHoldCount != null && r.legalHoldCount > 0) ? 'warning' : 'active',
+      title:       I18n.t('admin.sys_retention_title'),
+      detailsHtml: rows
+    };
+  }
+
+  /* Baut die System-Status-Karten: AD-Sync + Retention, beide aus echten Daten. */
+  function buildSystemStatusItems(syncLogs, retention) {
+    if (retention !== undefined) _lastRetention = retention;
+    return [
+      buildAdSyncItem(syncLogs),
+      buildRetentionItem(_lastRetention)
+    ];
   }
 
   /* Manueller AD-Sync per Button (POST /api/admin/sync/run).
@@ -1059,10 +1147,13 @@
     Render.initProfileDropdown();
     initTabSwitching();
 
-    // System-Status: AD-Sync aus echtem Endpoint, Rest (E-Mail/Retention) Mock.
-    FeedbackAPI.getAdminSyncLogs()
-      .then(function (logs) { renderSystemStatus(buildSystemStatusItems(logs)); })
-      .catch(function () { renderSystemStatus(FeedbackAPI.getAdminSystemStatus()); });
+    // System-Status: AD-Sync und Retention/Legal-Hold aus echten Endpoints.
+    Promise.all([
+      FeedbackAPI.getAdminSyncLogs().catch(function () { return []; }),
+      FeedbackAPI.getAdminRetentionStatus().catch(function () { return null; })
+    ]).then(function (res) {
+      renderSystemStatus(buildSystemStatusItems(res[0], res[1]));
+    });
 
     initManualSyncButton();
 

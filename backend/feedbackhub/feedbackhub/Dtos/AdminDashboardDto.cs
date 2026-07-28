@@ -47,3 +47,13 @@ public record AdminDepartmentStatDto(
   int FeedbackCount,
   double Pct
 );
+
+// ── GET /api/admin/retention-status ───────────────────────────────────────────
+// Aufbewahrungs-Policy + live gezaehlte Legal-Holds. Enthaelt nur real
+// vorhandene Werte: die feste Aufbewahrungsfrist und die tatsaechliche Anzahl
+// Feedbacks unter Legal Hold (aus der DB).
+public record AdminRetentionStatusDto(
+  int RetentionYears,
+  bool RetentionActive,
+  int LegalHoldCount
+);

@@ -192,4 +192,21 @@ public class AdminDashboardService
             ))
             .ToList();
     }
+
+    // ── Retention / Legal Hold ───────────────────────────────────────────────
+    // Aufbewahrungsfrist ist eine feste Policy; die Legal-Hold-Anzahl kommt live
+    // aus der DB. So enthaelt die Karte nur real vorhandene Werte.
+    private const int RetentionYears = 3;
+
+    public async Task<AdminRetentionStatusDto> GetRetentionStatusAsync()
+    {
+        var legalHoldCount = await _db.Feedbacks
+            .CountAsync(f => f.IsLegalHold && !f.IsDeleted);
+
+        return new AdminRetentionStatusDto(
+            RetentionYears:  RetentionYears,
+            RetentionActive: true,
+            LegalHoldCount:  legalHoldCount
+        );
+    }
 }

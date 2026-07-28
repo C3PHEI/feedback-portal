@@ -66,6 +66,14 @@ public class AdminDashboardController : ControllerBase
         return Ok(await _service.GetDepartmentStatsAsync());
     }
 
+    // GET /api/admin/retention-status
+    [HttpGet("retention-status")]
+    public async Task<IActionResult> GetRetentionStatus()
+    {
+        if (!await IsAdminAsync()) return Forbid();
+        return Ok(await _service.GetRetentionStatusAsync());
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private async Task<bool> IsAdminAsync()
