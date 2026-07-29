@@ -153,9 +153,15 @@
         driverEditHtml +
         '<hr class="divider my-4"/>' +
         '<div class="mb-4"><div class="history-text-label mb-2">' + I18n.t('history.edit_strenghts') + '</div>' +
-        '<textarea rows="4" id="editStrengths-' + fb.id + '">' + Render.escapeHtml(fb.strengths) + '</textarea></div>' +
+        '<textarea rows="4" id="editStrengths-' + fb.id + '">' + Render.escapeHtml(fb.strengths) + '</textarea>' +
+        '<div class="char-counter" id="editStrengths-' + fb.id + '-counter">' +
+        '<span id="editStrengths-' + fb.id + '-count">0</span>' + I18n.t('feedback.char_min') + '</div></div>' +
         '<div class="mb-2"><div class="history-text-label mb-2">' + I18n.t('history.edit_improvements') + '</div>' +
-        '<textarea rows="4" id="editImprovements-' + fb.id + '">' + Render.escapeHtml(fb.improvements) + '</textarea></div>' +
+        '<textarea rows="4" id="editImprovements-' + fb.id + '">' + Render.escapeHtml(fb.improvements) + '</textarea>' +
+        '<div class="char-counter" id="editImprovements-' + fb.id + '-counter">' +
+        '<span id="editImprovements-' + fb.id + '-count">0</span>' + I18n.t('feedback.char_min') + '</div></div>' +
+        '<div class="validation-msg" id="editValidation-' + fb.id + '" style="display:none;">' +
+        '<span>' + I18n.t('feedback.validation_text') + '</span></div>' +
         '<div class="edit-actions">' +
         '<button class="btn-edit-cancel" id="cancelEdit-' + fb.id + '">' + I18n.t('history.cancel') + '</button>' +
         '<button class="btn-edit-save" id="saveEdit-' + fb.id + '">' + I18n.t('history.save_btn') + '</button>' +
@@ -286,6 +292,47 @@
     if (displayTexts) displayTexts.style.display = hidden ? 'none' : '';
   }
 
+  // Aktualisiert einen einzelnen Zeichenzähler (Stärken/Verbesserungen) im
+  // Edit-Overlay und färbt ihn wie im "Feedback geben"-Formular:
+  // grün ab 200 Zeichen, rot solange darunter (aber > 0).
+  function updateEditCounter(fieldId) {
+    var el = document.getElementById(fieldId);
+    var counterWrap = document.getElementById(fieldId + '-counter');
+    var counter = document.getElementById(fieldId + '-count');
+    if (!el || !counterWrap || !counter) return 0;
+
+    var len = el.value.length;
+    counter.textContent = len;
+
+    if (len >= 200) {
+      counterWrap.classList.add('char-ok');
+      counterWrap.classList.remove('char-warn');
+    } else if (len > 0) {
+      counterWrap.classList.add('char-warn');
+      counterWrap.classList.remove('char-ok');
+    } else {
+      counterWrap.classList.remove('char-ok', 'char-warn');
+    }
+    return len;
+  }
+
+  // Validiert das Edit-Formular einer Karte. Wie beim "Feedback geben" muss
+  // mindestens eines der beiden Textfelder 200+ Zeichen enthalten; sonst wird
+  // der Speichern-Button gesperrt und ein Hinweis eingeblendet.
+  function validateEditForm(cardId) {
+    var sLen = updateEditCounter('editStrengths-' + cardId);
+    var iLen = updateEditCounter('editImprovements-' + cardId);
+    var textOk = (sLen >= 200) || (iLen >= 200);
+
+    var validationEl = document.getElementById('editValidation-' + cardId);
+    if (validationEl) validationEl.style.display = textOk ? 'none' : 'flex';
+
+    var saveBtn = document.getElementById('saveEdit-' + cardId);
+    if (saveBtn) saveBtn.disabled = !textOk;
+
+    return textOk;
+  }
+
   function initHistoryEditButtons() {
     var editBtns = document.querySelectorAll('[id^="editBtn-"]');
     editBtns.forEach(function (btn) {
@@ -412,6 +459,26 @@
         }
         saveBtn.disabled = false;
       });
+    });
+
+    // Zeichenzähler + Validierung für die Edit-Textfelder verdrahten.
+    // Bei jeder Eingabe wird geprüft, ob die 200-Zeichen-Regel erfüllt ist.
+    var editTextareas = document.querySelectorAll('[id^="editStrengths-"], [id^="editImprovements-"]');
+    editTextareas.forEach(function (ta) {
+      // id-Form: editStrengths-<cardId> bzw. editImprovements-<cardId>
+      var cardId = ta.id.replace('editStrengths-', '').replace('editImprovements-', '');
+      ta.addEventListener('input', function () {
+        validateEditForm(cardId);
+      });
+    });
+
+    // Initialen Zustand setzen (Zähler füllen, Button ggf. sperren).
+    var seen = {};
+    editTextareas.forEach(function (ta) {
+      var cardId = ta.id.replace('editStrengths-', '').replace('editImprovements-', '');
+      if (seen[cardId]) return;
+      seen[cardId] = true;
+      validateEditForm(cardId);
     });
   }
 

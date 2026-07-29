@@ -58,8 +58,10 @@
     var el = document.getElementById('admin-departments');
     if (!el || !depts) return;
     el.innerHTML = depts.map(function (d) {
+      var deptName = Render.escapeHtml(d.name);
       return '<div class="dash-dept-row">' +
-        '<span class="dash-dept-name">' + d.name + '</span>' +
+        '<span class="dash-dept-name" data-tooltip="' + deptName + '">' +
+        '<span class="dash-dept-name-text">' + deptName + '</span></span>' +
         '<div class="dash-dept-bar-track"><div class="dash-dept-bar-fill" style="width:' + d.pct + '%;"></div></div>' +
         '<span class="dash-dept-count">' + d.count + '</span></div>';
     }).join('');

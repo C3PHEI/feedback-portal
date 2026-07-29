@@ -630,12 +630,37 @@
   gap: 12px;
 }
 .dash-dept-name {
+  position: relative;
+  min-width: 0;
   font-size: 12px;
   color: var(--color-text-muted);
   font-family: 'DM Sans', sans-serif;
+}
+.dash-dept-name-text {
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+/* Vollständigen Abteilungsnamen als Tooltip einblenden, da die Anzeige
+   auf 100px gekürzt wird (Muster wie bei den Sterne-Tooltips). */
+.dash-dept-name[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-orange);
+  color: var(--color-text-primary);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+  animation: tooltipFade 0.15s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 .dash-dept-bar-track {
   height: 8px;
