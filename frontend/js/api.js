@@ -106,7 +106,19 @@ var FeedbackAPI = (function () {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
-  // Inbox-Format: "heute" / "gestern" / "Mo, 22.04." / "22.04.2026"
+  // Numerisches Datum je nach Sprache:
+  //   de → "22.04." / "22.04.2026"   en → "04/22" / "04/22/2026"
+  function localeNumericDate(d, withYear) {
+    var dd = ('0' + d.getDate()).slice(-2);
+    var mm = ('0' + (d.getMonth() + 1)).slice(-2);
+    var yy = d.getFullYear();
+    if (I18n.getLang() === 'en') {
+      return withYear ? (mm + '/' + dd + '/' + yy) : (mm + '/' + dd);
+    }
+    return withYear ? (dd + '.' + mm + '.' + yy) : (dd + '.' + mm + '.');
+  }
+
+  // Inbox-Format: "heute"/"today" / "gestern"/"yesterday" / "Mo, 22.04." / "22.04.2026"
   function formatDate(isoDate) {
     if (!isoDate) return '';
 
@@ -120,23 +132,18 @@ var FeedbackAPI = (function () {
 
     var diffDays = Math.round((today - feedbackDay) / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'heute';
-    if (diffDays === 1) return 'gestern';
+    if (diffDays === 0) return I18n.t('date.today');
+    if (diffDays === 1) return I18n.t('date.yesterday');
 
     if (diffDays < 7) {
-      var weekdays = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
-      var dd = ('0' + d.getDate()).slice(-2);
-      var mm = ('0' + (d.getMonth() + 1)).slice(-2);
-      return weekdays[d.getDay()] + ', ' + dd + '.' + mm + '.';
+      var weekdays = I18n.t('date.weekdays').split(',');
+      return weekdays[d.getDay()] + ', ' + localeNumericDate(d, false);
     }
 
-    var dd2 = ('0' + d.getDate()).slice(-2);
-    var mm2 = ('0' + (d.getMonth() + 1)).slice(-2);
-    var yy  = d.getFullYear();
-    return dd2 + '.' + mm2 + '.' + yy;
+    return localeNumericDate(d, true);
   }
 
-  // History-Format: "Heute, 14:33" / "Gestern, 09:12" / "22.04.2026, 14:33"
+  // History-Format: "Heute, 14:33"/"Today, 14:33" / "Gestern, .."/"Yesterday, .." / "22.04.2026, 14:33"
   function formatDateLabel(isoTimestamp) {
     if (!isoTimestamp) return '';
 
@@ -154,13 +161,10 @@ var FeedbackAPI = (function () {
     var min  = ('0' + d.getMinutes()).slice(-2);
     var time = hh + ':' + min;
 
-    if (diffDays === 0) return 'Heute, ' + time;
-    if (diffDays === 1) return 'Gestern, ' + time;
+    if (diffDays === 0) return I18n.t('date.today_cap') + ', ' + time;
+    if (diffDays === 1) return I18n.t('date.yesterday_cap') + ', ' + time;
 
-    var dd = ('0' + d.getDate()).slice(-2);
-    var mo = ('0' + (d.getMonth() + 1)).slice(-2);
-    var yy = d.getFullYear();
-    return dd + '.' + mo + '.' + yy + ', ' + time;
+    return localeNumericDate(d, true) + ', ' + time;
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -225,7 +229,7 @@ var FeedbackAPI = (function () {
 
     var from;
     if (dto.isAnonymous) {
-      from = { name: 'Anonymes Feedback', initials: null, anonymous: true };
+      from = { name: I18n.t('dept.anon_feedback'), initials: null, anonymous: true };
     } else {
       from = {
         name:      dto.submitter.displayName,
@@ -370,10 +374,7 @@ var FeedbackAPI = (function () {
     if (!isoDate) return '';
     var d = new Date(isoDate);
     if (isNaN(d.getTime())) return isoDate;
-    var dd = ('0' + d.getDate()).slice(-2);
-    var mm = ('0' + (d.getMonth() + 1)).slice(-2);
-    var yy = d.getFullYear();
-    return dd + '.' + mm + '.' + yy;
+    return localeNumericDate(d, true);
   }
 
   /* ═══════════════════════════════════════════════════════

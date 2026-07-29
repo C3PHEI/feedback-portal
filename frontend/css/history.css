@@ -272,6 +272,37 @@
 .btn-edit-save:hover {
   opacity: 0.9;
 }
+.btn-edit-save:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ─── Edit: Character Counter + Validation ──────────────── */
+.edit-overlay .char-counter {
+  text-align: right;
+  font-size: 13px;
+  color: var(--color-text-faint);
+  margin-top: 6px;
+  transition: color 0.2s;
+}
+.edit-overlay .char-counter.char-ok {
+  color: var(--color-success);
+}
+.edit-overlay .char-counter.char-warn {
+  color: var(--color-red);
+}
+.edit-overlay .validation-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: rgba(229, 38, 32, 0.08);
+  border: 1px solid rgba(229, 38, 32, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--color-red);
+}
 
 /* ─── Edited Badge ──────────────────────────────────────── */
 .edited-badge {

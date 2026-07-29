@@ -257,79 +257,6 @@
       </table>
     </div>
 
-    <!-- Deactivate User Modal -->
-    <div class="modal-overlay" id="deactivateModal">
-      <div class="modal-box">
-        <h2 class="modal-title" data-i18n="admin.deactivate_title">Benutzer deaktivieren</h2>
-        <div class="flex items-center gap-3 mb-5">
-          <div class="avatar deactivate-avatar" id="deactivateAvatar"></div>
-          <div>
-            <div class="text-white font-medium" id="deactivateName"></div>
-            <div class="text-xs text-muted" id="deactivateEmail"></div>
-          </div>
-        </div>
-        <div class="deactivate-info-box mb-4">
-          <div class="admin-card-title" data-i18n="admin.deactivate_overview">Übersicht</div>
-          <div class="deactivate-info-row">
-            <span data-i18n="admin.deactivate_role_label">Rolle</span>
-            <span class="text-white" id="deactivateRole"></span>
-          </div>
-          <div class="deactivate-info-row">
-            <span data-i18n="admin.deactivate_dept_label">Abteilung</span>
-            <span class="text-white" id="deactivateDept"></span>
-          </div>
-          <div class="deactivate-info-row">
-            <span data-i18n="admin.deactivate_feedbacks">Feedbacks gesendet / erhalten</span>
-            <span class="text-white" id="deactivateFeedbacks"></span>
-          </div>
-        </div>
-        <div class="deactivate-info-box mb-4">
-          <div class="admin-card-title" data-i18n="admin.deactivate_what_happens">Was passiert bei der Deaktivierung?</div>
-          <div class="deactivate-detail-item">
-            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_1"></span>
-          </div>
-          <div class="deactivate-detail-item">
-            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_2"></span>
-          </div>
-          <div class="deactivate-detail-item">
-            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_3"></span>
-          </div>
-          <div class="deactivate-detail-item">
-            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_4"></span>
-          </div>
-          <div class="deactivate-detail-item">
-            <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_5"></span>
-          </div>
-        </div>
-        <div class="deactivate-warning mb-5">
-          <p data-i18n-html="admin.deactivate_warning"></p>
-        </div>
-        <div class="flex gap-3 justify-end">
-          <button class="btn-admin" type="button" id="cancelDeactivateBtn" data-i18n="common.cancel">Abbrechen</button>
-          <button class="btn-admin danger" type="button" id="confirmDeactivateBtn" data-i18n="admin.deactivate_confirm_btn">&#128683; Deaktivieren</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Activate User Modal -->
-    <div class="modal-overlay" id="activateModal">
-      <div class="modal-box">
-        <h2 class="modal-title" data-i18n="admin.activate_title">Benutzer aktivieren</h2>
-        <div class="flex items-center gap-3 mb-5">
-          <div class="avatar deactivate-avatar" id="activateAvatar"></div>
-          <div>
-            <div class="text-white font-medium" id="activateName"></div>
-            <div class="text-xs text-muted" id="activateEmail"></div>
-          </div>
-        </div>
-        <p style="color:var(--color-text-muted);font-size:13px;margin-bottom:20px;" data-i18n="admin.activate_confirm_text">Möchtest du diesen Benutzer wirklich wieder aktivieren?</p>
-        <div class="flex gap-3 justify-end">
-          <button class="btn-admin" type="button" id="cancelActivateBtn" data-i18n="common.cancel">Abbrechen</button>
-          <button class="btn-admin" type="button" id="confirmActivateBtn" style="color:#22c55e;border-color:#22c55e33;" data-i18n="admin.activate_confirm_btn">✅ Aktivieren</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 
 </div>
@@ -519,6 +446,83 @@
     <div class="modal-footer">
       <button class="btn-admin" id="cancelDeptBtn" type="button" data-i18n="common.cancel">Abbrechen</button>
       <button class="btn-admin primary" id="confirmDeptBtn" type="button" data-i18n="common.save">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     Modal: Benutzer deaktivieren
+     ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="deactivateModal">
+  <div class="modal-box">
+    <h2 class="modal-title" data-i18n="admin.deactivate_title">Benutzer deaktivieren</h2>
+    <div class="flex items-center gap-3 mb-5">
+      <div class="avatar deactivate-avatar" id="deactivateAvatar"></div>
+      <div>
+        <div class="text-white font-medium" id="deactivateName"></div>
+        <div class="text-xs text-muted" id="deactivateEmail"></div>
+      </div>
+    </div>
+    <div class="deactivate-info-box mb-4">
+      <div class="admin-card-title" data-i18n="admin.deactivate_overview">Übersicht</div>
+      <div class="deactivate-info-row">
+        <span data-i18n="admin.deactivate_role_label">Rolle</span>
+        <span class="text-white" id="deactivateRole"></span>
+      </div>
+      <div class="deactivate-info-row">
+        <span data-i18n="admin.deactivate_dept_label">Abteilung</span>
+        <span class="text-white" id="deactivateDept"></span>
+      </div>
+      <div class="deactivate-info-row">
+        <span data-i18n="admin.deactivate_feedbacks">Feedbacks gesendet / erhalten</span>
+        <span class="text-white" id="deactivateFeedbacks"></span>
+      </div>
+    </div>
+    <div class="deactivate-info-box mb-4">
+      <div class="admin-card-title" data-i18n="admin.deactivate_what_happens">Was passiert bei der Deaktivierung?</div>
+      <div class="deactivate-detail-item">
+        <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_1"></span>
+      </div>
+      <div class="deactivate-detail-item">
+        <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_2"></span>
+      </div>
+      <div class="deactivate-detail-item">
+        <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_3"></span>
+      </div>
+      <div class="deactivate-detail-item">
+        <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_4"></span>
+      </div>
+      <div class="deactivate-detail-item">
+        <span class="deactivate-detail-value" data-i18n-html="admin.deactivate_detail_5"></span>
+      </div>
+    </div>
+    <div class="deactivate-warning mb-5">
+      <p data-i18n-html="admin.deactivate_warning"></p>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button class="btn-admin" type="button" id="cancelDeactivateBtn" data-i18n="common.cancel">Abbrechen</button>
+      <button class="btn-admin danger" type="button" id="confirmDeactivateBtn" data-i18n="admin.deactivate_confirm_btn">&#128683; Deaktivieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     Modal: Benutzer aktivieren
+     ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="activateModal">
+  <div class="modal-box">
+    <h2 class="modal-title" data-i18n="admin.activate_title">Benutzer aktivieren</h2>
+    <div class="flex items-center gap-3 mb-5">
+      <div class="avatar deactivate-avatar" id="activateAvatar"></div>
+      <div>
+        <div class="text-white font-medium" id="activateName"></div>
+        <div class="text-xs text-muted" id="activateEmail"></div>
+      </div>
+    </div>
+    <p style="color:var(--color-text-muted);font-size:13px;margin-bottom:20px;" data-i18n="admin.activate_confirm_text">Möchtest du diesen Benutzer wirklich wieder aktivieren?</p>
+    <div class="flex gap-3 justify-end">
+      <button class="btn-admin" type="button" id="cancelActivateBtn" data-i18n="common.cancel">Abbrechen</button>
+      <button class="btn-admin" type="button" id="confirmActivateBtn" style="color:#22c55e;border-color:#22c55e33;" data-i18n="admin.activate_confirm_btn">✅ Aktivieren</button>
     </div>
   </div>
 </div>
