@@ -12,7 +12,9 @@ public class AdSyncStatusStore
   // Ringpuffer der letzten Läufe (neuester zuerst), im RAM.
   // Geht bei App-Neustart verloren — für einen dauerhaften Audit-Verlauf
   // müsste er in die DB persistiert werden.
-  private const int MaxHistory = 20;
+  // Es werden maximal 10 Läufe behalten: kommt ein 11. hinzu, fällt der
+  // älteste (letzte) automatisch heraus (siehe Add).
+  private const int MaxHistory = 10;
   private readonly LinkedList<AdSyncResult> _history = new();
 
   public AdSyncResult? LastResult
