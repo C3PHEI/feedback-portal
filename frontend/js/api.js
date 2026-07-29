@@ -118,27 +118,13 @@ var FeedbackAPI = (function () {
     return withYear ? (dd + '.' + mm + '.' + yy) : (dd + '.' + mm + '.');
   }
 
-  // Inbox-Format: "heute"/"today" / "gestern"/"yesterday" / "Mo, 22.04." / "22.04.2026"
+  // Inbox-Format: immer das absolute Datum (kein "heute"/"gestern"),
+  // sprachabhängig:  de → "22.04.2026"   en → "04/22/2026"
   function formatDate(isoDate) {
     if (!isoDate) return '';
 
     var d = new Date(isoDate);
     if (isNaN(d.getTime())) return isoDate;
-
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-    var feedbackDay = new Date(d);
-    feedbackDay.setHours(0, 0, 0, 0);
-
-    var diffDays = Math.round((today - feedbackDay) / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return I18n.t('date.today');
-    if (diffDays === 1) return I18n.t('date.yesterday');
-
-    if (diffDays < 7) {
-      var weekdays = I18n.t('date.weekdays').split(',');
-      return weekdays[d.getDay()] + ', ' + localeNumericDate(d, false);
-    }
 
     return localeNumericDate(d, true);
   }

@@ -278,6 +278,7 @@ var I18n = (function () {
       'admin.deactivate_dept_label':     'Abteilung',
       'admin.deactivate_feedbacks':      'Feedbacks gesendet / erhalten',
       'admin.deactivate_what_happens':   'Was passiert bei der Deaktivierung?',
+      'admin.deactivate_hover_hint':     'Für Details darüberfahren',
       'admin.deactivate_detail_1':       '1. Zugriff — Login wird <span class="hl-danger">gesperrt</span> — kein Feedback senden oder empfangen möglich.',
       'admin.deactivate_detail_2':       '2. Datenaufbewahrung — Bestehende Feedbacks bleiben <span class="hl-orange">12 Monate</span> nach Deaktivierung erhalten und werden danach <span class="hl-orange">gelöscht oder anonymisiert</span>.',
       'admin.deactivate_detail_3':       '3. Legal Hold — Feedbacks mit dem Tag <span class="hl-badge">Legal Hold</span> sind von der automatischen Löschung <span class="hl-orange">ausgenommen</span>, bis der Tag manuell entfernt wird.',
@@ -378,12 +379,9 @@ var I18n = (function () {
       'common.fatal_title':     'Fehler beim Laden',
       'common.fatal_hint':      'Bitte Seite neu laden oder erneut anmelden.',
 
-      /* ─── Datums-Formatierung ─────────────────────────── */
-      'date.today':             'heute',
-      'date.yesterday':         'gestern',
+      /* ─── Datums-Formatierung (relativ, nur History-Ansicht) ──── */
       'date.today_cap':         'Heute',
       'date.yesterday_cap':     'Gestern',
-      'date.weekdays':          'So,Mo,Di,Mi,Do,Fr,Sa',
 
       /* ─── Driver Labels ─────────────────────────────── */
       'driver.impact':        'Ergebnisse / Leistung',
@@ -697,6 +695,7 @@ var I18n = (function () {
       'admin.deactivate_dept_label':     'Department',
       'admin.deactivate_feedbacks':      'Feedback sent / received',
       'admin.deactivate_what_happens':   'What happens when deactivated?',
+      'admin.deactivate_hover_hint':     'Hover for details',
       'admin.deactivate_detail_1':       '1. Access — Login is <span class="hl-danger">blocked</span> — no sending or receiving feedback possible.',
       'admin.deactivate_detail_2':       '2. Data Retention — Existing feedback is retained for <span class="hl-orange">12 months</span> after deactivation, then <span class="hl-orange">deleted or anonymized</span>.',
       'admin.deactivate_detail_3':       '3. Legal Hold — Feedback tagged <span class="hl-badge">Legal Hold</span> is <span class="hl-orange">exempt</span> from automatic deletion until the tag is manually removed.',
@@ -801,12 +800,9 @@ var I18n = (function () {
       'common.fatal_title':     'Failed to load',
       'common.fatal_hint':      'Please reload the page or sign in again.',
 
-      /* ─── Date formatting ─────────────────────────────── */
-      'date.today':             'today',
-      'date.yesterday':         'yesterday',
+      /* ─── Date formatting (relative, history view only) ──────── */
       'date.today_cap':         'Today',
       'date.yesterday_cap':     'Yesterday',
-      'date.weekdays':          'Sun,Mon,Tue,Wed,Thu,Fri,Sat',
 
       /* ─── Driver Labels ─────────────────────────────── */
       'driver.impact':        'Impact / Results',
