@@ -437,6 +437,73 @@
   line-height: 1.6;
 }
 
+/* ─── Einklappbarer "Was passiert bei der Deaktivierung?"-Block ──────
+   Standardmässig nur die Überschrift sichtbar (kleineres Modal); beim
+   Hovern (oder Fokussieren) klappen die Details auf. */
+.deactivate-collapsible {
+  cursor: help;
+  border: 1px solid transparent;
+  transition: border-color 0.2s, background 0.2s;
+}
+.deactivate-collapsible:hover,
+.deactivate-collapsible:focus-within {
+  border-color: var(--color-orange);
+  background: var(--color-surface);
+}
+.deactivate-collapsible:focus-visible {
+  outline: none;
+}
+.deactivate-collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.deactivate-collapsible-header .admin-card-title {
+  margin-bottom: 0;
+}
+.deactivate-collapsible-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--color-orange);
+  white-space: nowrap;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.deactivate-collapsible:hover .deactivate-collapsible-hint,
+.deactivate-collapsible:focus-within .deactivate-collapsible-hint {
+  opacity: 1;
+}
+.deactivate-chevron {
+  transition: transform 0.3s ease;
+}
+.deactivate-collapsible:hover .deactivate-chevron,
+.deactivate-collapsible:focus-within .deactivate-chevron {
+  transform: rotate(180deg);
+}
+/* Höhen-Animation via grid-template-rows 0fr → 1fr (auto-Höhe animierbar). */
+.deactivate-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.3s ease, opacity 0.25s ease, margin-top 0.3s ease;
+}
+.deactivate-details-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.deactivate-collapsible:hover .deactivate-details,
+.deactivate-collapsible:focus-within .deactivate-details {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 12px;
+}
+
 /* ─── Highlight Utilities ──────────────────────────── */
 .hl-orange {
   color: var(--color-orange);
