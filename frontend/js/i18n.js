@@ -379,12 +379,9 @@ var I18n = (function () {
       'common.fatal_title':     'Fehler beim Laden',
       'common.fatal_hint':      'Bitte Seite neu laden oder erneut anmelden.',
 
-      /* ─── Datums-Formatierung ─────────────────────────── */
-      'date.today':             'heute',
-      'date.yesterday':         'gestern',
+      /* ─── Datums-Formatierung (relativ, nur History-Ansicht) ──── */
       'date.today_cap':         'Heute',
       'date.yesterday_cap':     'Gestern',
-      'date.weekdays':          'So,Mo,Di,Mi,Do,Fr,Sa',
 
       /* ─── Driver Labels ─────────────────────────────── */
       'driver.impact':        'Ergebnisse / Leistung',
@@ -803,12 +800,9 @@ var I18n = (function () {
       'common.fatal_title':     'Failed to load',
       'common.fatal_hint':      'Please reload the page or sign in again.',
 
-      /* ─── Date formatting ─────────────────────────────── */
-      'date.today':             'today',
-      'date.yesterday':         'yesterday',
+      /* ─── Date formatting (relative, history view only) ──────── */
       'date.today_cap':         'Today',
       'date.yesterday_cap':     'Yesterday',
-      'date.weekdays':          'Sun,Mon,Tue,Wed,Thu,Fri,Sat',
 
       /* ─── Driver Labels ─────────────────────────────── */
       'driver.impact':        'Impact / Results',
