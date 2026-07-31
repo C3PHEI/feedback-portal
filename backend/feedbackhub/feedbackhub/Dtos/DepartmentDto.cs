@@ -13,7 +13,8 @@ public record TeamMemberDto(
   string Role,
   double? AvgRating,      // Gesamtschnitt ueber alle Driver, null wenn keine Ratings
   int FeedbackCount,      // Anzahl erhaltener Feedbacks (ohne deleted)
-  int AnonymousCount      // davon anonym (fuer Icon-Badge)
+  int AnonymousCount,     // davon anonym (fuer Icon-Badge)
+  string? Department      // eigene Abteilung des Mitglieds (nicht die des Managers)
 );
 
 // GET /api/departments/my-team/averages

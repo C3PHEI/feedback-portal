@@ -330,13 +330,12 @@ var FeedbackAPI = (function () {
   }
 
   function mapTeamMember(dto) {
-    var currentUser = _currentUserCache;
     return {
       id:             dto.id,
       name:           dto.displayName,
       initials:       buildInitials(dto.displayName),
       role:           dto.role,
-      department:     currentUser ? currentUser.department : null,
+      department:     dto.department || null,
       feedbackCount:  dto.feedbackCount  || 0,
       anonymousCount: dto.anonymousCount || 0,
       averageRating:  dto.avgRating != null ? dto.avgRating : null,
