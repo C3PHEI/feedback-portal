@@ -155,7 +155,8 @@
       detailsHtml = '<div class="dash-status-detail">' + I18n.t('admin.sync_none') + '</div>';
     } else {
       detailsHtml = renderLatestSyncRun(last);
-      var older = runs.slice(1, 3);
+      // Backend hält max. 10 Läufe vor (ältester fällt raus); alle als Verlauf zeigen.
+      var older = runs.slice(1, 10);
       if (older.length) {
         detailsHtml += '<div class="sync-run-history">' +
           '<div class="sync-run-history-label">' + I18n.t('admin.sync_previous_label') + '</div>' +

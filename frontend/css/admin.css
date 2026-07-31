@@ -857,10 +857,15 @@
 .sync-chip-label {
   font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--color-text-ghost);
   margin-top: 2px;
   text-align: center;
+  width: 100%;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 .sync-error-text {
   font-size: 12px;
