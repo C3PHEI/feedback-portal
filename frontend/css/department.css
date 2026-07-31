@@ -521,6 +521,8 @@
   color: var(--color-text-muted);
   line-height: 1.65;
   margin: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* ─── Anon badge in history ──────────────────────────── */
