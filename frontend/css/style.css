@@ -825,17 +825,27 @@ select.fancy-input option {
   white-space: pre-wrap;
 }
 
-/* ─── Inbox: bereits gemeldet ───────────────────────────── */
-.report-done {
+/* ─── Inbox: Melden-Button ──────────────────────────────── */
+.report-btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  background: none;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: 6px 14px;
+  border-radius: 6px;
   font-size: 12px;
   font-family: 'DM Sans', sans-serif;
-  color: var(--color-text-ghost);
-  padding: 6px 4px;
+  cursor: pointer;
 }
-.report-done svg {
+/* Bereits gemeldet: neutral/grün, aber weiterhin klickbar (zeigt den Hinweis). */
+.report-btn.is-reported {
+  border-color: var(--color-border);
+  color: var(--color-text-ghost);
+  cursor: default;
+}
+.report-btn.is-reported svg {
   color: var(--color-success);
 }
 
