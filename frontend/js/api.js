@@ -107,13 +107,13 @@ var FeedbackAPI = (function () {
   }
 
   // Numerisches Datum je nach Sprache:
-  //   de → "22.04." / "22.04.2026"   en → "04/22" / "04/22/2026"
+  //   de → "22.04." / "22.04.2026"   en → "22/04" / "22/04/2026"
   function localeNumericDate(d, withYear) {
     var dd = ('0' + d.getDate()).slice(-2);
     var mm = ('0' + (d.getMonth() + 1)).slice(-2);
     var yy = d.getFullYear();
     if (I18n.getLang() === 'en') {
-      return withYear ? (mm + '/' + dd + '/' + yy) : (mm + '/' + dd);
+      return withYear ? (dd + '/' + mm + '/' + yy) : (dd + '/' + mm);
     }
     return withYear ? (dd + '.' + mm + '.' + yy) : (dd + '.' + mm + '.');
   }
