@@ -41,7 +41,13 @@ public class DepartmentService
     var teamUsers = await _db.Users
       .Where(u => u.ManagerUserId == myId
                && u.IsActive)
-      .Select(u => new { u.Id, u.DisplayName, u.Role })
+      .Select(u => new
+      {
+        u.Id,
+        u.DisplayName,
+        u.Role,
+        DepartmentName = u.Department != null ? u.Department.Name : null
+      })
       .ToListAsync();
 
     if (teamUsers.Count == 0)
@@ -82,7 +88,8 @@ public class DepartmentService
         Role:           u.Role,
         AvgRating:      userScores.Count == 0 ? null : Math.Round(userScores.Average(), 2),
         FeedbackCount:  userFeedbacks.Count,
-        AnonymousCount: userFeedbacks.Count(f => f.IsAnonymous)
+        AnonymousCount: userFeedbacks.Count(f => f.IsAnonymous),
+        Department:     u.DepartmentName
       );
     })
     .OrderBy(m => m.DisplayName)
