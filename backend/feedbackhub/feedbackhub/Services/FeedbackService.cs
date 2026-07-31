@@ -155,7 +155,15 @@ public class FeedbackService
             .OrderByDescending(f => f.SubmittedAt)
             .ToListAsync();
 
-        var notes = await GetModerationNotesAsync(feedbacks.Select(f => f.Id).ToList());
+        var feedbackIds = feedbacks.Select(f => f.Id).ToList();
+        var notes = await GetModerationNotesAsync(feedbackIds);
+
+        // Feedbacks, die dieser Empfänger bereits gemeldet hat (nur 1x möglich).
+        var reportedIds = await _db.CocReports
+            .Where(r => feedbackIds.Contains(r.FeedbackId) && r.ReporterUserId == recipientId)
+            .Select(r => r.FeedbackId)
+            .ToListAsync();
+        var reportedSet = reportedIds.ToHashSet();
 
         return feedbacks.Select(f => new InboxFeedbackResponse(
             Id:             f.Id,
@@ -167,7 +175,8 @@ public class FeedbackService
             Strengths:      f.Strengths,
             AreasToImprove: f.AreasToImprove,
             Ratings:        MapRatings(f.Ratings),
-            ModerationNote: notes.GetValueOrDefault(f.Id)
+            ModerationNote: notes.GetValueOrDefault(f.Id),
+            IsReported:     reportedSet.Contains(f.Id)
         )).ToList();
     }
 

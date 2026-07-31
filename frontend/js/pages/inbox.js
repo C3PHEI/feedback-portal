@@ -95,15 +95,36 @@
       '<p class="inbox-detail-text">' + (fb.improvements ? Render.escapeHtml(fb.improvements) : '-') + '</p>' +
       '</div>' +
 
-      // Melden-Button
+      // Melden-Button — ein Feedback kann nur 1x gemeldet werden.
       '<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--color-border);text-align:right;">' +
-      '<button class="report-btn" data-feedback-id="' + id + '" ' +
-      'style="background:none;border:1px solid var(--color-danger);color:var(--color-danger);' +
-      'padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;">' +
-      I18n.t('inbox.report_btn') + '</button>' +
+      (fb.isReported
+        ? reportedBadgeHtml()
+        : '<button class="report-btn" data-feedback-id="' + id + '" ' +
+          'style="background:none;border:1px solid var(--color-danger);color:var(--color-danger);' +
+          'padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;">' +
+          I18n.t('inbox.report_btn') + '</button>') +
       '</div>' +
 
       '</div>';
+  }
+
+  /* Badge, das anzeigt, dass der Empfänger dieses Feedback bereits gemeldet hat. */
+  function reportedBadgeHtml() {
+    return '<span class="report-done" title="' + I18n.t('inbox.report_already') + '">' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M20 6 9 17l-5-5"/></svg> ' +
+      I18n.t('inbox.report_done') + '</span>';
+  }
+
+  /* Ersetzt den Melden-Button eines Feedbacks durch das "bereits gemeldet"-Badge,
+     ohne die ganze Inbox neu zu laden. */
+  function markFeedbackReported(feedbackId) {
+    var btn = document.querySelector('.report-btn[data-feedback-id="' + feedbackId + '"]');
+    if (!btn) return;
+    var span = document.createElement('span');
+    span.innerHTML = reportedBadgeHtml();
+    btn.replaceWith(span.firstChild);
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -259,14 +280,19 @@
       try {
         await FeedbackAPI.reportFeedback(feedbackId, reason);
         Render.showToast(I18n.t('inbox.report_success'));
+        markFeedbackReported(feedbackId);
         modal.remove();
       } catch (err) {
         console.error('Report failed:', err);
-        var msg = (err && err.errorCode === 'already_reported')
-          ? I18n.t('inbox.report_already')
-          : I18n.t('inbox.report_error');
-        Render.showToast(msg);
-        submitBtn.disabled = false;
+        if (err && err.errorCode === 'already_reported') {
+          // Bereits gemeldet: Zustand angleichen und Modal schliessen.
+          Render.showToast(I18n.t('inbox.report_already'));
+          markFeedbackReported(feedbackId);
+          modal.remove();
+        } else {
+          Render.showToast(I18n.t('inbox.report_error'));
+          submitBtn.disabled = false;
+        }
       }
     });
   }

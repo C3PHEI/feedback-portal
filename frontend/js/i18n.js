@@ -58,6 +58,7 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback wurde gemeldet.',
       'inbox.report_error':   'Meldung konnte nicht gesendet werden.',
       'inbox.report_already': 'Du hast dieses Feedback bereits gemeldet.',
+      'inbox.report_done':    'Bereits gemeldet',
       'inbox.empty':          'Du hast noch keine Feedbacks erhalten.',
       'inbox.load_error':     'Fehler beim Laden ({code}). Bitte Seite neu laden.',
 
@@ -476,6 +477,7 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback has been reported.',
       'inbox.report_error':   'Report could not be sent.',
       'inbox.report_already': 'You have already reported this feedback.',
+      'inbox.report_done':    'Already reported',
       'inbox.empty':          'You have not received any feedback yet.',
       'inbox.load_error':     'Failed to load ({code}). Please reload the page.',
 

@@ -45,7 +45,8 @@ public record InboxFeedbackResponse(
     string? Strengths,
     string? AreasToImprove,
     List<RatingResponse> Ratings,
-    string? ModerationNote = null
+    string? ModerationNote = null,
+    bool IsReported = false        // true, wenn der Empfänger dieses Feedback bereits gemeldet hat
 );
 
 public record DriverAverageResponse(Guid DriverId, string DriverName, double? Average);

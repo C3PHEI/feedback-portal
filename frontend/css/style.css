@@ -825,6 +825,20 @@ select.fancy-input option {
   white-space: pre-wrap;
 }
 
+/* ─── Inbox: bereits gemeldet ───────────────────────────── */
+.report-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--color-text-ghost);
+  padding: 6px 4px;
+}
+.report-done svg {
+  color: var(--color-success);
+}
+
 /* ─── Inbox Collapsed Preview ───────────────────────────── */
 .inbox-preview {
   margin-top: 12px;
