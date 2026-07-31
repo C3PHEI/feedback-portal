@@ -97,34 +97,50 @@
 
       // Melden-Button — ein Feedback kann nur 1x gemeldet werden.
       '<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--color-border);text-align:right;">' +
-      (fb.isReported
-        ? reportedBadgeHtml()
-        : '<button class="report-btn" data-feedback-id="' + id + '" ' +
-          'style="background:none;border:1px solid var(--color-danger);color:var(--color-danger);' +
-          'padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;">' +
-          I18n.t('inbox.report_btn') + '</button>') +
+      reportButtonHtml(id, fb.isReported) +
       '</div>' +
 
       '</div>';
   }
 
-  /* Badge, das anzeigt, dass der Empfänger dieses Feedback bereits gemeldet hat. */
-  function reportedBadgeHtml() {
-    return '<span class="report-done" title="' + I18n.t('inbox.report_already') + '">' +
-      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-      'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
-      '<path d="M20 6 9 17l-5-5"/></svg> ' +
-      I18n.t('inbox.report_done') + '</span>';
+  /* Melden-Button. Bereits gemeldete Feedbacks bleiben klickbar, geben beim
+     Klick aber nur den Hinweis aus, dass ein Feedback nur 1x gemeldet werden
+     kann (data-reported steuert das Verhalten in handleReportClick). */
+  function reportButtonHtml(id, isReported) {
+    if (isReported) {
+      return '<button class="report-btn is-reported" data-feedback-id="' + id + '" data-reported="1">' +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+        'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M20 6 9 17l-5-5"/></svg> ' +
+        I18n.t('inbox.report_done') + '</button>';
+    }
+    return '<button class="report-btn" data-feedback-id="' + id + '">' +
+      I18n.t('inbox.report_btn') + '</button>';
   }
 
-  /* Ersetzt den Melden-Button eines Feedbacks durch das "bereits gemeldet"-Badge,
-     ohne die ganze Inbox neu zu laden. */
+  /* Markiert den Melden-Button eines Feedbacks als "bereits gemeldet",
+     ohne die ganze Inbox neu zu laden. Der Button bleibt klickbar. */
   function markFeedbackReported(feedbackId) {
     var btn = document.querySelector('.report-btn[data-feedback-id="' + feedbackId + '"]');
     if (!btn) return;
-    var span = document.createElement('span');
-    span.innerHTML = reportedBadgeHtml();
-    btn.replaceWith(span.firstChild);
+    var holder = document.createElement('span');
+    holder.innerHTML = reportButtonHtml(feedbackId, true);
+    var newBtn = holder.firstChild;
+    btn.replaceWith(newBtn);
+    newBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      handleReportClick(newBtn);
+    });
+  }
+
+  /* Zentrale Klicklogik für den Melden-Button: bereits gemeldet → Hinweis,
+     sonst Melde-Dialog öffnen. */
+  function handleReportClick(btn) {
+    if (btn.dataset.reported === '1') {
+      Render.showToast(I18n.t('inbox.report_already'));
+      return;
+    }
+    openReportModal(btn.dataset.feedbackId);
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -239,7 +255,7 @@
     document.querySelectorAll('.report-btn').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        openReportModal(btn.dataset.feedbackId);
+        handleReportClick(btn);
       });
     });
   }
