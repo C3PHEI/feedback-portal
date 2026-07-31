@@ -58,6 +58,7 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback wurde gemeldet.',
       'inbox.report_error':   'Meldung konnte nicht gesendet werden.',
       'inbox.report_already': 'Du hast dieses Feedback bereits gemeldet.',
+      'inbox.report_done':    'Bereits gemeldet',
       'inbox.empty':          'Du hast noch keine Feedbacks erhalten.',
       'inbox.load_error':     'Fehler beim Laden ({code}). Bitte Seite neu laden.',
 
@@ -121,6 +122,7 @@ var I18n = (function () {
       'feedback.submit_hint':             'Einmal abgesendet, ist das Feedback endgültig. Du hast 5 Minuten um Tippfehler zu korrigieren.',
       'feedback.toast_submitted':         'Feedback erfolgreich eingereicht',
       'feedback.toast_error':             'Feedback konnte nicht gesendet werden.',
+      'feedback.error.recipient_cooldown_active': 'Du hast dieser Person kürzlich Feedback gegeben. Du kannst derselben Person nur alle 90 Tage namentliches Feedback geben.',
       'feedback.anon_warning_text':       'Du hast ausgewählt, Feedback anonym einzureichen. Bitte stelle sicher, dass deine Kommentare keine persönlichen Identifikatoren, spezifischen Projektnamen oder Sprachhinweise enthalten, die deine Identität offenbaren könnten. Achte darauf, was du schreibst und welche Sprache du wählst, um echte Anonymität zu gewährleisten.',
       'feedback.anon_confirm':            'Ich habe gelesen und verstanden',
       'feedback.rate_limit_text':         'Anonymes Feedback kann von einer Person pro Jahr genau 1x an dieselbe Person gesendet werden.',
@@ -475,6 +477,7 @@ var I18n = (function () {
       'inbox.report_success': 'Feedback has been reported.',
       'inbox.report_error':   'Report could not be sent.',
       'inbox.report_already': 'You have already reported this feedback.',
+      'inbox.report_done':    'Already reported',
       'inbox.empty':          'You have not received any feedback yet.',
       'inbox.load_error':     'Failed to load ({code}). Please reload the page.',
 
@@ -538,6 +541,7 @@ var I18n = (function () {
       'feedback.submit_hint':             'Once submitted, feedback is final. You have 5 minutes to correct typos.',
       'feedback.toast_submitted':         'Feedback submitted successfully',
       'feedback.toast_error':             'Feedback could not be sent.',
+      'feedback.error.recipient_cooldown_active': 'You recently gave this person feedback. You can only give the same person named feedback once every 90 days.',
       'feedback.anon_warning_text':       'You have chosen to submit feedback anonymously. Please ensure your comments contain no personal identifiers, specific project names, or language cues that could reveal your identity. Write with privacy in mind.',
       'feedback.anon_confirm':            'I have read and understood',
       'feedback.rate_limit_text':         'Anonymous feedback can be sent by one person to the same person exactly once per year.',

@@ -8,6 +8,10 @@ namespace feedbackhub.Services;
 
 public class FeedbackService
 {
+    // Cooldown für namentliches Feedback an denselben Empfänger.
+    // Anonymes Feedback hat ein separates Limit (1x pro Jahr) und ist davon unberührt.
+    private const int RecipientCooldownDays = 90;
+
     private readonly AppDbContext           _db;
     private readonly GraphEmailService       _email;
     private readonly ILogger<FeedbackService> _logger;
@@ -58,6 +62,22 @@ public class FeedbackService
 
             if (alreadyUsed)
                 return new ServiceResult<Guid>(false, default, "anonymous_rate_limit_exceeded");
+        }
+        else
+        {
+            // Namentlich: Cooldown pro Empfänger. Es zählt nur namentliches,
+            // nicht gelöschtes Feedback – ein moderativ entferntes Feedback
+            // gibt den Empfänger wieder frei.
+            var cutoff = DateTime.UtcNow.AddDays(-RecipientCooldownDays);
+            var recentNamed = await _db.Feedbacks.AnyAsync(f =>
+                f.SubmitterId == submitterId &&
+                f.RecipientId == req.RecipientId &&
+                !f.IsAnonymous &&
+                !f.IsDeleted &&
+                f.SubmittedAt > cutoff);
+
+            if (recentNamed)
+                return new ServiceResult<Guid>(false, default, "recipient_cooldown_active");
         }
 
         var now = DateTime.UtcNow;
@@ -135,7 +155,15 @@ public class FeedbackService
             .OrderByDescending(f => f.SubmittedAt)
             .ToListAsync();
 
-        var notes = await GetModerationNotesAsync(feedbacks.Select(f => f.Id).ToList());
+        var feedbackIds = feedbacks.Select(f => f.Id).ToList();
+        var notes = await GetModerationNotesAsync(feedbackIds);
+
+        // Feedbacks, die dieser Empfänger bereits gemeldet hat (nur 1x möglich).
+        var reportedIds = await _db.CocReports
+            .Where(r => feedbackIds.Contains(r.FeedbackId) && r.ReporterUserId == recipientId)
+            .Select(r => r.FeedbackId)
+            .ToListAsync();
+        var reportedSet = reportedIds.ToHashSet();
 
         return feedbacks.Select(f => new InboxFeedbackResponse(
             Id:             f.Id,
@@ -147,7 +175,8 @@ public class FeedbackService
             Strengths:      f.Strengths,
             AreasToImprove: f.AreasToImprove,
             Ratings:        MapRatings(f.Ratings),
-            ModerationNote: notes.GetValueOrDefault(f.Id)
+            ModerationNote: notes.GetValueOrDefault(f.Id),
+            IsReported:     reportedSet.Contains(f.Id)
         )).ToList();
     }
 

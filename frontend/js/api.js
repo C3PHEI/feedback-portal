@@ -234,7 +234,8 @@ var FeedbackAPI = (function () {
       drivers:      sortDrivers(dto.ratings.map(mapRating)),
       strengths:    dto.strengths || '',
       improvements: dto.areasToImprove || '',
-      moderationNote: dto.moderationNote || null
+      moderationNote: dto.moderationNote || null,
+      isReported:   dto.isReported === true
     };
   }
 
