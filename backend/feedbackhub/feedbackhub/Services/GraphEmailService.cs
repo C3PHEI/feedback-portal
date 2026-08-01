@@ -10,6 +10,10 @@ public class GraphEmailService
     private readonly ILogger<GraphEmailService> _logger;
     private readonly string _portalUrl;
     private readonly string _senderMailbox;
+    private readonly string _cocReportMailbox;
+
+    // Fallback, falls in der Konfiguration kein Postfach für CoC-Meldungen gesetzt ist.
+    private const string DefaultCocReportMailbox = "adma.mbru@casinodavos.ch";
 
     // Logo einmalig laden und im Speicher halten (statt bei jeder Mail von Disk)
     private static readonly Lazy<byte[]?> LogoBytes = new(() =>
@@ -29,6 +33,11 @@ public class GraphEmailService
         _logger        = logger;
         _portalUrl     = config["App:PortalUrl"]!;
         _senderMailbox = config["App:SenderMailbox"]!;
+
+        var cocMailbox    = config["App:CocReportMailbox"];
+        _cocReportMailbox = string.IsNullOrWhiteSpace(cocMailbox)
+            ? DefaultCocReportMailbox
+            : cocMailbox;
     }
 
     // Benachrichtigt den Empfänger, dass er neues Feedback erhalten hat.
@@ -38,6 +47,14 @@ public class GraphEmailService
             recipient,
             "Sie haben neues Feedback erhalten | You have received new feedback",
             BuildFeedbackNotificationHtml());
+
+    // Benachrichtigt das CoC-Postfach, dass ein Mitarbeiter ein Feedback gemeldet hat.
+    // Wie bei der Feedback-Mail bewusst ohne Inhalte – Details nur im Portal.
+    public Task SendReportNotificationAsync() =>
+        SendHtmlEmailAsync(
+            _cocReportMailbox,
+            "Ein Feedback wurde gemeldet | A feedback has been reported",
+            BuildReportNotificationHtml());
 
     public async Task SendHtmlEmailAsync(
         string recipient,
@@ -113,9 +130,37 @@ public class GraphEmailService
             });
     }
 
-// Tabellenbasiert mit Inline-Styles, da Outlook weder Flexbox noch
+    private string BuildFeedbackNotificationHtml() =>
+        BuildNotificationHtml(
+            preheader: "Neues Feedback im FeedbackHub",
+            deText: $"""
+                Sie haben neues Feedback im FeedbackHub erhalten. Bitte melden Sie sich im
+                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">Portal</a>
+                an, um es einzusehen.
+                """,
+            enText: $"""
+                You have received new feedback in FeedbackHub. Please sign in to the
+                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">portal</a>
+                to view it.
+                """);
+
+    private string BuildReportNotificationHtml() =>
+        BuildNotificationHtml(
+            preheader: "Gemeldetes Feedback im FeedbackHub",
+            deText: $"""
+                Ein Mitarbeiter hat ein Feedback im FeedbackHub gemeldet. Bitte melden Sie sich im
+                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">Portal</a>
+                an, um die Meldung zu pr&uuml;fen.
+                """,
+            enText: $"""
+                An employee has reported a feedback in FeedbackHub. Please sign in to the
+                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">portal</a>
+                to review the report.
+                """);
+
+    // Tabellenbasiert mit Inline-Styles, da Outlook weder Flexbox noch
     // <style>-Blöcke zuverlässig unterstützt.
-    private string BuildFeedbackNotificationHtml()
+    private string BuildNotificationHtml(string preheader, string deText, string enText)
     {
         const string font = "Arial, Helvetica, sans-serif";
 
@@ -130,7 +175,7 @@ public class GraphEmailService
 <body style="margin:0; padding:0; background-color:#f4f4f4;">
 
   <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:transparent;">
-    Neues Feedback im FeedbackHub
+    {preheader}
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f4f4;">
@@ -154,9 +199,7 @@ public class GraphEmailService
                 Guten Tag
               </p>
               <p style="margin:0 0 16px 0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
-                Sie haben neues Feedback im FeedbackHub erhalten. Bitte melden Sie sich im
-                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">Portal</a>
-                an, um es einzusehen.
+                {deText}
               </p>
               <p style="margin:0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 Freundliche Gr&uuml;sse<br>
@@ -178,9 +221,7 @@ public class GraphEmailService
                 Hello
               </p>
               <p style="margin:0 0 16px 0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
-                You have received new feedback in FeedbackHub. Please sign in to the
-                <a href="{_portalUrl}" target="_blank" style="color:#c8201a; text-decoration:underline;">portal</a>
-                to view it.
+                {enText}
               </p>
               <p style="margin:0; font-family:{font}; font-size:15px; line-height:1.6; color:#333333;">
                 Kind regards<br>
