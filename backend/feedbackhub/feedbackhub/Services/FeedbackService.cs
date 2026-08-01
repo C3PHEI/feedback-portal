@@ -377,6 +377,20 @@ public class FeedbackService
         }
 
         await _db.SaveChangesAsync();
+
+        // E-Mail an das CoC-Postfach (best-effort).
+        // Ein Fehler beim Versand darf die Meldung nicht scheitern lassen.
+        try
+        {
+            await _email.SendReportNotificationAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Report-Benachrichtigung für Feedback {FeedbackId} konnte nicht gesendet werden.",
+                feedbackId);
+        }
+
         return new ServiceResult(true);
     }
 
