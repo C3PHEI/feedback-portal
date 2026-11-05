@@ -1,4 +1,4 @@
-# Feedback Hub ![Status](https://img.shields.io/badge/status-active%20development-blue) ![Version](https://img.shields.io/badge/version-pre--release-lightgrey) ![.NET](https://img.shields.io/badge/.NET%2010-512BD4?logo=dotnet&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black) ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white) ![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?logo=chartdotjs&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white) ![Microsoft Entra ID](https://img.shields.io/badge/Microsoft%20Entra%20ID-0078D4)
+# Feedback Hub ![Status](https://img.shields.io/badge/status-completed-brightgreen) ![Version](https://img.shields.io/badge/version-1.0-blue) ![.NET](https://img.shields.io/badge/.NET%2010-512BD4?logo=dotnet&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black) ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white) ![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?logo=chartdotjs&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white) ![Microsoft Entra ID](https://img.shields.io/badge/Microsoft%20Entra%20ID-0078D4)
 
 > Feedback Hub is an internal web portal where colleagues give each other structured, constructive feedback, by name or anonymously, so that feedback becomes a regular habit instead of something that only happens once a year.
 
@@ -21,7 +21,6 @@
   * [Run](#run)
   * [API Overview](#api-overview)
   * [Project Structure](#project-structure)
-- [Roadmap](#roadmap)
 - [FAQ](#faq)
 
 ## About the Project
@@ -225,7 +224,7 @@ psql -h <host> -U <user> -d feedbackhub -f db/2026-07-23_add_users_manager_user_
 ```
 
 > [!IMPORTANT]
-> The initial database schema and the seed data for the four drivers are not part of the repository yet. Only the incremental scripts are versioned in `db/`.
+> The initial database schema and the seed data for the four drivers are not part of this repository. Only the incremental scripts are versioned in `db/`.
 
 ## Deploying on Windows Server (IIS)
 
@@ -337,32 +336,6 @@ feedback-portal/
 └── README.md
 ```
 
-## Roadmap
-
-**Current status**: the core features are implemented and the application is under active development.
-
-**Version 1.0**
-
-- [x] Feedback with four rated drivers and written strengths / areas to improve
-- [x] Anonymous feedback with yearly limit and 90-day cooldown for named feedback
-- [x] Inbox and history with a one-time edit window of 5 minutes
-- [x] Team view for managers based on Entra ID reporting lines
-- [x] Code of conduct reports and moderation
-- [x] Admin dashboard and user management
-- [x] Daily user and role sync from Entra ID
-- [x] E-mail notifications through Microsoft Graph
-- [x] German and English interface
-- [ ] Initial database schema and seed data in `db/`
-- [ ] Partial redaction of feedback text (the action can be selected in moderation, but the text is not changed yet)
-- [ ] Automated enforcement of the retention policy, including legal hold handling
-- [ ] Automated tests for backend and frontend
-
-**Future ideas**
-
-- [ ] Local development login without Entra ID (a `TestAuth` handler exists but is not registered in `Program.cs` yet)
-- [ ] Configuration template (`appsettings.template.json`) in the repository
-- [ ] Bundling Tailwind CSS at build time instead of loading it from the CDN
-
 ## FAQ
 
 ### Who can see who wrote an anonymous feedback?
@@ -391,7 +364,7 @@ Through Entra ID. A daily sync creates, updates and deactivates users based on t
 
 ### Can I run it in Docker?
 
-Not at the moment. The backend contains a `Dockerfile`, but it loads its Graph certificate from the Windows certificate store, which is not available in a Linux container. The supported setup is IIS on Windows Server.
+No. The backend contains a `Dockerfile`, but it loads its Graph certificate from the Windows certificate store, which is not available in a Linux container. The supported setup is IIS on Windows Server.
 
 ---
 
